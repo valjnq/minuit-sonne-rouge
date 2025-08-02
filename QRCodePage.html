@@ -1,0 +1,44 @@
+<!-- public/QRCodePage.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>QR Code - Minuit Sonne Rouge</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+    #qrcode {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="qrcode"></canvas>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const edition = params.get("edition");
+
+    const links = {
+      "Sombre présage": "/assets/Minuitsonnerouge_Sombrepresage.pdf",
+      "Parfums d’hystérie": "/assets/Minuitsonnerouge_Parfumsdhysterie.pdf",
+      "Crépuscule funeste": "/assets/Minuitsonnerouge_Crepusculefuneste.pdf"
+    };
+
+    const url = links[edition];
+    if (url) {
+      QRCode.toCanvas(document.getElementById("qrcode"), window.location.origin + url);
+    } else {
+      document.body.innerHTML = "<p>Édition inconnue.</p>";
+    }
+  </script>
+</body>
+</html>
