@@ -6,15 +6,22 @@
   <title>QR Code - Minuit Sonne Rouge</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
     body {
       background: #111;
       color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
       font-family: sans-serif;
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+      overflow-y: auto;
+      box-sizing: border-box;
+      padding-bottom: 2rem;
+      display: block;
     }
     #qrcode {
       margin-bottom: 1rem;
