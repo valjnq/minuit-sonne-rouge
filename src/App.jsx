@@ -52,23 +52,22 @@ export default function App() {
   const [notes, setNotes] = useState("");
 
   const urlPDF = {
-    "Sombre présage": "/docs/minuitsonnerouge-sombrepresage.pdf",
-    "Parfums d’hystérie": "/docs/minuitsonnerouge-parfumsdhysterie.pdf",
-    "Crépuscule funeste": "/docs/minuitsonnerouge-crepusculefuneste.pdf",
+    "Sombre présage": "docs/minuitsonnerouge-sombrepresage.pdf",
+    "Parfums d’hystérie": "docs/minuitsonnerouge-parfumsdhysterie.pdf",
+    "Crépuscule funeste": "docs/minuitsonnerouge-crepusculefuneste.pdf",
   };
 
+  useEffect(() => {
+    setSelected([]);
+    setErreurValidation("");
+  }, [edition]);
 
-useEffect(() => {
-  setSelected([]);
-  setErreurValidation("");
-}, [edition]);
-
-useEffect(() => {
-  setTableRepartition((prev) => ({
-    ...prev,
-    [nbJoueurs]: base[nbJoueurs],
-  }));
-}, [nbJoueurs]);
+  useEffect(() => {
+    setTableRepartition((prev) => ({
+      ...prev,
+      [nbJoueurs]: base[nbJoueurs],
+    }));
+  }, [nbJoueurs]);
   const colonnes = Array.from({ length: 11 }, (_, i) => i + 5);
 
   const lignes = [
@@ -99,17 +98,18 @@ useEffect(() => {
     if (estDejaSelectionne) {
       setSelected((prev) => prev.filter((r) => r.nom !== role.nom));
     } else {
-      const max =
-        role.type === "Habitant"
-          ? maxParType.Habitants
-          : role.type === "Étranger"
-          ? maxParType.Étrangers
-          : role.type === "Acolyte"
-          ? maxParType.Acolytes
-          : maxParType.Demons;
-      const dejaPris = compteParType[role.type] || 0;
-      if (dejaPris < max) {
-        setSelected((prev) => [...prev, role]);
+      // Only enforce the Demon cap
+      if (role.type === "Démon") {
+        const max = maxParType.Demons;
+        const dejaPris = selected.filter((r) => r.type === "Démon").length;
+        if (dejaPris < max) {
+          setSelected((prev) => [...prev, role]);
+        }
+      } else {
+        // No cap for other types, just add if total < nbJoueurs
+        if (selected.length < nbJoueurs) {
+          setSelected((prev) => [...prev, role]);
+        }
       }
     }
   }
@@ -291,17 +291,20 @@ useEffect(() => {
         </label>
       </div>
 
-      
       <div style={{ overflowX: "auto", marginBottom: "2rem" }}>
-        <table style={{ borderCollapse: "collapse", fontFamily: "Cardo, serif" }}>
+        <table
+          style={{ borderCollapse: "collapse", fontFamily: "Cardo, serif" }}
+        >
           <thead>
             <tr>
-              <th style={{ border: "1px solid #ccc", padding: "0.5rem" }}>Joueurs</th>
+              <th style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
+                Joueurs
+              </th>
               <th
                 style={{
                   border: "1px solid #ccc",
                   padding: "0.5rem",
-                  backgroundColor: "#ffeeba",
+                  // backgroundColor: "#ffeeba", // Remove or comment out this line
                 }}
               >
                 {nbJoueurs}
@@ -320,18 +323,19 @@ useEffect(() => {
                   style={{
                     border: "1px solid #ccc",
                     padding: "0.25rem",
-                    backgroundColor: "#ffeeba",
                   }}
                 >
-                  <input
-                    type="number"
-                    value={tableRepartition[nbJoueurs]?.[label] ?? 0}
-                    onChange={(e) =>
-                      updateRoleCount(nbJoueurs, label, Number(e.target.value))
-                    }
-                    disabled={rolesValides}
-                    style={{ width: "3rem", textAlign: "center" }}
-                  />
+                  <span
+                    style={{
+                      width: "3rem",
+                      textAlign: "center",
+                      display: "inline-block",
+                      color, // <-- add this line
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {tableRepartition[nbJoueurs]?.[label] ?? 0}
+                  </span>
                 </td>
               </tr>
             ))}
@@ -437,57 +441,85 @@ useEffect(() => {
               <h2 style={{ fontFamily: "Cardo, serif", fontSize: "1.5rem" }}>
                 {label} ({count}/{max})
               </h2>
-              {rolesDuType.map((role) => (
-                <div
-                  key={role.nom}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "1rem",
-                    marginBottom: "0.5rem",
-                    borderBottom: "1px solid #ccc",
-                    paddingBottom: "0.5rem",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={selected.some((r) => r.nom === role.nom)}
-                    onChange={() => toggleRole(role)}
-                    disabled={rolesValides}
-                  />
-                  <img
-                    src={`/icons/icon_${normalizeNom(role.nom)}.png`}
-                    alt={role.nom}
-                    style={{
-                      height: "48px",
-                      width: "48px",
-                      objectFit: "contain",
-                    }}
-                  />
-                  <div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+                {rolesDuType.map((role) => {
+                  const isSelected = selected.some((r) => r.nom === role.nom);
+                  const isDemon = role.type === "Démon";
+                  const demonCount = selected.filter(
+                    (r) => r.type === "Démon"
+                  ).length;
+                  const isDisabled = isSelected
+                    ? false
+                    : isDemon
+                    ? demonCount >= maxParType.Demons ||
+                      selected.length >= nbJoueurs
+                    : selected.length >= nbJoueurs;
+
+                  return (
                     <div
+                      key={role.nom}
+                      onClick={() => {
+                        if (rolesValides || isDisabled) return;
+                        toggleRole(role);
+                      }}
                       style={{
-                        fontFamily: "'IM Fell English SC', serif",
-                        fontSize: "1.25rem",
-                        color:
-                          role.alignement === "Bon" ? "#0e74b4" : "#950f13",
-                        marginBottom: "0.25rem",
+                        border: isSelected
+                          ? role.alignement === "Bon"
+                            ? "2px solid #0e74b4"
+                            : "2px solid #950f13"
+                          : "1px solid #ccc",
+                        borderRadius: 8,
+                        padding: "0.5rem",
+                        cursor:
+                          isDisabled || rolesValides
+                            ? "not-allowed"
+                            : "pointer",
+                        opacity: isDisabled ? 0.5 : 1,
+                        background: isSelected
+                          ? role.alignement === "Bon"
+                            ? "#e6f0fa"
+                            : "#fae6e6"
+                          : "#fafafa",
+                        width: 220,
+                        minHeight: 90,
+                        textAlign: "center",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
                     >
-                      {role.nom}
+                      <img
+                        src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                        alt={role.nom}
+                        style={{ height: 48, width: 48, objectFit: "contain" }}
+                      />
+                      <div
+                        style={{
+                          fontFamily: "'IM Fell English SC', serif",
+                          fontSize: "1.1rem",
+                          color:
+                            role.alignement === "Bon" ? "#0e74b4" : "#950f13",
+                          fontWeight: "bold",
+                          marginTop: 8,
+                        }}
+                      >
+                        {role.nom}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: "Cardo, serif",
+                          fontSize: "0.95rem",
+                          maxWidth: "30ch",
+                          marginTop: 4,
+                        }}
+                      >
+                        {role.pouvoir}
+                      </div>
                     </div>
-                    <div
-                      style={{
-                        fontFamily: "Cardo, serif",
-                        fontSize: "1rem",
-                        maxWidth: "60ch",
-                      }}
-                    >
-                      {role.pouvoir}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                  );
+                })}
+              </div>
             </div>
           );
         })}
@@ -576,7 +608,7 @@ useEffect(() => {
                       }}
                     >
                       <img
-                        src={`/icons/icon_${normalizeNom(role.nom)}.png`}
+                        src={`icons/icon_${normalizeNom(role.nom)}.png`}
                         alt={role.nom}
                         style={{
                           height: "32px",
@@ -660,7 +692,7 @@ useEffect(() => {
           {indexActif !== null && roleActif && (
             <div style={{ textAlign: "center" }}>
               <img
-                src={`/icons/icon_${normalizeNom(roleActif.nom)}.png`}
+                src={`icons/icon_${normalizeNom(roleActif.nom)}.png`}
                 alt={roleActif.nom}
                 style={{ width: "100px", marginBottom: "1rem" }}
               />
@@ -748,7 +780,7 @@ useEffect(() => {
                       {nom}
                     </div>
                     <img
-                      src={`/icons/icon_${normalizeNom(role.nom)}.png`}
+                      src={`icons/icon_${normalizeNom(role.nom)}.png`}
                       alt={role.nom}
                       style={{
                         height: "32px",
@@ -809,11 +841,93 @@ useEffect(() => {
           </h2>
 
           <QRCode
-            value={window.location.origin + urlPDF[edition]}
+            value={
+              window.location.origin + "/minuit-sonne-rouge/" + urlPDF[edition]
+            }
             size={256}
             bgColor="#ffffff"
             fgColor="#000000"
           />
+          {qrCodeVisible && (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: "grey",
+                color: "white",
+                zIndex: 15,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <button
+                onClick={() => setQrCodeVisible(false)}
+                style={{
+                  position: "absolute",
+                  top: "1rem",
+                  right: "1rem",
+                  fontSize: "1.5rem",
+                  color: "white",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                ✖
+              </button>
+
+              <h2
+                style={{
+                  fontFamily: "Cardo",
+                  fontSize: "1.5rem",
+                  marginBottom: "1rem",
+                }}
+              >
+                Script pour : {edition}
+              </h2>
+
+              <QRCode
+                value={
+                  window.location.origin +
+                  "/minuit-sonne-rouge/" +
+                  urlPDF[edition]
+                }
+                size={256}
+                bgColor="#ffffff"
+                fgColor="#000000"
+              />
+
+              {/* Add this button below the QRCode */}
+              <button
+                style={{
+                  marginTop: "1.5rem",
+                  padding: "0.5rem 1.5rem",
+                  fontFamily: "Cardo, serif",
+                  fontSize: "1.1rem",
+                  cursor: "pointer",
+                  background: "#fff",
+                  color: "#222",
+                  borderRadius: 8,
+                  border: "1px solid #ccc",
+                }}
+                onClick={() =>
+                  window.open(
+                    window.location.origin +
+                      "/minuit-sonne-rouge/" +
+                      urlPDF[edition],
+                    "_blank"
+                  )
+                }
+              >
+                Voir PDF
+              </button>
+            </div>
+          )}
         </div>
       )}
       {Object.keys(joueursAttribues).length === nbJoueurs && !bluffsValides && (
@@ -873,7 +987,7 @@ useEffect(() => {
                   }}
                 >
                   <img
-                    src={`/icons/icon_${normalizeNom(role.nom)}.png`}
+                    src={`icons/icon_${normalizeNom(role.nom)}.png`}
                     alt={role.nom}
                     style={{ width: 48, height: 48, objectFit: "contain" }}
                   />
@@ -947,7 +1061,7 @@ useEffect(() => {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: "rgba(0,0,0,0.95)",
+            backgroundColor: "grey",
             color: "white",
             zIndex: 100,
             display: "flex",
@@ -984,7 +1098,7 @@ useEffect(() => {
             {bluffs.map((role) => (
               <div key={role.nom} style={{ textAlign: "center" }}>
                 <img
-                  src={`/icons/icon_${normalizeNom(role.nom)}.png`}
+                  src={`icons/icon_${normalizeNom(role.nom)}.png`}
                   alt={role.nom}
                   style={{ width: 80, height: 80, objectFit: "contain" }}
                 />
@@ -1018,7 +1132,6 @@ useEffect(() => {
               resize: "vertical",
               background: "#fffbe6",
             }}
-            placeholder="Écris ici tes notes de partie, rappels, indices, etc."
           />
         </div>
       )}
