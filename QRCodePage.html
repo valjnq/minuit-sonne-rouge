@@ -31,11 +31,23 @@
       fetch("/minuit-sonne-rouge/src/roles-fr.json")
         .then((res) => res.json())
         .then((allRoles) => {
+          // Remove QR code canvas if present
+          const qr = document.getElementById("qrcode");
+          if (qr) qr.remove();
+
+          // Add title
+          const h2 = document.createElement("h2");
+          h2.textContent = "Script personnalisé";
+          h2.style.fontFamily = "Cardo,serif";
+          h2.style.fontSize = "2rem";
+          h2.style.marginBottom = "2rem";
+          document.body.appendChild(h2);
+
+          // Add grid
           const noms = custom.split(",").map(decodeURIComponent);
           const roles = noms
             .map((nom) => allRoles.find((r) => r.nom === nom))
             .filter(Boolean);
-          document.body.innerHTML = `<h2 style='font-family:Cardo,serif;font-size:2rem;margin-bottom:2rem;'>Script personnalisé</h2>`;
           const grid = document.createElement("div");
           grid.style.display = "flex";
           grid.style.flexWrap = "wrap";
@@ -55,13 +67,24 @@
             card.style.alignItems = "center";
             card.style.justifyContent = "center";
             card.innerHTML = `
-              <img src="icons/icon_${normalizeNom(role.nom)}.png" alt="${role.nom}" style="height:48px;width:48px;object-fit:contain;" />
+              <img src="/minuit-sonne-rouge/icons/icon_${normalizeNom(role.nom)}.png" alt="${role.nom}" style="height:48px;width:48px;object-fit:contain;" />
               <div style="font-family:'IM Fell English SC',serif;font-size:1.1rem;color:${role.alignement === 'Bon' ? '#0e74b4' : '#950f13'};font-weight:bold;margin-top:8px;">${role.nom}</div>
               <div style="font-family:Cardo,serif;font-size:0.95rem;max-width:30ch;margin-top:4px;">${role.pouvoir || ''}</div>
             `;
             grid.appendChild(card);
           });
           document.body.appendChild(grid);
+
+          // Add return button
+          const btn = document.createElement("button");
+          btn.textContent = "Retour";
+          btn.style.marginTop = "2rem";
+          btn.style.padding = "0.5rem 1rem";
+          btn.style.fontFamily = "Cardo, serif";
+          btn.style.fontSize = "1rem";
+          btn.style.cursor = "pointer";
+          btn.onclick = () => { window.location.href = "/minuit-sonne-rouge/"; };
+          document.body.appendChild(btn);
         });
       function normalizeNom(nom) {
         return nom
