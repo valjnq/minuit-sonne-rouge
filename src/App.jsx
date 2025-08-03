@@ -10,6 +10,18 @@ function normalizeNom(nom) {
     .toLowerCase();
 }
 
+const buttonStyle = {
+  padding: "0.5rem 1.2rem",
+  fontFamily: "Cardo, serif",
+  fontSize: "1rem",
+  borderRadius: 8,
+  border: "1px solid #bbb",
+  background: "#f5f5f5",
+  color: "#222",
+  cursor: "pointer",
+  transition: "background 0.2s, color 0.2s, border 0.2s",
+};
+
 export default function App() {
   const base = {
     5: { Habitants: 3, Étrangers: 0, Acolytes: 1, Demons: 1 },
@@ -50,6 +62,9 @@ export default function App() {
   const [bluffsValides, setBluffsValides] = useState(false);
   const [afficherNotes, setAfficherNotes] = useState(false);
   const [notes, setNotes] = useState("");
+  const [customScriptVisible, setCustomScriptVisible] = useState(false);
+  const [customScriptPool, setCustomScriptPool] = useState([]); // pool of available roles for custom script
+  const [customScriptTemp, setCustomScriptTemp] = useState([]); // temp selection in modal
 
   const urlPDF = {
     "Sombre présage": "docs/minuitsonnerouge-sombrepresage.pdf",
@@ -60,14 +75,17 @@ export default function App() {
   useEffect(() => {
     setSelected([]);
     setErreurValidation("");
+    if (edition === "script personnalisé") {
+      setCustomScriptVisible(true);
+      // Only clear temp if edition changes from something else
+      // (do not clear if just opening/closing modal)
+      // No action here: keep customScriptTemp as is
+    } else {
+      setCustomScriptVisible(false);
+      setCustomScriptTemp([]); // clear temp if leaving custom script
+    }
   }, [edition]);
 
-  useEffect(() => {
-    setTableRepartition((prev) => ({
-      ...prev,
-      [nbJoueurs]: base[nbJoueurs],
-    }));
-  }, [nbJoueurs]);
   const colonnes = Array.from({ length: 11 }, (_, i) => i + 5);
 
   const lignes = [
@@ -79,11 +97,15 @@ export default function App() {
 
   const maxParType = tableRepartition[nbJoueurs];
 
-  const rolesFiltres = roles.filter(
-    (r) =>
-      r.edition === edition &&
-      (!rolesValides || selected.some((sel) => sel.nom === r.nom))
-  );
+  // For custom script, show only the custom pool as available roles; otherwise, filter by edition
+  const rolesFiltres =
+    edition === "script personnalisé"
+      ? customScriptPool
+      : roles.filter(
+          (r) =>
+            r.edition === edition &&
+            (!rolesValides || selected.some((sel) => sel.nom === r.nom))
+        );
 
   const rolesEdition = roles.filter((r) => r.edition === edition);
 
@@ -136,10 +158,7 @@ export default function App() {
     setSelected(nouvelleSelection);
   }
 
-  function reinitialiserTableau() {
-    if (rolesValides) return;
-    setTableRepartition(base);
-  }
+  // reinitialiserTableau removed
   function deselectionnerTousLesRoles() {
     if (rolesValides) return;
     setSelected([]);
@@ -177,45 +196,13 @@ export default function App() {
     setAffectationVisible(false);
   }
 
-  function updateRoleCount(joueurCount, roleType, value) {
-    if (rolesValides) return;
-    const nouveau = {
-      ...tableRepartition[joueurCount],
-      [roleType]: Math.max(
-        0,
-        Math.min(
-          roleType === "Demons" ||
-            roleType === "Étrangers" ||
-            roleType === "Acolytes"
-            ? 4
-            : roleType === "Habitants"
-            ? 13
-            : 99,
-          value
-        )
-      ),
-    };
-
-    const total =
-      Object.entries(nouveau).reduce(
-        (sum, [k, v]) => sum + (k !== "Demons" ? v : 0),
-        0
-      ) + nouveau.Demons;
-    if (total <= joueurCount) {
-      setTableRepartition((prev) => ({
-        ...prev,
-        [joueurCount]: nouveau,
-      }));
-    }
-  }
-
   const nomsRolesAttribues = Object.values(joueursAttribues).map(
     (j) => j.role.nom
   );
 
-  const rolesBonsNonAttribués = rolesEdition.filter(
-    (r) => r.alignement === "Bon" && !nomsRolesAttribues.includes(r.nom)
-  );
+  // Show all 'Bon' roles from the edition or script that are NOT attributed to players (not in joueursAttribues)
+  const rolesBonsNonAttribués = (edition === "script personnalisé" ? customScriptPool : roles.filter(r => r.edition === edition))
+    .filter((r) => r.alignement === "Bon" && !nomsRolesAttribues.includes(r.nom));
 
   return (
     <div style={{ padding: "2rem" }}>
@@ -231,50 +218,39 @@ export default function App() {
         Grimoire de poche
       </h1>
 
-      <div style={{ marginBottom: "1rem" }}>
+      <div
+        style={{
+          marginBottom: "1rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "2rem",
+        }}
+      >
         <label
           style={{ display: "inline-flex", alignItems: "center", gap: "1rem" }}
         >
           Nombre de joueurs :
-          <input
-            type="range"
-            min="5"
-            max="15"
+          <select
             value={nbJoueurs}
             onChange={(e) => setNbJoueurs(Number(e.target.value))}
             disabled={rolesValides}
-            style={{ width: "200px", verticalAlign: "middle" }}
-          />
-          <span style={{ fontWeight: "bold" }}>{nbJoueurs}</span>
+            style={{
+              marginLeft: "0.5rem",
+              fontSize: "1rem",
+              fontFamily: "Cardo, serif",
+            }}
+          >
+            {Array.from({ length: 11 }, (_, i) => i + 5).map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
         </label>
 
-        <button
-          onClick={reinitialiserTableau}
-          disabled={rolesValides}
-          style={{
-            marginBottom: "1rem",
-            padding: "0.5rem 1rem",
-            fontFamily: "Cardo, serif",
-            fontSize: "1rem",
-            cursor: "pointer",
-          }}
+        <label
+          style={{ display: "inline-flex", alignItems: "center", gap: "1rem" }}
         >
-          Réinitialiser le tableau
-        </button>
-        <button
-          onClick={() => setQrCodeVisible(true)}
-          style={{
-            marginBottom: "1rem",
-            padding: "0.5rem 1rem",
-            fontFamily: "Cardo, serif",
-            fontSize: "1rem",
-            cursor: "pointer",
-          }}
-        >
-          Voir le script
-        </button>
-
-        <label style={{ marginLeft: "2rem" }}>
           Édition :
           <select
             value={edition}
@@ -287,10 +263,188 @@ export default function App() {
                 {ed}
               </option>
             ))}
+            <option value="script personnalisé">Script personnalisé</option>
           </select>
+          {edition === "script personnalisé" && (
+            <button
+              type="button"
+              onClick={() => {
+                setCustomScriptVisible(true);
+                if (customScriptPool.length > 0 && customScriptTemp.length === 0) {
+                  setCustomScriptTemp(customScriptPool);
+                }
+              }}
+              disabled={rolesValides}
+              style={{
+                ...buttonStyle,
+                marginLeft: "1rem",
+                cursor: rolesValides ? "not-allowed" : "pointer",
+                opacity: rolesValides ? 0.5 : 1
+              }}
+            >
+              Choisir les rôles
+            </button>
+          )}
         </label>
-      </div>
+      {customScriptVisible && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(60,60,60,0.95)",
+            color: "white",
+            zIndex: 100,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <button
+            onClick={() => {
+              setCustomScriptVisible(false);
+              // Do not clear customScriptTemp here, so selection is preserved
+            }}
+            style={{
+              position: "absolute",
+              top: "1rem",
+              right: "1rem",
+              fontSize: "2rem",
+              color: "white",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            ✖
+          </button>
+          <h2 style={{ fontFamily: "Cardo, serif", fontSize: "2rem", marginBottom: "1.5rem" }}>
+            Script personnalisé : Choisissez les rôles
+          </h2>
+          <div style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%"
+          }}>
+            <button
+              onClick={() => setCustomScriptTemp([])}
+              style={{
+                ...buttonStyle,
+                marginBottom: "1rem"
+              }}
+            >
+              Tout effacer
+            </button>
+            <div style={{
+              maxWidth: "90vw",
+              maxHeight: "60vh",
+              overflowY: "auto",
+              background: "#222",
+              borderRadius: 8,
+              padding: "1rem"
+            }}>
+              {['Habitant', 'Étranger', 'Acolyte', 'Démon'].map((type) => {
+                const rolesOfType = roles.filter((r) => r.type === type);
+                const selectedOfType = customScriptTemp.filter((r) => r.type === type).length;
+                if (rolesOfType.length === 0) return null;
+                return (
+                  <div key={type} style={{ marginBottom: '2rem' }}>
+                    <div style={{
+                      fontFamily: "Cardo, serif",
+                      fontSize: "1.2rem",
+                      color: type === 'Démon' || type === 'Acolyte' ? '#950f13' : '#0e74b4',
+                      marginBottom: '0.5rem',
+                      marginTop: '1rem',
+                    }}>{type + (type === 'Habitant' ? 's' : type === 'Étranger' ? 's' : type === 'Acolyte' ? 's' : 's')} {selectedOfType > 0 ? `(${selectedOfType})` : ''}</div>
+                    <div style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "1rem",
+                    }}>
+                      {rolesOfType.map((role) => {
+                        const isSelected = customScriptTemp.some((r) => r.nom === role.nom);
+                        return (
+                          <div
+                            key={role.nom}
+                            onClick={() => {
+                              if (isSelected) {
+                                setCustomScriptTemp(customScriptTemp.filter((r) => r.nom !== role.nom));
+                              } else {
+                                setCustomScriptTemp([...customScriptTemp, role]);
+                              }
+                            }}
+                            style={{
+                              border: isSelected ? "2px solid #0e74b4" : "1px solid #ccc",
+                              borderRadius: 8,
+                              padding: "0.5rem",
+                              cursor: "pointer",
+                              opacity: isSelected ? 1 : 0.8,
+                              background: isSelected ? "#e6f0fa" : "#333",
+                              width: 180,
+                              textAlign: "center",
+                            }}
+                          >
+                            <img
+                              src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                              alt={role.nom}
+                              style={{ width: 48, height: 48, objectFit: "contain" }}
+                            />
+                            <div
+                              style={{
+                                fontFamily: "Cardo, serif",
+                                fontWeight: "bold",
+                                marginTop: 8,
+                                color: isSelected ? "#0e74b4" : "#fff"
+                              }}
+                            >
+                              {role.nom}
+                            </div>
+                            <div style={{ fontSize: "0.9rem", color: "#ccc" }}>{role.edition}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              setCustomScriptPool(customScriptTemp);
+              setCustomScriptVisible(false);
+              setCustomScriptTemp([]);
+              setSelected([]); // clear current selection for new pool
+              setRolesValides(false);
+              setEdition("script personnalisé");
+            }}
+            style={{
+              ...buttonStyle,
+              marginTop: "2rem",
+              fontSize: "1.1rem"
+            }}
+          >
+            Valider la sélection ({customScriptTemp.length} rôles)
+          </button>
+        </div>
+      )}
 
+        <button
+          onClick={() => setQrCodeVisible(true)}
+          style={{
+            ...buttonStyle,
+            cursor: customScriptPool.length === 0 && edition === "script personnalisé" ? "not-allowed" : "pointer",
+            opacity: customScriptPool.length === 0 && edition === "script personnalisé" ? 0.5 : 1
+          }}
+          disabled={customScriptPool.length === 0 && edition === "script personnalisé"}
+        >
+          Partager le script
+        </button>
+      </div>
       <div style={{ overflowX: "auto", marginBottom: "2rem" }}>
         <table
           style={{ borderCollapse: "collapse", fontFamily: "Cardo, serif" }}
@@ -304,7 +458,6 @@ export default function App() {
                 style={{
                   border: "1px solid #ccc",
                   padding: "0.5rem",
-                  // backgroundColor: "#ffeeba", // Remove or comment out this line
                 }}
               >
                 {nbJoueurs}
@@ -312,7 +465,7 @@ export default function App() {
             </tr>
           </thead>
           <tbody>
-            {lignes.map(({ label, color }) => (
+            {lignes.map(({ label, color, type }) => (
               <tr key={label}>
                 <td
                   style={{ border: "1px solid #ccc", padding: "0.5rem", color }}
@@ -330,8 +483,10 @@ export default function App() {
                       width: "3rem",
                       textAlign: "center",
                       display: "inline-block",
-                      color, // <-- add this line
+                      color,
                       fontWeight: "bold",
+                      fontFamily: "Cardo, serif",
+                      fontSize: "1rem",
                     }}
                   >
                     {tableRepartition[nbJoueurs]?.[label] ?? 0}
@@ -346,11 +501,8 @@ export default function App() {
       <button
         onClick={() => setAfficherRoles((prev) => !prev)}
         style={{
-          marginBottom: "1rem",
-          padding: "0.5rem 1rem",
-          fontFamily: "Cardo, serif",
-          fontSize: "1rem",
-          cursor: "pointer",
+          ...buttonStyle,
+          marginBottom: "1rem"
         }}
       >
         {afficherRoles ? "Masquer les rôles" : "Afficher les rôles"}
@@ -359,11 +511,10 @@ export default function App() {
         onClick={tirerAuHasard}
         disabled={rolesValides}
         style={{
+          ...buttonStyle,
           marginBottom: "1rem",
-          padding: "0.5rem 1rem",
-          fontFamily: "Cardo, serif",
-          fontSize: "1rem",
           cursor: rolesValides ? "not-allowed" : "pointer",
+          opacity: rolesValides ? 0.5 : 1
         }}
       >
         Sélection aléatoire
@@ -372,11 +523,10 @@ export default function App() {
         onClick={deselectionnerTousLesRoles}
         disabled={rolesValides || selected.length === 0}
         style={{
+          ...buttonStyle,
           marginBottom: "1rem",
-          padding: "0.5rem 1rem",
-          fontFamily: "Cardo, serif",
-          fontSize: "1rem",
           cursor: rolesValides ? "not-allowed" : "pointer",
+          opacity: rolesValides || selected.length === 0 ? 0.5 : 1
         }}
       >
         Désélectionner tous les rôles
@@ -393,6 +543,23 @@ export default function App() {
               `Il faut sélectionner ${nbJoueurs} rôles (actuellement ${selected.length}).`
             );
           } else {
+            // Compute repartition from selected roles
+            const repartition = {
+              Habitants: 0,
+              Étrangers: 0,
+              Acolytes: 0,
+              Demons: 0,
+            };
+            selected.forEach((r) => {
+              if (r.type === "Habitant") repartition.Habitants++;
+              else if (r.type === "Étranger") repartition["Étrangers"]++;
+              else if (r.type === "Acolyte") repartition.Acolytes++;
+              else if (r.type === "Démon") repartition.Demons++;
+            });
+            setTableRepartition((prev) => ({
+              ...prev,
+              [nbJoueurs]: { ...repartition },
+            }));
             setRolesValides(true);
             setErreurValidation("");
             setRolesRestants([...selected]);
@@ -400,11 +567,10 @@ export default function App() {
         }}
         disabled={rolesValides}
         style={{
+          ...buttonStyle,
           marginBottom: "1rem",
-          padding: "0.5rem 1rem",
-          fontFamily: "Cardo, serif",
-          fontSize: "1rem",
           cursor: rolesValides ? "default" : "pointer",
+          opacity: rolesValides ? 0.5 : 1
         }}
       >
         Valider les rôles
@@ -423,7 +589,9 @@ export default function App() {
 
       {afficherRoles &&
         lignes.map(({ type, label }) => {
-          const rolesDuType = rolesFiltres.filter((r) => r.type === type);
+          // After validation, only show roles that are in play (selected)
+          const sourceRoles = rolesValides ? selected : rolesFiltres;
+          const rolesDuType = sourceRoles.filter((r) => r.type === type);
           if (rolesDuType.length === 0) return null;
 
           const count = compteParType[type] || 0;
@@ -529,13 +697,9 @@ export default function App() {
           onClick={() => setAffectationVisible(true)}
           disabled={Object.keys(joueursAttribues).length === nbJoueurs}
           style={{
-            padding: "0.5rem 1rem",
-            fontFamily: "Cardo",
-            fontSize: "1rem",
-            cursor:
-              Object.keys(joueursAttribues).length === nbJoueurs
-                ? "not-allowed"
-                : "pointer",
+            ...buttonStyle,
+            cursor: Object.keys(joueursAttribues).length === nbJoueurs ? "not-allowed" : "pointer",
+            opacity: Object.keys(joueursAttribues).length === nbJoueurs ? 0.5 : 1
           }}
         >
           Attribuer les rôles
@@ -546,11 +710,8 @@ export default function App() {
           <button
             onClick={() => setAfficherOrdreReveil((prev) => !prev)}
             style={{
-              marginBottom: "1rem",
-              padding: "0.5rem 1rem",
-              fontFamily: "Cardo, serif",
-              fontSize: "1rem",
-              cursor: "pointer",
+              ...buttonStyle,
+              marginBottom: "1rem"
             }}
           >
             {afficherOrdreReveil
@@ -567,11 +728,8 @@ export default function App() {
                   )
                 }
                 style={{
-                  marginBottom: "1rem",
-                  padding: "0.5rem 1rem",
-                  fontFamily: "Cardo, serif",
-                  fontSize: "1rem",
-                  cursor: "pointer",
+                  ...buttonStyle,
+                  marginBottom: "1rem"
                 }}
               >
                 {ordreNuitActuelle === "premiere"
@@ -737,11 +895,8 @@ export default function App() {
           <button
             onClick={() => setAfficherRepartition((prev) => !prev)}
             style={{
-              marginTop: "2rem",
-              padding: "0.5rem 1rem",
-              fontFamily: "Cardo, serif",
-              fontSize: "1rem",
-              cursor: "pointer",
+              ...buttonStyle,
+              marginTop: "2rem"
             }}
           >
             {afficherRepartition
@@ -837,96 +992,71 @@ export default function App() {
               marginBottom: "1rem",
             }}
           >
-            Script pour : {edition}
+            Liste des rôles pour : {edition}
           </h2>
 
           <QRCode
             value={
-              window.location.origin + "/minuit-sonne-rouge/" + urlPDF[edition]
+              edition === "script personnalisé"
+                ? (customScriptPool.length > 0
+                    ? `${window.location.origin}/minuit-sonne-rouge/QRCodePage.html?custom=${encodeURIComponent(customScriptPool.map(r => r.nom).join(","))}`
+                    : window.location.origin + "/minuit-sonne-rouge/")
+                : urlPDF[edition]
+                  ? window.location.origin + "/minuit-sonne-rouge/" + urlPDF[edition]
+                  : window.location.origin + "/minuit-sonne-rouge/"
             }
             size={256}
             bgColor="#ffffff"
             fgColor="#000000"
           />
-          {qrCodeVisible && (
-            <div
+          {/* Show 'Afficher le script' for custom script, 'Voir PDF' for standard editions */}
+          {edition === "script personnalisé" && customScriptPool.length > 0 && (
+            <button
               style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "grey",
-                color: "white",
-                zIndex: 15,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
+                marginTop: "1.5rem",
+                padding: "0.5rem 1.5rem",
+                fontFamily: "Cardo, serif",
+                fontSize: "1.1rem",
+                cursor: "pointer",
+                background: "#fff",
+                color: "#222",
+                borderRadius: 8,
+                border: "1px solid #ccc",
               }}
+              onClick={() =>
+                window.open(
+                  `${window.location.origin}/minuit-sonne-rouge/QRCodePage.html?custom=${encodeURIComponent(customScriptPool.map(r => r.nom).join(","))}`,
+                  "_blank"
+                )
+              }
             >
-              <button
-                onClick={() => setQrCodeVisible(false)}
-                style={{
-                  position: "absolute",
-                  top: "1rem",
-                  right: "1rem",
-                  fontSize: "1.5rem",
-                  color: "white",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                ✖
-              </button>
-
-              <h2
-                style={{
-                  fontFamily: "Cardo",
-                  fontSize: "1.5rem",
-                  marginBottom: "1rem",
-                }}
-              >
-                Script pour : {edition}
-              </h2>
-
-              <QRCode
-                value={
+              Afficher la liste
+            </button>
+          )}
+          {edition !== "script personnalisé" && urlPDF[edition] && (
+            <button
+              style={{
+                marginTop: "1.5rem",
+                padding: "0.5rem 1.5rem",
+                fontFamily: "Cardo, serif",
+                fontSize: "1.1rem",
+                cursor: "pointer",
+                background: "#fff",
+                color: "#222",
+                borderRadius: 8,
+                border: "1px solid #ccc",
+              }}
+              onClick={() =>
+                window.open(
                   window.location.origin +
-                  "/minuit-sonne-rouge/" +
-                  urlPDF[edition]
-                }
-                size={256}
-                bgColor="#ffffff"
-                fgColor="#000000"
-              />
-
-              {/* Add this button below the QRCode */}
-              <button
-                style={{
-                  marginTop: "1.5rem",
-                  padding: "0.5rem 1.5rem",
-                  fontFamily: "Cardo, serif",
-                  fontSize: "1.1rem",
-                  cursor: "pointer",
-                  background: "#fff",
-                  color: "#222",
-                  borderRadius: 8,
-                  border: "1px solid #ccc",
-                }}
-                onClick={() =>
-                  window.open(
-                    window.location.origin +
-                      "/minuit-sonne-rouge/" +
-                      urlPDF[edition],
-                    "_blank"
-                  )
-                }
-              >
-                Voir PDF
-              </button>
-            </div>
+                    "/minuit-sonne-rouge/" +
+                    urlPDF[edition],
+                  "_blank"
+                )
+              }
+            >
+              Afficher la liste
+            </button>
           )}
         </div>
       )}
@@ -937,11 +1067,8 @@ export default function App() {
             setErreurBluffs("");
           }}
           style={{
-            marginTop: "1rem",
-            padding: "0.5rem 1rem",
-            fontFamily: "Cardo, serif",
-            fontSize: "1rem",
-            cursor: "pointer",
+            ...buttonStyle,
+            marginTop: "1rem"
           }}
           disabled={bluffsValides}
         >
@@ -1027,11 +1154,10 @@ export default function App() {
               }
             }}
             style={{
+              ...buttonStyle,
               marginTop: "1rem",
-              padding: "0.5rem 1rem",
-              fontFamily: "Cardo, serif",
-              fontSize: "1rem",
               cursor: bluffs.length === 3 ? "pointer" : "not-allowed",
+              opacity: bluffs.length === 3 ? 1 : 0.5
             }}
             disabled={bluffs.length !== 3}
           >
@@ -1043,14 +1169,11 @@ export default function App() {
         <button
           onClick={() => setAfficherBluffs(true)}
           style={{
-            marginTop: "1rem",
-            padding: "0.5rem 1rem",
-            fontFamily: "Cardo, serif",
-            fontSize: "1rem",
-            cursor: "pointer",
+            ...buttonStyle,
+            marginTop: "1rem"
           }}
         >
-          Montrer bluffs
+          Montrer les bluffs
         </button>
       )}
       {afficherBluffs && (
@@ -1092,7 +1215,7 @@ export default function App() {
               marginBottom: "2rem",
             }}
           >
-            Voici tes bluffs
+            Ces rôles ne sont pas en jeu
           </h2>
           <div style={{ display: "flex", gap: "2rem" }}>
             {bluffs.map((role) => (
@@ -1138,14 +1261,11 @@ export default function App() {
       <button
         onClick={() => setAfficherNotes((prev) => !prev)}
         style={{
-          marginTop: "2rem",
-          padding: "0.5rem 1rem",
-          fontFamily: "Cardo, serif",
-          fontSize: "1rem",
-          cursor: "pointer",
+          ...buttonStyle,
+          marginTop: "2rem"
         }}
       >
-        {afficherNotes ? "Masquer les notes MJ" : "Notes du maître du jeu"}
+        {afficherNotes ? "Masquer les notes" : "Afficher les notes"}
       </button>
     </div>
   );
