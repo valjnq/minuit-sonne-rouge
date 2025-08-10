@@ -276,7 +276,7 @@
     "type": "Habitant",
     "alignement": "Bon",
     "ordreAutresNuits": 1,
-    "ordrePremiereNuit": 4
+    "ordrePremiereNuit": 1
   },
   {
     "nom": "Bête de foire",
@@ -476,7 +476,7 @@
     "type": "Étranger",
     "alignement": "Bon",
     "ordreAutresNuits": 14,
-    "ordrePremiereNuit": 2
+    "ordrePremiereNuit": 3
   },
   {
     "nom": "Bouffon",

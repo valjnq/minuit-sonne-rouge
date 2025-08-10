@@ -23,6 +23,7 @@ const buttonStyle = {
 };
 
 export default function App() {
+  // ...existing code...
   const base = {
     5: { Habitants: 3, Étrangers: 0, Acolytes: 1, Demons: 1 },
     6: { Habitants: 3, Étrangers: 1, Acolytes: 1, Demons: 1 },
@@ -65,6 +66,7 @@ export default function App() {
   const [customScriptVisible, setCustomScriptVisible] = useState(false);
   const [customScriptPool, setCustomScriptPool] = useState([]); // pool of available roles for custom script
   const [customScriptTemp, setCustomScriptTemp] = useState([]); // temp selection in modal
+  const [afficherGrimoire, setAfficherGrimoire] = useState(false);
 
   const urlPDF = {
     "Sombre présage": "docs/minuitsonnerouge-sombrepresage.pdf",
@@ -403,7 +405,7 @@ export default function App() {
                             >
                               {role.nom}
                             </div>
-                            <div style={{ fontSize: "0.9rem", color: "#ccc" }}>{role.edition}</div>
+                            {/* Removed edition display for custom script role selection */}
                           </div>
                         );
                       })}
@@ -744,11 +746,178 @@ export default function App() {
                     ? "Première nuit"
                     : "Autres nuits"}
                 </h2>
+                <div
+                  key="crepuscule"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  <img
+                    src={`icons/crepuscule.png`}
+                    alt="crépuscule"
+                    style={{
+                      height: "32px",
+                      width: "32px",
+                      objectFit: "contain",
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontFamily: "Cardo, serif",
+                      fontSize: "1.2rem",
+                      color: "black"
+                    }}
+                  >
+                    Crépuscule
+                  </span>
+                </div>
+                {/* Philosophe (ordrePremiereNuit: 1) */}
+                {ordreNuitActuelle === "premiere" && selected.some(r => r.nom.toLowerCase() === "philosophe" && r.ordrePremiereNuit === 1) && (
+                  selected
+                    .filter(r => r.nom.toLowerCase() === "philosophe" && r.ordrePremiereNuit === 1)
+                    .map((role) => (
+                      <div
+                        key={role.nom}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "1rem",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        <img
+                          src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                          alt={role.nom}
+                          style={{
+                            height: "32px",
+                            width: "32px",
+                            objectFit: "contain",
+                          }}
+                        />
+                        <span
+                          style={{
+                            fontFamily: "Cardo, serif",
+                            fontSize: "1.2rem",
+                            color: role.alignement === "Bon" ? "#0e74b4" : "#950f13",
+                          }}
+                        >
+                          {role.nom}
+                        </span>
+                      </div>
+                    ))
+                )}
+                {/* Réveil des acolytes (ordrePremiereNuit: 2) */}
+                {ordreNuitActuelle === "premiere" && (
+                  <div
+                    key="acolyte"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1rem",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    <img
+                      src={`icons/acolyte.png`}
+                      alt="Réveil des acolytes"
+                      style={{
+                        height: "32px",
+                        width: "32px",
+                        objectFit: "contain",
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontFamily: "Cardo, serif",
+                        fontSize: "1.2rem",
+                        color: "#950f13"
+                      }}
+                    >
+                      Réveil des acolytes
+                    </span>
+                  </div>
+                )}
+                {/* Lunatique (ordrePremiereNuit: 3) */}
+                {ordreNuitActuelle === "premiere" && selected.some(r => r.nom.toLowerCase() === "lunatique" && r.ordrePremiereNuit === 3) && (
+                  selected
+                    .filter(r => r.nom.toLowerCase() === "lunatique" && r.ordrePremiereNuit === 3)
+                    .map((role) => (
+                      <div
+                        key={role.nom}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "1rem",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        <img
+                          src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                          alt={role.nom}
+                          style={{
+                            height: "32px",
+                            width: "32px",
+                            objectFit: "contain",
+                          }}
+                        />
+                        <span
+                          style={{
+                            fontFamily: "Cardo, serif",
+                            fontSize: "1.2rem",
+                            color: role.alignement === "Bon" ? "#0e74b4" : "#950f13",
+                          }}
+                        >
+                          {role.nom}
+                        </span>
+                      </div>
+                    ))
+                )}
+                {/* Réveil du démon et bluffs (ordrePremiereNuit: 4) - only show if no role has ordrePremiereNuit: 4, otherwise handled in roles loop */}
+                {ordreNuitActuelle === "premiere" && !selected.some(r => r.ordrePremiereNuit === 4) && (
+                  <div
+                    key="demon-bluffs"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1rem",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    <img
+                      src={`icons/demon.png`}
+                      alt="Réveil du démon et bluffs"
+                      style={{
+                        height: "32px",
+                        width: "32px",
+                        objectFit: "contain",
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontFamily: "Cardo, serif",
+                        fontSize: "1.2rem",
+                        color: "#950f13"
+                      }}
+                    >
+                      Réveil du démon et bluffs
+                    </span>
+                  </div>
+                )}
+                {/* Other roles, skipping 1-4 in premiere nuit. For autres nuits, do NOT show 'Réveil du démon et bluffs'.
+                    If a role has ordrePremiereNuit: 4, render the demon-bluffs block in its place. */}
                 {selected
                   .filter((r) =>
                     ordreNuitActuelle === "premiere"
-                      ? typeof r.ordrePremiereNuit === "number"
-                      : typeof r.ordreAutresNuits === "number"
+                      ? typeof r.ordrePremiereNuit === "number" && r.ordrePremiereNuit > 4
+                      : typeof r.ordreAutresNuits === "number" && r.nom.toLowerCase() !== "réveil du démon et bluffs" && r.nom.toLowerCase() !== "reveil du demon et bluffs"
+                  )
+                  .concat(
+                    ordreNuitActuelle === "premiere"
+                      ? selected.filter(r => r.ordrePremiereNuit === 4 && (r.nom.toLowerCase() === "réveil du démon et bluffs" || r.nom.toLowerCase() === "reveil du demon et bluffs")).map(r => ({...r, isDemonBluffs: true}))
+                      : []
                   )
                   .sort((a, b) =>
                     ordreNuitActuelle === "premiere"
@@ -756,34 +925,96 @@ export default function App() {
                       : a.ordreAutresNuits - b.ordreAutresNuits
                   )
                   .map((role) => (
-                    <div
-                      key={role.nom}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "1rem",
-                        marginBottom: "0.5rem",
-                      }}
-                    >
-                      <img
-                        src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                        alt={role.nom}
+                    role.isDemonBluffs ? (
+                      <div
+                        key="demon-bluffs"
                         style={{
-                          height: "32px",
-                          width: "32px",
-                          objectFit: "contain",
-                        }}
-                      />
-                      <span
-                        style={{
-                          fontFamily: "Cardo, serif",
-                          fontSize: "1.2rem",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "1rem",
+                          marginBottom: "0.5rem",
                         }}
                       >
-                        {role.nom}
-                      </span>
-                    </div>
+                        <img
+                          src={`icons/demon.png`}
+                          alt="Réveil du démon et bluffs"
+                          style={{
+                            height: "32px",
+                            width: "32px",
+                            objectFit: "contain",
+                          }}
+                        />
+                        <span
+                          style={{
+                            fontFamily: "Cardo, serif",
+                            fontSize: "1.2rem",
+                            color: "#950f13"
+                          }}
+                        >
+                          Réveil du démon et bluffs
+                        </span>
+                      </div>
+                    ) : (
+                      <div
+                        key={role.nom}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "1rem",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        <img
+                          src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                          alt={role.nom}
+                          style={{
+                            height: "32px",
+                            width: "32px",
+                            objectFit: "contain",
+                          }}
+                        />
+                        <span
+                          style={{
+                            fontFamily: "Cardo, serif",
+                            fontSize: "1.2rem",
+                            color: role.alignement === "Bon" ? "#0e74b4" : "#950f13",
+                          }}
+                        >
+                          {role.nom}
+                        </span>
+                      </div>
+                    )
                   ))}
+
+                {/* Always show Aube last */}
+                <div
+                  key="aube"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  <img
+                    src={`icons/aube.png`}
+                    alt="Aube"
+                    style={{
+                      height: "32px",
+                      width: "32px",
+                      objectFit: "contain",
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontFamily: "Cardo, serif",
+                      fontSize: "1.2rem",
+                      color: "black"
+                    }}
+                  >
+                    Aube
+                  </span>
+                </div>
               </div>
             </>
           )}
@@ -951,7 +1182,6 @@ export default function App() {
           )}
         </>
       )}
-
       {qrCodeVisible && (
         <div
           style={{
