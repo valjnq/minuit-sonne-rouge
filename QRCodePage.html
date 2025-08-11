@@ -45,97 +45,140 @@
           // Add title
           const h2 = document.createElement("h2");
           h2.textContent = "Script personnalisé";
-          h2.style.fontFamily = "Cardo,serif";
           h2.style.fontSize = "2rem";
           h2.style.marginBottom = "2rem";
+          h2.style.textAlign = "center";
           document.body.appendChild(h2);
 
-          // Add table-like list grouped by type
+          // Prepare role data
           const noms = custom.split(",").map(decodeURIComponent);
-          const roles = noms
-            .map((nom) => allRoles.find((r) => r.nom === nom))
-            .filter(Boolean);
+          const roles = noms.map((nom) => allRoles.find((r) => r.nom === nom)).filter(Boolean);
           const typeLabels = {
             'Habitant': 'Villageois',
             'Étranger': 'Étrangers',
             'Acolyte': 'Acolytes',
             'Démon': 'Démons'
           };
-          const types = ['Habitant', 'Étranger', 'Acolyte', 'Démon'];
-          types.forEach(type => {
-            const rolesOfType = roles.filter(r => r.type === type || r.type === typeLabels[type]);
-            if (rolesOfType.length === 0) return;
-            // Add type header styled like a section
-            const header = document.createElement('div');
-            header.textContent = typeLabels[type];
-            header.style.fontFamily = "'IM Fell English SC',serif";
-            header.style.fontSize = '2rem';
-            header.style.color = (type === 'Démon' || type === 'Acolyte') ? '#950f13' : '#0e74b4';
-            header.style.background = '#ece6d6';
-            header.style.border = '2px solid #222';
-            header.style.borderRadius = '18px';
-            header.style.padding = '0.3em 1.5em';
-            header.style.display = 'inline-block';
-            header.style.margin = '2.5rem 0 1.5rem 0';
-            header.style.boxShadow = '0 2px 8px #0002';
-            document.body.appendChild(header);
+          const types = ['Villageois', 'Étrangers', 'Acolytes', 'Démons'];
+          const typeMap = {
+            'Villageois': ['Habitant', 'Villageois'],
+            'Étrangers': ['Étranger', 'Étrangers'],
+            'Acolytes': ['Acolyte', 'Acolytes'],
+            'Démons': ['Démon', 'Démons']
+          };
 
-            // Add a container for the list
-            const list = document.createElement('div');
-            list.style.margin = '0 0 2.5rem 0';
-            list.style.width = '100%';
-            list.style.maxWidth = '900px';
-            list.style.marginLeft = 'auto';
-            list.style.marginRight = 'auto';
+          // Container for all lists
+          const allLists = document.createElement('div');
+          allLists.id = 'role-lists';
+          allLists.style.maxWidth = '900px';
+          allLists.style.margin = '0 auto';
+          document.body.appendChild(allLists);
 
-            rolesOfType.forEach((role) => {
-              const row = document.createElement('div');
-              row.style.display = 'flex';
-              row.style.alignItems = 'center';
-              row.style.gap = '2.5rem';
-              row.style.background = '#fff';
-              row.style.color = '#222';
-              row.style.borderRadius = '12px';
-              row.style.margin = '1.2rem 0';
-              row.style.padding = '1.2rem 2rem';
-              row.style.boxShadow = '0 2px 8px #0001';
+          function renderLists() {
+            allLists.innerHTML = '';
+            types.forEach(type => {
+              const rolesOfType = roles.filter(r => typeMap[type].includes(r.type));
+              if (rolesOfType.length === 0) return;
 
-              // Icon
-              const icon = document.createElement('img');
-              icon.src = `/minuit-sonne-rouge/icons/icon_${normalizeNom(role.nom)}.png`;
-              icon.alt = role.nom;
-              icon.style.height = '56px';
-              icon.style.width = '56px';
-              icon.style.objectFit = 'contain';
-              icon.style.flex = '0 0 56px';
-              row.appendChild(icon);
+              // Collapsible section container
+              const section = document.createElement('div');
+              section.style.marginBottom = '2.5rem';
+              section.style.borderTop = '2px solid #222';
+              section.style.paddingTop = '0.5rem';
 
-              // Name
-              const name = document.createElement('div');
-              name.textContent = role.nom;
-              name.style.fontFamily = "'IM Fell English SC',serif";
-              name.style.fontSize = '1.5rem';
-              name.style.fontWeight = 'bold';
-              name.style.color = role.alignement === 'Bon' ? '#0e74b4' : '#950f13';
-              name.style.flex = '0 0 180px';
-              name.style.textAlign = 'left';
-              row.appendChild(name);
+              // Collapsible button
+              const btn = document.createElement('button');
+              btn.type = 'button';
+              btn.textContent = `▼  ${type}`;
+              btn.setAttribute('aria-expanded', 'true');
+              btn.style.fontSize = '1.2rem';
+              btn.style.fontWeight = 'bold';
+              btn.style.fontFamily = "serif";
+              btn.style.color = (type === 'Démons' || type === 'Acolytes') ? '#950f13' : '#0e74b4';
+              btn.style.background = '#ece6d6';
+              btn.style.border = '2px solid #222';
+              btn.style.borderRadius = '18px';
+              btn.style.padding = '0.3em 1.5em';
+              btn.style.margin = '0 0 1.5rem 0';
+              btn.style.boxShadow = '0 2px 8px #0002';
+              btn.style.cursor = 'pointer';
+              btn.style.display = 'inline-block';
 
-              // Power/Description
-              const desc = document.createElement('div');
-              desc.textContent = role.pouvoir || '';
-              desc.style.fontFamily = 'Cardo,serif';
-              desc.style.fontSize = '1.25rem';
-              desc.style.lineHeight = '1.5';
-              desc.style.textAlign = 'left';
-              desc.style.flex = '1 1 auto';
-              row.appendChild(desc);
+              // List container
+              const list = document.createElement('div');
+              list.style.width = '100%';
+              list.style.maxWidth = '900px';
+              list.style.marginLeft = 'auto';
+              list.style.marginRight = 'auto';
 
-              list.appendChild(row);
+              rolesOfType.forEach((role, idx) => {
+                const row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.alignItems = 'center';
+                row.style.gap = '2.5rem';
+                row.style.background = '#fff';
+                row.style.color = '#222';
+                row.style.borderRadius = '12px';
+                row.style.margin = '0';
+                row.style.padding = '1.2rem 2rem';
+                row.style.boxShadow = '0 2px 8px #0001';
+                if (idx > 0) {
+                  row.style.borderTop = '1px solid #ece6d6';
+                }
+
+                // Icon
+                const icon = document.createElement('img');
+                icon.src = `/minuit-sonne-rouge/icons/icon_${normalizeNom(role.nom)}.png`;
+                icon.alt = role.nom;
+                icon.style.height = '56px';
+                icon.style.width = '56px';
+                icon.style.objectFit = 'contain';
+                icon.style.flex = '0 0 56px';
+                row.appendChild(icon);
+
+                // Name
+                const name = document.createElement('div');
+                name.textContent = role.nom;
+                name.style.fontWeight = 'bold';
+                name.style.fontSize = '1.5rem';
+                name.style.color = role.alignement === 'Bon' ? '#0e74b4' : '#950f13';
+                name.style.flex = '0 0 180px';
+                name.style.textAlign = 'left';
+                row.appendChild(name);
+
+                // Power/Description
+                const desc = document.createElement('div');
+                desc.textContent = role.pouvoir || '';
+                desc.style.fontSize = '1.25rem';
+                desc.style.lineHeight = '1.5';
+                desc.style.textAlign = 'left';
+                desc.style.flex = '1 1 auto';
+                row.appendChild(desc);
+
+                list.appendChild(row);
+              });
+
+              // Collapsible logic
+              btn.addEventListener('click', function() {
+                if (list.style.display === 'none') {
+                  list.style.display = '';
+                  btn.textContent = `▼  ${type}`;
+                  btn.setAttribute('aria-expanded', 'true');
+                } else {
+                  list.style.display = 'none';
+                  btn.textContent = `►  ${type}`;
+                  btn.setAttribute('aria-expanded', 'false');
+                }
+              });
+
+              section.appendChild(btn);
+              section.appendChild(list);
+              allLists.appendChild(section);
             });
-            document.body.appendChild(list);
-          });
+          }
 
+          // Initial render
+          renderLists();
         });
       function normalizeNom(nom) {
         return nom
