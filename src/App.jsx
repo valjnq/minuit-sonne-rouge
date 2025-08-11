@@ -105,6 +105,11 @@ export default function App() {
   const [editBluffsModal, setEditBluffsModal] = useState(false);
   const [editBluffsTemp, setEditBluffsTemp] = useState([]);
 
+  // Remove a custom jeton by index
+  function removeCustomJeton(index) {
+    setCustomJetons((prev) => prev.filter((_, i) => i !== index));
+  }
+
   const [rolesDisponiblesPourRemplacer, setRolesDisponiblesPourRemplacer] =
     useState([]);
   const [rolesRestantsInitial, setRolesRestantsInitial] = useState([]);
@@ -347,6 +352,7 @@ export default function App() {
     setRolesValides(true);
     setErreurValidation("");
     setRolesRestants([...selected]);
+    setAfficherRoles(false); // Hide roles section automatically
   }
 
   return (
@@ -745,6 +751,17 @@ export default function App() {
       >
         Valider les rôles
       </button>
+      {erreurValidation && (
+        <div
+          style={{
+            color: "#950f13",
+            marginBottom: "1rem",
+            fontFamily: "Cardo, serif",
+          }}
+        >
+          {erreurValidation}
+        </div>
+      )}
 
       {/* ROLES DISPLAY BLOCK - restored to main return */}
 
@@ -758,7 +775,13 @@ export default function App() {
           const expectedCount = maxParType[label];
           return (
             <div key={type} style={{ marginBottom: "1rem" }}>
-              <div style={{ fontWeight: "bold", marginBottom: "0.5rem", fontSize: "1.2rem" }}>
+              <div
+                style={{
+                  fontWeight: "bold",
+                  marginBottom: "0.5rem",
+                  fontSize: "1.2rem",
+                }}
+              >
                 {label} ({selectedCount}/{expectedCount})
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
@@ -1579,7 +1602,7 @@ export default function App() {
                       fontSize: "1.3rem",
                       marginRight: "1.5rem",
                       letterSpacing: "1px",
-                      color: "black",
+                      color: "#950f13",
                       minWidth: "140px",
                       textAlign: "left",
                     }}
@@ -2083,6 +2106,14 @@ export default function App() {
                                             };
                                             return updated;
                                           });
+                                          // Update selected roles for ordre de réveil
+                                          setSelected((prevSelected) => {
+                                            // Remove the old role and add the new one
+                                            const withoutOld = prevSelected.filter(
+                                              (role) => role.nom !== joueur?.role?.nom
+                                            );
+                                            return [...withoutOld, r];
+                                          });
                                         }
                                         setShowRemplacerDropdown(false);
                                         setRemplacerRole(null);
@@ -2518,9 +2549,7 @@ export default function App() {
                 display: "flex",
                 justifyContent: "flex-end",
               }}
-            >
-
-            </div>
+            ></div>
             <div
               style={{
                 display: "flex",
@@ -2799,6 +2828,31 @@ export default function App() {
               height: "100vh",
             }}
           >
+            {/* Bin icon for custom messages, top left */}
+            {jetonInfoPage && jetonInfoPage.startsWith("custom-") && (
+              <button
+                onClick={() => {
+                  const idx = parseInt(jetonInfoPage.split("-")[1]);
+                  removeCustomJeton(idx);
+                  setJetonInfoPage(null);
+                }}
+                style={{
+                  position: "absolute",
+                  top: "1.5rem",
+                  left: "2rem",
+                  fontSize: "2rem",
+                  color: "#fff",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  zIndex: 401,
+                }}
+                title="Supprimer ce message"
+              >
+                🗑️
+              </button>
+            )}
+            {/* Close icon, top right */}
             <button
               onClick={() => setJetonInfoPage(null)}
               style={{
@@ -2868,187 +2922,6 @@ export default function App() {
                 ) : null)}
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Modal for available roles in the script (communication section) */}
-      {rolesModalOpen && afficherRoles && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            background: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-          }}
-        >
-          {/* If a role is selected, show only its info in a focused modal */}
-          {selectedRole ? (
-            <div
-              style={{
-                background: "#fff",
-                borderRadius: 16,
-                padding: "2.5rem 2rem 2rem 2rem",
-                boxShadow: "0 2px 24px rgba(0,0,0,0.35)",
-                minWidth: 340,
-                maxWidth: 420,
-                textAlign: "center",
-                position: "relative",
-              }}
-            >
-              <button
-                style={{
-                  position: "absolute",
-                  top: 18,
-                  right: 18,
-                  fontSize: 28,
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "#222",
-                }}
-                onClick={() => {
-                  setSelectedRole(null);
-                  setRolesModalOpen(false);
-                }}
-                aria-label="Fermer"
-              >
-                ×
-              </button>
-              <img
-                src={`icons/icon_${normalizeNom(selectedRole.nom)}.png`}
-                alt={selectedRole.nom}
-                style={{
-                  width: 72,
-                  height: 72,
-                  objectFit: "contain",
-                  marginBottom: "1rem",
-                }}
-              />
-              <h2
-                style={{
-                  fontFamily: "Cardo, serif",
-                  fontSize: "2rem",
-                  margin: "0.5rem 0 1rem 0",
-                }}
-              >
-                {selectedRole.nom}
-              </h2>
-              <div
-                style={{
-                  fontSize: "1.1rem",
-                  marginBottom: "1.2rem",
-                  color: "#222",
-                }}
-              >
-                {selectedRole.pouvoir}
-              </div>
-              <div
-                style={{ fontStyle: "italic", color: "#555", fontSize: "1rem" }}
-              >
-                {selectedRole.type} – {selectedRole.alignement}
-              </div>
-            </div>
-          ) : (
-            <div
-              style={{
-                background: "#f5f5f5",
-                borderRadius: 12,
-                padding: "2rem",
-                boxShadow: "0 2px 16px rgba(0,0,0,0.3)",
-                minWidth: 400,
-                maxWidth: 600,
-                maxHeight: "80vh",
-                overflowY: "auto",
-                position: "relative",
-              }}
-            >
-              <button
-                style={{
-                  position: "absolute",
-                  top: 12,
-                  right: 12,
-                  fontSize: 24,
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  setRolesModalOpen(false);
-                  setSelectedRole(null);
-                }}
-                aria-label="Fermer"
-              >
-                ×
-              </button>
-              <h2 style={{ fontFamily: "Cardo, serif", marginBottom: "1rem" }}>
-                Rôles du script
-              </h2>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(80px, 1fr))",
-                  gap: "1rem",
-                }}
-              >
-                {(rolesDisponiblesPourRemplacer.length > 0
-                  ? rolesDisponiblesPourRemplacer
-                  : selected
-                ).map((role) => {
-                  const iconName = `icon_${normalizeNom(role.nom)}.png`;
-                  return (
-                    <div
-                      key={role.nom}
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        cursor: "pointer",
-                        border:
-                          selectedRole && selectedRole.nom === role.nom
-                            ? "2px solid #0e74b4"
-                            : "2px solid transparent",
-                        borderRadius: 8,
-                        padding: "0.5rem",
-                        background: "#fff",
-                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                        transition: "border 0.2s",
-                      }}
-                      onClick={() => setSelectedRole(role)}
-                    >
-                      <img
-                        src={`icons/${iconName}`}
-                        alt={role.nom}
-                        style={{
-                          width: 48,
-                          height: 48,
-                          marginBottom: 8,
-                          objectFit: "contain",
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
-                      />
-                      <span
-                        style={{
-                          fontFamily: "Cardo, serif",
-                          fontSize: "0.95rem",
-                          textAlign: "center",
-                        }}
-                      >
-                        {role.nom}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
         </div>
       )}
 
