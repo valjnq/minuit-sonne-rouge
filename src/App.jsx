@@ -10,6 +10,11 @@ function normalizeNom(nom) {
     .toLowerCase();
 }
 
+function getRoleIcon(role) {
+  const fileName = `icon_${normalizeNom(role.nom)}.png`;
+  return `/icons/${fileName}`;
+}
+
 const buttonStyle = {
   padding: "0.5rem 1.2rem",
   fontFamily: "Cardo, serif",
@@ -160,6 +165,13 @@ export default function App() {
   const [customScriptVisible, setCustomScriptVisible] = useState(false);
   const [customScriptPool, setCustomScriptPool] = useState([]);
   const [customScriptTemp, setCustomScriptTemp] = useState([]);
+
+  // Ensure customScriptTemp is always initialized from validated pool when opening modal
+  useEffect(() => {
+    if (customScriptVisible) {
+      setCustomScriptTemp(customScriptPool);
+    }
+  }, [customScriptVisible]);
   const [afficherGrimoire, setAfficherGrimoire] = useState(false);
 
   const urlPDF = {
@@ -461,7 +473,8 @@ export default function App() {
             <button
               onClick={() => {
                 setCustomScriptVisible(false);
-                // Do not clear customScriptTemp here, so selection is preserved
+                // Reset temp selection to validated pool when closing without validating
+                setCustomScriptTemp(customScriptPool);
               }}
               style={{
                 position: "absolute",
@@ -2549,7 +2562,173 @@ export default function App() {
                 display: "flex",
                 justifyContent: "flex-end",
               }}
-            ></div>
+            >
+              <button
+                style={{
+                  ...buttonStyle,
+                  background: "#222",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: "1.1rem",
+                  minWidth: "180px",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                }}
+                onClick={() => setRolesModalOpen(true)}
+              >
+                Rôles
+              </button>
+            </div>
+            {/* Modal for roles selection */}
+            {rolesModalOpen && (
+              <div
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: "rgba(0,0,0,0.7)",
+                  zIndex: 400,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  style={{
+                    background: "#fff",
+                    color: "#222",
+                    borderRadius: "10px",
+                    padding: "2rem",
+                    minWidth: "320px",
+                    maxHeight: "80vh",
+                    overflowY: "auto",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                    position: "relative",
+                  }}
+                >
+                  <button
+                    onClick={() => setRolesModalOpen(false)}
+                    style={{
+                      position: "absolute",
+                      top: "1rem",
+                      right: "1rem",
+                      fontSize: "1.5rem",
+                      color: "#333",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    ×
+                  </button>
+                  <h2 style={{ marginBottom: "1rem" }}>Choisir un rôle</h2>
+                  {/* Group roles by type */}
+                  {(() => {
+                    const types = {};
+                    rolesFiltres.forEach((role) => {
+                      if (!types[role.type]) types[role.type] = [];
+                      types[role.type].push(role);
+                    });
+                    const typeOrder = ["Habitant", "Étranger", "Acolyte", "Démon"];
+                    return typeOrder
+                      .filter((type) => types[type])
+                      .map((type) => (
+                        <div key={type} style={{ marginBottom: "1.2rem" }}>
+                          <div style={{ fontWeight: "bold", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#222" }}>{type}</div>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                            {types[type].map((role) => (
+                              <button
+                                key={role.nom}
+                                style={{
+                                  background: "#eee",
+                                  color: "#222",
+                                  border: "1px solid #bbb",
+                                  borderRadius: "6px",
+                                  fontWeight: "bold",
+                                  fontSize: "1rem",
+                                  padding: "0.4rem 0.8rem",
+                                  marginBottom: "0.3rem",
+                                  cursor: "pointer",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "0.5rem",
+                                }}
+                                onClick={() => {
+                                  setSelectedRole(role);
+                                  setRolesModalOpen(false);
+                                }}
+                              >
+                                <img
+                                  src={getRoleIcon(role)}
+                                  alt={role.nom}
+                                  style={{ width: "28px", height: "28px", borderRadius: "4px", background: "#fff", border: "1px solid #ccc" }}
+                                  onError={(e) => { e.target.style.display = 'none'; }}
+                                />
+                                {role.nom}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ));
+                  })()}
+                </div>
+              </div>
+            )}
+            {/* Modal for displaying selected role */}
+            {selectedRole && (
+              <div
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: "#000",
+                  zIndex: 401,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  style={{
+                    background: "#111",
+                    color: "#fff",
+                    borderRadius: "12px",
+                    padding: "2.5rem 2rem",
+                    minWidth: "320px",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.4)",
+                    position: "relative",
+                    textAlign: "center",
+                  }}
+                >
+                  <button
+                    onClick={() => setSelectedRole(null)}
+                    style={{
+                      position: "absolute",
+                      top: "1rem",
+                      right: "1rem",
+                      fontSize: "1.5rem",
+                      color: "#fff",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    ×
+                  </button>
+                  <img
+                    src={getRoleIcon(selectedRole)}
+                    alt={selectedRole.nom}
+                    style={{ width: "64px", height: "64px", borderRadius: "8px", background: "#fff", border: "2px solid #fff", marginBottom: "1rem" }}
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                  <h2 style={{ marginBottom: "1.2rem", fontSize: "2rem" }}>{selectedRole.nom}</h2>
+                  <div style={{ fontSize: "1rem" }}>{selectedRole.description}</div>
+                </div>
+              </div>
+            )}
             <div
               style={{
                 display: "flex",
