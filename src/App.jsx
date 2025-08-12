@@ -12,7 +12,7 @@ function normalizeNom(nom) {
 
 function getRoleIcon(role) {
   const fileName = `icon_${normalizeNom(role.nom)}.png`;
-  return `/icons/${fileName}`;
+  return `icons/${fileName}`;
 }
 
 const buttonStyle = {
