@@ -369,18 +369,19 @@ export default function App() {
 
   return (
     <div style={{ padding: "2rem" }}>
-      {/* ...existing code... */}
-      <h1
-        style={{
-          fontFamily: "'Pirata One', cursive",
-          fontSize: "2.5rem",
-          marginBottom: "1.5rem",
-          textAlign: "left",
-          marginLeft: "2rem",
-        }}
-      >
-        Grimoire de poche
-      </h1>
+      <div style={{ display: "flex", alignItems: "center", marginBottom: "1.5rem", marginLeft: "2rem" }}>
+        <img src={"/icons/grimoire.png"} alt="Grimoire" style={{ height: "48px", marginRight: "12px" }} />
+        <h1
+          style={{
+            fontFamily: "'Pirata One', cursive",
+            fontSize: "2.5rem",
+            margin: 0,
+            textAlign: "left"
+          }}
+        >
+          Grimoire de poche
+        </h1>
+      </div>
 
       <div
         style={{
