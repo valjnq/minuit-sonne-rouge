@@ -370,7 +370,7 @@ export default function App() {
   return (
     <div style={{ padding: "2rem" }}>
       <div style={{ display: "flex", alignItems: "center", marginBottom: "1.5rem", marginLeft: "2rem" }}>
-        <img src={"/icons/grimoire.png"} alt="Grimoire" style={{ height: "48px", marginRight: "12px" }} />
+        <img src={"icons/grimoire.png"} alt="Grimoire" style={{ height: "48px", marginRight: "12px" }} />
         <h1
           style={{
             fontFamily: "'Pirata One', cursive",
