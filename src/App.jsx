@@ -1519,6 +1519,7 @@ export default function App() {
                         width: "48px",
                         objectFit: "contain",
                         marginRight: "0.5rem",
+                        filter: mort ? "grayscale(1) brightness(1)" : "none",
                       }}
                     />
                     <div
