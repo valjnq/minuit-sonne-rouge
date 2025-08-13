@@ -357,10 +357,11 @@ export default function App() {
       );
       return;
     }
-    setTableRepartition((prev) => ({
-      ...prev,
-      [nbJoueurs]: { ...repartition },
-    }));
+  // setTableRepartition is disabled to keep the table static
+  // setTableRepartition((prev) => ({
+  //   ...prev,
+  //   [nbJoueurs]: { ...repartition },
+  // }));
     setRolesValides(true);
     setErreurValidation("");
     setRolesRestants([...selected]);
@@ -1551,7 +1552,11 @@ export default function App() {
                               verticalAlign: "middle",
                             }}
                           >
-                            💀
+                            <img
+                              src="icons/mort.png"
+                              alt="Mort icon"
+                              style={{ width: 32, height: 32, verticalAlign: "middle" }}
+                            />
                           </span>
                           <span
                             style={{
@@ -1560,7 +1565,13 @@ export default function App() {
                               verticalAlign: "middle",
                             }}
                           >
-                            {token ? "✅" : "❌"}
+                            {token ? (
+                              <img
+                                src="icons/vote.png"
+                                alt="Vote icon"
+                                style={{ width: 32, height: 32, verticalAlign: "middle" }}
+                              />
+                            ) : null}
                           </span>
                         </>
                       )}
@@ -2225,7 +2236,7 @@ export default function App() {
                                 });
                               }}
                             >
-                              Vote {joueur?.token ? "✅" : "❌"}
+                              Vote
                             </button>
                           )}
                         </div>
