@@ -296,11 +296,21 @@ export default function App() {
 
   function validerJoueur() {
     if (indexActif === null || !nomTemporaire.trim() || !roleActif) return;
+    // Détermine l'alignement selon le type du rôle
+    let alignementAuto = "Maléfique";
+    if (roleActif.type === "Habitant" || roleActif.type === "Étranger") {
+      alignementAuto = "Bon";
+    }
     setJoueursAttribues((prev) => ({
       ...prev,
-      [indexActif]: { nom: nomTemporaire.trim(), role: roleActif },
+      [indexActif]: {
+        nom: nomTemporaire.trim(),
+        role: roleActif,
+        alignement: alignementAuto,
+        alignementFixe: false,
+      },
     }));
-    // On first validation, store the selected roles for remplacement
+    // On first validation, store the selected roles pour remplacement
     if (rolesDisponiblesPourRemplacer.length === 0 && selected.length > 0) {
       setRolesDisponiblesPourRemplacer(selected);
     }
@@ -1301,9 +1311,16 @@ export default function App() {
                   );
                   for (let i = 0; i < nbJoueurs; i++) {
                     if (!newAttribues[i] && availableRoles.length > 0) {
+                      const roleAuto = availableRoles[0];
+                      let alignementAuto = "Maléfique";
+                      if (roleAuto.type === "Habitant" || roleAuto.type === "Étranger") {
+                        alignementAuto = "Bon";
+                      }
                       newAttribues[i] = {
                         nom: `player ${i + 1}`,
-                        role: availableRoles[0],
+                        role: roleAuto,
+                        alignement: alignementAuto,
+                        alignementFixe: false,
                       };
                       availableRoles.shift();
                     }
@@ -1487,7 +1504,7 @@ export default function App() {
               }}
             >
               {Object.entries(joueursAttribues).map(
-                ([index, { nom, role, mort, token, rappelRoles }]) => (
+                ([index, joueur]) => (
                   <div
                     key={index}
                     style={{
@@ -1495,7 +1512,7 @@ export default function App() {
                       alignItems: "center",
                       gap: "1rem",
                       marginBottom: "1rem",
-                      background: mort ? "#e0e0e0" : "#f8f8f8",
+                      background: joueur.mort ? "#e0e0e0" : "#f8f8f8",
                       borderRadius: "16px",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
                       padding: "1rem",
@@ -1504,63 +1521,62 @@ export default function App() {
                       position: "relative",
                       border: "2px solid #e0e0e0",
                     }}
-                    onClick={() => setNomEditModal({ index, nom })}
+                    onClick={() => setNomEditModal({ index, nom: joueur.nom })}
                     onTouchStart={(e) =>
-                      (e.currentTarget.style.background = mort
+                      (e.currentTarget.style.background = joueur.mort
                         ? "#d0d0d0"
                         : "#e6f0fa")
                     }
                     onTouchEnd={(e) =>
-                      (e.currentTarget.style.background = mort
+                      (e.currentTarget.style.background = joueur.mort
                         ? "#e0e0e0"
                         : "#f8f8f8")
                     }
                     onMouseDown={(e) =>
-                      (e.currentTarget.style.background = mort
+                      (e.currentTarget.style.background = joueur.mort
                         ? "#d0d0d0"
                         : "#e6f0fa")
                     }
                     onMouseUp={(e) =>
-                      (e.currentTarget.style.background = mort
+                      (e.currentTarget.style.background = joueur.mort
                         ? "#e0e0e0"
                         : "#f8f8f8")
                     }
                   >
                     <img
-                      src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                      alt={role.nom}
+                      src={`icons/icon_${normalizeNom(joueur.role.nom)}.png`}
+                      alt={joueur.role.nom}
                       style={{
                         height: "48px",
                         width: "48px",
                         objectFit: "contain",
                         marginRight: "0.5rem",
-                        filter: mort ? "grayscale(1) brightness(1)" : "none",
+                        filter: joueur.mort ? "grayscale(1) brightness(1)" : "none",
                       }}
                     />
-                    <div
-                      style={{
-                        flex: 1,
-                        fontFamily: "Cardo, serif",
-                        fontWeight: "bold",
-                        fontSize: "1.2rem",
-                        color:
-                          role.type === "Habitant" || role.type === "Étranger"
-                            ? "#0e74b4"
-                            : role.type === "Acolyte" || role.type === "Démon"
-                            ? "#950f13"
-                            : "#222",
-                        padding: "0.5rem 0",
-                        borderRadius: "8px",
-                        textAlign: "left",
-                        userSelect: "none",
-                        textDecoration: "none",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <span>{nom}</span>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <span
+                        style={{
+                          flex: 1,
+                          fontFamily: "Cardo, serif",
+                          fontWeight: "bold",
+                          fontSize: "1.2rem",
+                          color:
+                            joueur.alignement === "Bon"
+                              ? "#0e74b4"
+                              : joueur.alignement === "Maléfique"
+                              ? "#950f13"
+                              : "#222",
+                          padding: "0.5rem 0",
+                          borderRadius: "8px",
+                          textAlign: "left",
+                          userSelect: "none",
+                        }}
+                      >
+                        {joueur.nom}
+                      </span>
                       {/* Rappel icons after name, before mort icon */}
-                      {(Array.isArray(rappelRoles) ? rappelRoles : []).map(
+                      {(Array.isArray(joueur.rappelRoles) ? joueur.rappelRoles : []).map(
                         (r, idx) => (
                           <span
                             key={r.nom}
@@ -1583,7 +1599,7 @@ export default function App() {
                           </span>
                         )
                       )}
-                      {mort && (
+                      {joueur.mort && (
                         <span
                           style={{
                             marginLeft: "0.5rem",
@@ -1603,7 +1619,7 @@ export default function App() {
                         </span>
                       )}
                       {/* Vote icon after mort icon if mort is true */}
-                      {mort && token && (
+                      {joueur.mort && joueur.token && (
                         <span
                           style={{
                             marginLeft: "0.2rem",
@@ -1626,7 +1642,7 @@ export default function App() {
                     <span
                       style={{
                         fontSize: "1.3rem",
-                        color: mort ? "#888" : "#0e74b4",
+                        color: joueur.mort ? "#888" : "#0e74b4",
                         marginLeft: "0.5rem",
                         opacity: 0.7,
                         pointerEvents: "none",
@@ -1999,26 +2015,17 @@ export default function App() {
                             >
                               <input
                                 type="checkbox"
-                                checked={
-                                  role.type === "Habitant" ||
-                                  role.type === "Étranger"
-                                }
+                                checked={joueur?.alignement === "Bon"}
                                 onChange={() => {
                                   setJoueursAttribues((prev) => {
                                     const updated = { ...prev };
                                     updated[nomEditModal.index] = {
                                       ...updated[nomEditModal.index],
-                                      role: {
-                                        ...role,
-                                        type:
-                                          role.type === "Habitant"
-                                            ? "Acolyte"
-                                            : role.type === "Étranger"
-                                            ? "Démon"
-                                            : role.type === "Acolyte"
-                                            ? "Habitant"
-                                            : "Étranger",
-                                      },
+                                      alignement:
+                                        updated[nomEditModal.index].alignement === "Bon"
+                                          ? "Maléfique"
+                                          : "Bon",
+                                      alignementFixe: true,
                                     };
                                     return updated;
                                   });
@@ -2030,8 +2037,7 @@ export default function App() {
                                   width: "40px",
                                   height: "24px",
                                   background:
-                                    role.type === "Habitant" ||
-                                    role.type === "Étranger"
+                                    joueur?.alignement === "Bon"
                                       ? "#0e74b4"
                                       : "#950f13",
                                   borderRadius: "12px",
@@ -2044,8 +2050,7 @@ export default function App() {
                                   style={{
                                     position: "absolute",
                                     left:
-                                      role.type === "Habitant" ||
-                                      role.type === "Étranger"
+                                      joueur?.alignement === "Bon"
                                         ? "20px"
                                         : "2px",
                                     top: "2px",
@@ -2064,16 +2069,12 @@ export default function App() {
                                 fontFamily: "Cardo, serif",
                                 fontSize: "1.1rem",
                                 color:
-                                  role.type === "Habitant" ||
-                                  role.type === "Étranger"
+                                  joueur?.alignement === "Bon"
                                     ? "#0e74b4"
                                     : "#950f13",
                               }}
                             >
-                              {role.type === "Habitant" ||
-                              role.type === "Étranger"
-                                ? "Bon"
-                                : "Maléfique"}
+                              {joueur?.alignement === "Bon" ? "Bon" : "Maléfique"}
                             </span>
                             {/* Rappel icons next to alignment */}
                             {joueur?.rappelRoles &&
@@ -2475,9 +2476,15 @@ export default function App() {
                                   );
                                   setJoueursAttribues((prev) => {
                                     const updated = { ...prev };
+                                    // Si alignementFixe est déjà true, on ne touche pas à l'alignement
                                     updated[nomEditModal.index] = {
                                       ...updated[nomEditModal.index],
                                       role: newRole,
+                                      alignementFixe: true,
+                                      alignement:
+                                        updated[nomEditModal.index].alignementFixe
+                                          ? updated[nomEditModal.index].alignement
+                                          : updated[nomEditModal.index].alignement,
                                     };
                                     return updated;
                                   });
