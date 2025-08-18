@@ -549,6 +549,15 @@
     "rappel": true
   },
   {
+    "nom": "Courtisane",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Une fois par partie, durant la nuit, choisis un rôle. Le joueur au rôle choisi devient ivre durant 3 jours et 3 nuits.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 4,
+    "rappel": true
+  },
+  {
     "nom": "Parrain",
     "edition": "Crépuscule funeste",
     "pouvoir": "Tu commences la partie en connaissant quels étrangers sont dans la partie. Si un étranger meurt la journée, choisis un joueur durant la nuit. Il meurt. [+1 ou -1 étranger]",
@@ -566,15 +575,6 @@
     "alignement": "Maléfique",
     "ordreAutresNuits": 9,
     "ordrePremiereNuit": 10,
-    "rappel": true
-  },
-  {
-    "nom": "Courtisane",
-    "edition": "Crépuscule funeste",
-    "pouvoir": "Une fois par partie, durant la nuit, choisis un rôle. Le joueur au rôle choisi devient ivre durant 3 jours et 3 nuits.",
-    "type": "Habitant",
-    "alignement": "Bon",
-    "ordreAutresNuits": 4,
     "rappel": true
   },
   {
