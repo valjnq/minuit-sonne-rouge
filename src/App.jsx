@@ -150,6 +150,10 @@ export default function App() {
   const [nomTemporaire, setNomTemporaire] = useState("");
   const [roleActif, setRoleActif] = useState(null);
   // Add missing state for roles modal
+  // State for rappel dropdown and selected rappel role in name edit modal
+  const [showRappelModal, setShowRappelModal] = useState(false);
+  // Store multiple rappel roles as an array
+  const [rappelRolesSelected, setRappelRolesSelected] = useState([]);
   const [rolesModalOpen, setRolesModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
   const [rolesRestants, setRolesRestants] = useState([]);
@@ -357,11 +361,11 @@ export default function App() {
       );
       return;
     }
-  // setTableRepartition is disabled to keep the table static
-  // setTableRepartition((prev) => ({
-  //   ...prev,
-  //   [nbJoueurs]: { ...repartition },
-  // }));
+    // setTableRepartition is disabled to keep the table static
+    // setTableRepartition((prev) => ({
+    //   ...prev,
+    //   [nbJoueurs]: { ...repartition },
+    // }));
     setRolesValides(true);
     setErreurValidation("");
     setRolesRestants([...selected]);
@@ -370,14 +374,25 @@ export default function App() {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <div style={{ display: "flex", alignItems: "center", marginBottom: "1.5rem", marginLeft: "2rem" }}>
-        <img src={"icons/grimoire.png"} alt="Grimoire" style={{ height: "48px", marginRight: "12px" }} />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginBottom: "1.5rem",
+          marginLeft: "2rem",
+        }}
+      >
+        <img
+          src={"icons/grimoire.png"}
+          alt="Grimoire"
+          style={{ height: "48px", marginRight: "12px" }}
+        />
         <h1
           style={{
             fontFamily: "'Pirata One', cursive",
             fontSize: "2.5rem",
             margin: 0,
-            textAlign: "left"
+            textAlign: "left",
           }}
         >
           Grimoire de poche
@@ -1472,7 +1487,7 @@ export default function App() {
               }}
             >
               {Object.entries(joueursAttribues).map(
-                ([index, { nom, role, mort, token }]) => (
+                ([index, { nom, role, mort, token, rappelRoles }]) => (
                   <div
                     key={index}
                     style={{
@@ -1544,37 +1559,68 @@ export default function App() {
                       }}
                     >
                       <span>{nom}</span>
-                      {mort && (
-                        <>
+                      {/* Rappel icons after name, before mort icon */}
+                      {(Array.isArray(rappelRoles) ? rappelRoles : []).map(
+                        (r, idx) => (
                           <span
+                            key={r.nom}
                             style={{
-                              marginLeft: "0.5rem",
+                              marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
                               fontSize: "1.3rem",
                               verticalAlign: "middle",
                             }}
                           >
                             <img
-                              src="icons/mort.png"
-                              alt="Mort icon"
-                              style={{ width: 32, height: 32, verticalAlign: "middle" }}
+                              src={`icons/icon_${normalizeNom(r.nom)}.png`}
+                              alt={r.nom}
+                              style={{
+                                width: 32,
+                                height: 32,
+                                verticalAlign: "middle",
+                                objectFit: "contain",
+                              }}
                             />
                           </span>
-                          <span
+                        )
+                      )}
+                      {mort && (
+                        <span
+                          style={{
+                            marginLeft: "0.5rem",
+                            fontSize: "1.3rem",
+                            verticalAlign: "middle",
+                          }}
+                        >
+                          <img
+                            src="icons/mort.png"
+                            alt="Mort icon"
                             style={{
-                              marginLeft: "0.2rem",
-                              fontSize: "1.3rem",
+                              width: 32,
+                              height: 32,
                               verticalAlign: "middle",
                             }}
-                          >
-                            {token ? (
-                              <img
-                                src="icons/vote.png"
-                                alt="Vote icon"
-                                style={{ width: 32, height: 32, verticalAlign: "middle" }}
-                              />
-                            ) : null}
-                          </span>
-                        </>
+                          />
+                        </span>
+                      )}
+                      {/* Vote icon after mort icon if mort is true */}
+                      {mort && token && (
+                        <span
+                          style={{
+                            marginLeft: "0.2rem",
+                            fontSize: "1.3rem",
+                            verticalAlign: "middle",
+                          }}
+                        >
+                          <img
+                            src="icons/vote.png"
+                            alt="Vote icon"
+                            style={{
+                              width: 32,
+                              height: 32,
+                              verticalAlign: "middle",
+                            }}
+                          />
+                        </span>
                       )}
                     </div>
                     <span
@@ -1805,6 +1851,14 @@ export default function App() {
                 (() => {
                   const joueur = joueursAttribues[nomEditModal.index];
                   const role = joueur?.role;
+                  // Get all roles with rappel:true for current edition
+                  const rappelRoles = roles.filter(
+                    (r) => r.edition === edition && r.rappel
+                  );
+                  // Get rappel icon paths
+                  const rappelIcons = rappelRolesSelected.map(
+                    (r) => `icons/icon_${normalizeNom(r.nom)}.png`
+                  );
                   return (
                     <div
                       style={{
@@ -1890,20 +1944,24 @@ export default function App() {
                             </div>
                           </div>
                         )}
-                        <h2
-                          style={{ fontFamily: "Cardo", marginBottom: "1rem" }}
-                        >
-                          Modifier le nom du joueur
-                        </h2>
                         <input
                           type="text"
                           value={nomEditModal.nom}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            const newNom = e.target.value;
                             setNomEditModal({
                               ...nomEditModal,
-                              nom: e.target.value,
-                            })
-                          }
+                              nom: newNom,
+                            });
+                            setJoueursAttribues((prev) => {
+                              const updated = { ...prev };
+                              updated[nomEditModal.index] = {
+                                ...updated[nomEditModal.index],
+                                nom: newNom,
+                              };
+                              return updated;
+                            });
+                          }}
                           style={{
                             width: "100%",
                             fontSize: "1.2rem",
@@ -1913,7 +1971,6 @@ export default function App() {
                             border: "1px solid #ccc",
                             fontFamily: "Cardo, serif",
                           }}
-                          autoFocus
                         />
                         {/* Alignment switch */}
                         {role && (
@@ -2018,6 +2075,32 @@ export default function App() {
                                 ? "Bon"
                                 : "Maléfique"}
                             </span>
+                            {/* Rappel icons next to alignment */}
+                            {joueur?.rappelRoles &&
+                              joueur.rappelRoles.length > 0 &&
+                              joueur.rappelRoles.map((r, idx) => (
+                                <span
+                                  key={r.nom}
+                                  style={{
+                                    marginLeft: "0.2rem",
+                                    fontSize: "1.3rem",
+                                    verticalAlign: "middle",
+                                  }}
+                                >
+                                  <img
+                                    src={`icons/icon_${normalizeNom(
+                                      r.nom
+                                    )}.png`}
+                                    alt={r.nom}
+                                    style={{
+                                      width: 32,
+                                      height: 32,
+                                      verticalAlign: "middle",
+                                      objectFit: "contain",
+                                    }}
+                                  />
+                                </span>
+                              ))}
                           </div>
                         )}
                         <div
@@ -2027,32 +2110,174 @@ export default function App() {
                             marginBottom: "1rem",
                           }}
                         >
-                          <button
-                            style={{
-                              padding: "0.5rem 1.5rem",
-                              fontFamily: "Cardo, serif",
-                              fontSize: "1.1rem",
-                              cursor: "pointer",
-                              background: "#222",
-                              color: "#fff",
-                              borderRadius: 8,
-                              border: "none",
-                            }}
-                            onClick={() => {
-                              // Update the player's name in joueursAttribues
-                              setJoueursAttribues((prev) => {
-                                const updated = { ...prev };
-                                updated[nomEditModal.index] = {
-                                  ...updated[nomEditModal.index],
-                                  nom: nomEditModal.nom,
-                                };
-                                return updated;
-                              });
-                              setNomEditModal(null);
-                            }}
-                          >
-                            Enregistrer
-                          </button>
+                          {/* Save button removed, changes are now live */}
+                          {/* Rappel button and dropdown */}
+                          <div style={{ position: "relative" }}>
+                            <button
+                              style={{
+                                padding: "0.5rem 1.5rem",
+                                fontFamily: "Cardo, serif",
+                                fontSize: "1.1rem",
+                                cursor: "pointer",
+                                background: "#bdbdbdff",
+                                color: "#222",
+                                borderRadius: 8,
+                                border: "none",
+                              }}
+                              onClick={() => setShowRappelModal(true)}
+                            >
+                              Rappels
+                            </button>
+                            {/* Rappel selection modal */}
+                            {showRappelModal && (
+                              <div
+                                style={{
+                                  position: "fixed",
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  backgroundColor: "rgba(0,0,0,0.5)",
+                                  zIndex: 100,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    position: "relative",
+                                    background: "white",
+                                    borderRadius: "10px",
+                                    padding: "2rem",
+                                    minWidth: "300px",
+                                    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                                    maxWidth: "90vw",
+                                    width: "100%",
+                                  }}
+                                >
+                                  <button
+                                    onClick={() => setShowRappelModal(false)}
+                                    style={{
+                                      position: "absolute",
+                                      top: "1rem",
+                                      right: "1rem",
+                                      background: "none",
+                                      border: "none",
+                                      fontSize: "2rem",
+                                      color: "#000",
+                                      cursor: "pointer",
+                                      lineHeight: 1,
+                                      zIndex: 101,
+                                    }}
+                                    aria-label="Fermer"
+                                  >
+                                    ×
+                                  </button>
+                                  <h3
+                                    style={{
+                                      fontFamily: "Cardo, serif",
+                                      marginBottom: "1rem",
+                                    }}
+                                  >
+                                    Sélectionner les rappels
+                                  </h3>
+                                  <div
+                                    style={{
+                                      display: "grid",
+                                      gridTemplateColumns:
+                                        "repeat(auto-fit, minmax(120px, 1fr))",
+                                      gap: "0.5rem",
+                                    }}
+                                  >
+                                    {rappelRoles.map((r) => (
+                                      <button
+                                        key={r.nom}
+                                        style={{
+                                          padding: "0.5rem",
+                                          borderRadius: 8,
+                                          border: "1px solid #bbb",
+                                          background:
+                                            (joueursAttribues[nomEditModal.index]?.rappelRoles || []).some(
+                                              (selected) => selected.nom === r.nom
+                                            )
+                                              ? "#bdbdbdff"
+                                              : "#f5f5f5",
+                                          color: "#222",
+                                          fontFamily: "Cardo, serif",
+                                          fontSize: "1rem",
+                                          cursor: "pointer",
+                                          boxShadow:
+                                            (joueursAttribues[nomEditModal.index]?.rappelRoles || []).some(
+                                              (selected) => selected.nom === r.nom
+                                            )
+                                              ? "0 2px 8px rgba(230,192,125,0.15)"
+                                              : "none",
+                                          display: "flex",
+                                          flexDirection: "column",
+                                          alignItems: "center",
+                                          gap: "0.25rem",
+                                        }}
+                                        onClick={() => {
+                                          // Toggle role selection and update joueursAttribues immediately
+                                          setJoueursAttribues((attribues) => {
+                                            const current = attribues[nomEditModal.index]?.rappelRoles || [];
+                                            let newRoles;
+                                            if (
+                                              current.some(
+                                                (selected) => selected.nom === r.nom
+                                              )
+                                            ) {
+                                              newRoles = current.filter(
+                                                (selected) => selected.nom !== r.nom
+                                              );
+                                            } else {
+                                              newRoles = [...current, r];
+                                            }
+                                            const updated = { ...attribues };
+                                            updated[nomEditModal.index] = {
+                                              ...updated[nomEditModal.index],
+                                              rappelRoles: newRoles,
+                                            };
+                                            return updated;
+                                          });
+                                          setShowRappelModal(false);
+                                        }}
+                                      >
+                                        <img
+                                          src={`icons/icon_${normalizeNom(
+                                            r.nom
+                                          )}.png`}
+                                          alt={r.nom}
+                                          style={{
+                                            width: "24px",
+                                            height: "24px",
+                                            marginBottom: "0.25rem",
+                                          }}
+                                          onError={(e) => {
+                                            e.target.style.display = "none";
+                                          }}
+                                        />
+                                        <span
+                                          style={{
+                                            color:
+                                              r.alignement === "Bon"
+                                                ? "#0e74b4"
+                                                : r.alignement === "Maléfique"
+                                                ? "#950f13"
+                                                : "#222",
+                                            fontWeight: 500,
+                                          }}
+                                        >
+                                          {r.nom}
+                                        </span>
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
                           {/* Remplacer button and dropdown */}
                           <div style={{ position: "relative" }}>
                             <button
@@ -2066,88 +2291,168 @@ export default function App() {
                                 borderRadius: 8,
                                 border: "none",
                               }}
-                              onClick={() =>
-                                setShowRemplacerDropdown((prev) => !prev)
-                              }
+                              onClick={() => setShowRemplacerDropdown(true)}
                             >
-                              Remplacer
+                              Changer de rôle
                             </button>
                             {showRemplacerDropdown && (
                               <div
                                 style={{
-                                  position: "absolute",
-                                  top: "2.5rem",
+                                  position: "fixed",
+                                  top: 0,
                                   left: 0,
-                                  width: "400px",
+                                  right: 0,
+                                  bottom: 0,
+                                  backgroundColor: "rgba(0,0,0,0.5)",
                                   zIndex: 100,
-                                  background: "#fff",
-                                  boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-                                  borderRadius: 8,
-                                  padding: "1rem",
-                                  display: "grid",
-                                  gridTemplateColumns:
-                                    "repeat(auto-fit, minmax(120px, 1fr))",
-                                  gap: "0.5rem",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
                                 }}
                               >
-                                {[
-                                  joueur?.role,
-                                  ...roles.filter(
-                                    (r) =>
-                                      r.edition === edition &&
-                                      r.nom !== joueur?.role?.nom
-                                  ),
-                                ]
-                                  .filter(Boolean)
-                                  .map((r) => (
-                                    <button
-                                      key={r.nom}
-                                      style={{
-                                        padding: "0.5rem",
-                                        borderRadius: 8,
-                                        border: "1px solid #bbb",
-                                        background:
-                                          joueur?.role?.nom === r.nom
-                                            ? "#0e74b4"
-                                            : "#f5f5f5",
-                                        color:
-                                          joueur?.role?.nom === r.nom
-                                            ? "#fff"
-                                            : "#222",
-                                        fontFamily: "Cardo, serif",
-                                        fontSize: "1rem",
-                                        cursor: "pointer",
-                                        boxShadow:
-                                          joueur?.role?.nom === r.nom
-                                            ? "0 2px 8px rgba(14,116,180,0.15)"
-                                            : "none",
-                                      }}
-                                      onClick={() => {
-                                        if (r.nom !== joueur?.role?.nom) {
-                                          setJoueursAttribues((prev) => {
-                                            const updated = { ...prev };
-                                            updated[nomEditModal.index] = {
-                                              ...updated[nomEditModal.index],
-                                              role: r,
-                                            };
-                                            return updated;
-                                          });
-                                          // Update selected roles for ordre de réveil
-                                          setSelected((prevSelected) => {
-                                            // Remove the old role and add the new one
-                                            const withoutOld = prevSelected.filter(
-                                              (role) => role.nom !== joueur?.role?.nom
-                                            );
-                                            return [...withoutOld, r];
-                                          });
-                                        }
-                                        setShowRemplacerDropdown(false);
-                                        setRemplacerRole(null);
-                                      }}
-                                    >
-                                      {r.nom}
-                                    </button>
-                                  ))}
+                                <div
+                                  style={{
+                                    position: "relative",
+                                    background: "white",
+                                    borderRadius: "10px",
+                                    padding: "2rem",
+                                    minWidth: "300px",
+                                    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                                    maxWidth: "90vw",
+                                    width: "100%",
+                                  }}
+                                >
+                                  <button
+                                    onClick={() =>
+                                      setShowRemplacerDropdown(false)
+                                    }
+                                    style={{
+                                      position: "absolute",
+                                      top: "1rem",
+                                      right: "1rem",
+                                      background: "none",
+                                      border: "none",
+                                      fontSize: "2rem",
+                                      color: "#000",
+                                      cursor: "pointer",
+                                      lineHeight: 1,
+                                      zIndex: 101,
+                                    }}
+                                    aria-label="Fermer"
+                                  >
+                                    ×
+                                  </button>
+                                  <h3
+                                    style={{
+                                      fontFamily: "Cardo, serif",
+                                      marginBottom: "1rem",
+                                    }}
+                                  >
+                                    Sélectionner le nouveau rôle
+                                  </h3>
+                                  <div
+                                    style={{
+                                      display: "grid",
+                                      gridTemplateColumns:
+                                        "repeat(auto-fit, minmax(120px, 1fr))",
+                                      gap: "0.5rem",
+                                    }}
+                                  >
+                                    {[
+                                      joueur?.role,
+                                      ...roles.filter(
+                                        (r) =>
+                                          r.edition === edition &&
+                                          r.nom !== joueur?.role?.nom
+                                      ),
+                                    ]
+                                      .filter(Boolean)
+                                      .map((r) => (
+                                        <button
+                                          key={r.nom}
+                                          style={{
+                                            padding: "0.5rem",
+                                            borderRadius: 8,
+                                            border: "1px solid #bbb",
+                                            background:
+                                              joueur?.role?.nom === r.nom
+                                                ? "#bdbdbdff"
+                                                : "#f5f5f5",
+                                            color:
+                                              joueur?.role?.nom === r.nom
+                                                ? "#fff"
+                                                : "#222",
+                                            fontFamily: "Cardo, serif",
+                                            fontSize: "1rem",
+                                            cursor: "pointer",
+                                            boxShadow:
+                                              joueur?.role?.nom === r.nom
+                                                ? "0 2px 8px rgba(14,116,180,0.15)"
+                                                : "none",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            gap: "0.25rem",
+                                          }}
+                                          onClick={() => {
+                                            if (r.nom !== joueur?.role?.nom) {
+                                              setJoueursAttribues((prev) => {
+                                                const updated = { ...prev };
+                                                updated[nomEditModal.index] = {
+                                                  ...updated[
+                                                    nomEditModal.index
+                                                  ],
+                                                  role: r,
+                                                };
+                                                return updated;
+                                              });
+                                              // Update selected roles for ordre de réveil
+                                              setSelected((prevSelected) => {
+                                                // Remove the old role and add the new one
+                                                const withoutOld =
+                                                  prevSelected.filter(
+                                                    (role) =>
+                                                      role.nom !==
+                                                      joueur?.role?.nom
+                                                  );
+                                                return [...withoutOld, r];
+                                              });
+                                            }
+                                            setShowRemplacerDropdown(false);
+                                            setRemplacerRole(null);
+                                          }}
+                                        >
+                                          <img
+                                            src={`icons/icon_${normalizeNom(
+                                              r.nom
+                                            )}.png`}
+                                            alt={r.nom}
+                                            style={{
+                                              width: "24px",
+                                              height: "24px",
+                                              marginBottom: "0.25rem",
+                                            }}
+                                            onError={(e) => {
+                                              e.target.style.display = "none";
+                                            }}
+                                          />
+                                          <span
+                                            style={{
+                                              color:
+                                                r.alignement === "Bon"
+                                                  ? "#0e74b4"
+                                                  : r.alignement === "Maléfique"
+                                                  ? "#950f13"
+                                                  : "#222",
+                                              fontWeight: 500,
+                                            }}
+                                          >
+                                            {r.nom}
+                                          </span>
+                                        </button>
+                                      ))}
+                                  </div>
+                                </div>
                               </div>
                             )}
                             {/* Confirm role change */}
@@ -2219,7 +2524,7 @@ export default function App() {
                                 fontFamily: "Cardo, serif",
                                 fontSize: "1.1rem",
                                 cursor: "pointer",
-                                background: joueur?.token ? "#0e74b4" : "#eee",
+                                background: joueur?.token ? "#E9AA12" : "#eee",
                                 color: joueur?.token ? "#fff" : "#222",
                                 borderRadius: 8,
                                 border: "none",
@@ -2643,13 +2948,33 @@ export default function App() {
                       if (!types[role.type]) types[role.type] = [];
                       types[role.type].push(role);
                     });
-                    const typeOrder = ["Habitant", "Étranger", "Acolyte", "Démon"];
+                    const typeOrder = [
+                      "Habitant",
+                      "Étranger",
+                      "Acolyte",
+                      "Démon",
+                    ];
                     return typeOrder
                       .filter((type) => types[type])
                       .map((type) => (
                         <div key={type} style={{ marginBottom: "1.2rem" }}>
-                          <div style={{ fontWeight: "bold", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#222" }}>{type}</div>
-                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                          <div
+                            style={{
+                              fontWeight: "bold",
+                              fontSize: "1.1rem",
+                              marginBottom: "0.5rem",
+                              color: "#222",
+                            }}
+                          >
+                            {type}
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              gap: "0.5rem",
+                            }}
+                          >
                             {types[type].map((role) => (
                               <button
                                 key={role.nom}
@@ -2675,8 +3000,16 @@ export default function App() {
                                 <img
                                   src={getRoleIcon(role)}
                                   alt={role.nom}
-                                  style={{ width: "28px", height: "28px", borderRadius: "4px", background: "#fff", border: "1px solid #ccc" }}
-                                  onError={(e) => { e.target.style.display = 'none'; }}
+                                  style={{
+                                    width: "28px",
+                                    height: "28px",
+                                    borderRadius: "4px",
+                                    background: "#fff",
+                                    border: "1px solid #ccc",
+                                  }}
+                                  onError={(e) => {
+                                    e.target.style.display = "none";
+                                  }}
                                 />
                                 {role.nom}
                               </button>
@@ -2734,11 +3067,24 @@ export default function App() {
                   <img
                     src={getRoleIcon(selectedRole)}
                     alt={selectedRole.nom}
-                    style={{ width: "64px", height: "64px", borderRadius: "8px", background: "#fff", border: "2px solid #fff", marginBottom: "1rem" }}
-                    onError={(e) => { e.target.style.display = 'none'; }}
+                    style={{
+                      width: "64px",
+                      height: "64px",
+                      borderRadius: "8px",
+                      background: "#fff",
+                      border: "2px solid #fff",
+                      marginBottom: "1rem",
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                    }}
                   />
-                  <h2 style={{ marginBottom: "1.2rem", fontSize: "2rem" }}>{selectedRole.nom}</h2>
-                  <div style={{ fontSize: "1rem" }}>{selectedRole.description}</div>
+                  <h2 style={{ marginBottom: "1.2rem", fontSize: "2rem" }}>
+                    {selectedRole.nom}
+                  </h2>
+                  <div style={{ fontSize: "1rem" }}>
+                    {selectedRole.description}
+                  </div>
                 </div>
               </div>
             )}
