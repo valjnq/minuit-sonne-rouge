@@ -1299,6 +1299,7 @@ export default function App() {
                 gap: "1.5rem",
               }}
             >
+              {/*
               <button
                 onClick={() => {
                   // Automatic attribution: assign all available roles to players named 'player 1', 'player 2', ...
@@ -1343,6 +1344,7 @@ export default function App() {
               >
                 Attribution automatique
               </button>
+              */}
               <div
                 style={{
                   display: "grid",
@@ -1639,17 +1641,6 @@ export default function App() {
                         </span>
                       )}
                     </div>
-                    <span
-                      style={{
-                        fontSize: "1.3rem",
-                        color: joueur.mort ? "#888" : "#0e74b4",
-                        marginLeft: "0.5rem",
-                        opacity: 0.7,
-                        pointerEvents: "none",
-                      }}
-                    >
-                      ✎
-                    </span>
                   </div>
                 )
               )}
