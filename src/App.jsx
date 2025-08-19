@@ -187,7 +187,7 @@ export default function App() {
   useEffect(() => {
     setSelected([]);
     setErreurValidation("");
-    if (edition === "script personnalisé") {
+    if (edition === "Script personnalisé") {
       setCustomScriptVisible(true);
       // Only clear temp if edition changes from something else
       // (do not clear if just opening/closing modal)
@@ -214,7 +214,7 @@ export default function App() {
 
   // For custom script, show only the custom pool as available roles; otherwise, filter by edition
   const rolesFiltres =
-    edition === "script personnalisé"
+    edition === "Script personnalisé"
       ? customScriptPool
       : roles.filter((r) => r.edition === edition);
 
@@ -331,7 +331,7 @@ export default function App() {
 
   // Show all 'Bon' roles from the edition or script that are NOT attributed to players (not in joueursAttribues)
   const rolesBonsNonAttribués = (
-    edition === "script personnalisé"
+    edition === "Script personnalisé"
       ? customScriptPool
       : roles.filter((r) => r.edition === edition)
   ).filter(
@@ -467,9 +467,9 @@ export default function App() {
                 {ed}
               </option>
             ))}
-            <option value="script personnalisé">Script personnalisé</option>
+            <option value="Script personnalisé">Script personnalisé</option>
           </select>
-          {edition === "script personnalisé" && (
+          {edition === "Script personnalisé" && (
             <button
               type="button"
               onClick={() => {
@@ -672,7 +672,7 @@ export default function App() {
                 setCustomScriptTemp([]);
                 setSelected([]); // clear current selection for new pool
                 setRolesValides(false);
-                setEdition("script personnalisé");
+                setEdition("Script personnalisé");
               }}
               style={{
                 ...buttonStyle,
@@ -690,16 +690,16 @@ export default function App() {
           style={{
             ...buttonStyle,
             cursor:
-              customScriptPool.length === 0 && edition === "script personnalisé"
+              customScriptPool.length === 0 && edition === "Script personnalisé"
                 ? "not-allowed"
                 : "pointer",
             opacity:
-              customScriptPool.length === 0 && edition === "script personnalisé"
+              customScriptPool.length === 0 && edition === "Script personnalisé"
                 ? 0.5
                 : 1,
           }}
           disabled={
-            customScriptPool.length === 0 && edition === "script personnalisé"
+            customScriptPool.length === 0 && edition === "Script personnalisé"
           }
         >
           Partager le script
@@ -1872,7 +1872,7 @@ export default function App() {
                   const role = joueur?.role;
                   // Get all roles with rappel:true for current edition or custom script, sorted by type
                   const typeOrder = ["Habitant", "Étranger", "Acolyte", "Démon"];
-                  const rappelRoles = (edition === "script personnalisé"
+                  const rappelRoles = (edition === "Script personnalisé"
                     ? customScriptPool
                     : roles.filter((r) => r.edition === edition)
                   )
@@ -2368,7 +2368,7 @@ export default function App() {
                                   >
                                     {[
                                       joueur?.role,
-                                      ...((edition === "script personnalisé"
+                                      ...((edition === "Script personnalisé"
                                         ? customScriptPool
                                         : roles.filter((r) => r.edition === edition)
                                       )
@@ -2607,14 +2607,17 @@ export default function App() {
               fontFamily: "Cardo",
               fontSize: "1.5rem",
               marginBottom: "1rem",
+              textAlign: "center",
             }}
           >
-            Liste des rôles pour : {edition}
+            Liste des rôles pour :
+            <br />
+            {edition}
           </h2>
 
           <QRCode
             value={
-              edition === "script personnalisé"
+              edition === "Script personnalisé"
                 ? customScriptPool.length > 0
                   ? `${
                       window.location.origin
@@ -2633,7 +2636,7 @@ export default function App() {
             fgColor="#000000"
           />
           {/* Show 'Afficher le script' for custom script, 'Voir PDF' for standard editions */}
-          {edition === "script personnalisé" && customScriptPool.length > 0 && (
+          {edition === "Script personnalisé" && customScriptPool.length > 0 && (
             <button
               style={{
                 marginTop: "1.5rem",
@@ -2657,10 +2660,10 @@ export default function App() {
                 )
               }
             >
-              Afficher la liste
+              Afficher
             </button>
           )}
-          {edition !== "script personnalisé" && urlPDF[edition] && (
+          {edition !== "Script personnalisé" && urlPDF[edition] && (
             <button
               style={{
                 marginTop: "1.5rem",
@@ -2682,7 +2685,7 @@ export default function App() {
                 )
               }
             >
-              Afficher la liste
+              Afficher
             </button>
           )}
         </div>

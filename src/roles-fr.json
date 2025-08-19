@@ -230,7 +230,7 @@
     "rappel": true
   },
   {
-    "nom": "Érudit",
+    "nom": "Savant",
     "edition": "Parfums d’hystérie",
     "pouvoir": "Chaque jour, tu peux consulter le conteur en privé pour apprendre 2 informations. L’une d’elles est fausse (tu ne sais pas laquelle).",
     "type": "Habitant",
