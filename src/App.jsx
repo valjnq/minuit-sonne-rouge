@@ -1564,54 +1564,31 @@ export default function App() {
                         width: "48px",
                         objectFit: "contain",
                         marginRight: "0.5rem",
-                        filter: joueur.mort ? "grayscale(1) brightness(1)" : "none",
+                       // filter: joueur.mort ? "grayscale(1) brightness(1)" : "none",
                       }}
                     />
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <span
-                        style={{
-                          flex: 1,
-                          fontFamily: "Cardo, serif",
-                          fontWeight: "bold",
-                          fontSize: "1.2rem",
-                          color:
-                            joueur.alignement === "Bon"
-                              ? "#0e74b4"
-                              : joueur.alignement === "Maléfique"
-                              ? "#950f13"
-                              : "#222",
-                          padding: "0.5rem 0",
-                          borderRadius: "8px",
-                          textAlign: "left",
-                          userSelect: "none",
-                        }}
-                      >
-                        {joueur.nom}
-                      </span>
-                      {/* Rappel icons after name, before mort icon */}
-                      {(Array.isArray(joueur.rappelRoles) ? joueur.rappelRoles : []).map(
-                        (r, idx) => (
-                          <span
-                            key={r.nom}
-                            style={{
-                              marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
-                              fontSize: "1.3rem",
-                              verticalAlign: "middle",
-                            }}
-                          >
-                            <img
-                              src={`icons/icon_${normalizeNom(r.nom)}.png`}
-                              alt={r.nom}
-                              style={{
-                                width: 36,
-                                height: 36,
-                                verticalAlign: "middle",
-                                objectFit: "contain",
-                              }}
-                            />
-                          </span>
-                        )
-                      )}
+                        <span
+                          style={{
+                            flex: 1,
+                            fontFamily: "Cardo, serif",
+                            fontWeight: "bold",
+                            fontSize: "1.2rem",
+                            color:
+                              joueur.alignement === "Bon"
+                                ? "#0e74b4"
+                                : joueur.alignement === "Maléfique"
+                                ? "#950f13"
+                                : "#222",
+                            padding: "0.5rem 0",
+                            borderRadius: "8px",
+                            textAlign: "left",
+                            userSelect: "none",
+                        //    textDecoration: joueur.mort ? "line-through" : "none",
+                          }}
+                        >
+                          {joueur.nom}
+                        </span>
                       {joueur.mort && (
                         <span
                           style={{
@@ -1650,6 +1627,30 @@ export default function App() {
                             }}
                           />
                         </span>
+                      )}
+                      {/* Rappel icons after mort and vote icons */}
+                      {(Array.isArray(joueur.rappelRoles) ? joueur.rappelRoles : []).map(
+                        (r, idx) => (
+                          <span
+                            key={r.nom}
+                            style={{
+                              marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
+                              fontSize: "1.3rem",
+                              verticalAlign: "middle",
+                            }}
+                          >
+                            <img
+                              src={`icons/icon_${normalizeNom(r.nom)}.png`}
+                              alt={r.nom}
+                              style={{
+                                width: 36,
+                                height: 36,
+                                verticalAlign: "middle",
+                                objectFit: "contain",
+                              }}
+                            />
+                          </span>
+                        )
                       )}
                     </div>
                   </div>
