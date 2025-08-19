@@ -392,6 +392,19 @@ export default function App() {
           marginLeft: "2rem",
         }}
       >
+        <span
+          style={{
+            fontFamily: "'Pirata One', cursive",
+            fontSize: "2.5rem",
+            color: "#950f13",
+            marginRight: "12px",
+            fontWeight: "bold",
+            letterSpacing: "1px",
+            whiteSpace: "nowrap",
+          }}
+        >
+        Minuit sonne rouge
+        </span>
         <img
           src={"icons/grimoire.png"}
           alt="Grimoire"
@@ -969,8 +982,8 @@ export default function App() {
                     src={`icons/crepuscule.png`}
                     alt="crépuscule"
                     style={{
-                      height: "32px",
-                      width: "32px",
+                      height: "36px",
+                      width: "36px",
                       objectFit: "contain",
                     }}
                   />
@@ -1011,8 +1024,8 @@ export default function App() {
                           src={`icons/icon_${normalizeNom(role.nom)}.png`}
                           alt={role.nom}
                           style={{
-                            height: "32px",
-                            width: "32px",
+                            height: "36px",
+                            width: "36px",
                             objectFit: "contain",
                           }}
                         />
@@ -1043,8 +1056,8 @@ export default function App() {
                       src={`icons/acolyte.png`}
                       alt="Réveil des acolytes"
                       style={{
-                        height: "32px",
-                        width: "32px",
+                        height: "36px",
+                        width: "36px",
                         objectFit: "contain",
                       }}
                     />
@@ -1086,8 +1099,8 @@ export default function App() {
                           src={`icons/icon_${normalizeNom(role.nom)}.png`}
                           alt={role.nom}
                           style={{
-                            height: "32px",
-                            width: "32px",
+                            height: "36px",
+                            width: "36px",
                             objectFit: "contain",
                           }}
                         />
@@ -1119,8 +1132,8 @@ export default function App() {
                         src={`icons/demon.png`}
                         alt="Réveil du démon et bluffs"
                         style={{
-                          height: "32px",
-                          width: "32px",
+                          height: "36px",
+                          width: "36px",
                           objectFit: "contain",
                         }}
                       />
@@ -1180,8 +1193,8 @@ export default function App() {
                           src={`icons/demon.png`}
                           alt="Réveil du démon et bluffs"
                           style={{
-                            height: "32px",
-                            width: "32px",
+                            height: "36px",
+                            width: "36px",
                             objectFit: "contain",
                           }}
                         />
@@ -1209,8 +1222,8 @@ export default function App() {
                           src={`icons/icon_${normalizeNom(role.nom)}.png`}
                           alt={role.nom}
                           style={{
-                            height: "32px",
-                            width: "32px",
+                            height: "36px",
+                            width: "36px",
                             objectFit: "contain",
                           }}
                         />
@@ -1241,8 +1254,8 @@ export default function App() {
                     src={`icons/aube.png`}
                     alt="Aube"
                     style={{
-                      height: "32px",
-                      width: "32px",
+                      height: "36px",
+                      width: "36px",
                       objectFit: "contain",
                     }}
                   />
@@ -1299,7 +1312,6 @@ export default function App() {
                 gap: "1.5rem",
               }}
             >
-              {/*
               <button
                 onClick={() => {
                   // Automatic attribution: assign all available roles to players named 'player 1', 'player 2', ...
@@ -1344,7 +1356,6 @@ export default function App() {
               >
                 Attribution automatique
               </button>
-              */}
               <div
                 style={{
                   display: "grid",
@@ -1592,8 +1603,8 @@ export default function App() {
                               src={`icons/icon_${normalizeNom(r.nom)}.png`}
                               alt={r.nom}
                               style={{
-                                width: 32,
-                                height: 32,
+                                width: 36,
+                                height: 36,
                                 verticalAlign: "middle",
                                 objectFit: "contain",
                               }}
@@ -1858,10 +1869,14 @@ export default function App() {
                 (() => {
                   const joueur = joueursAttribues[nomEditModal.index];
                   const role = joueur?.role;
-                  // Get all roles with rappel:true for current edition
-                  const rappelRoles = roles.filter(
-                    (r) => r.edition === edition && r.rappel
-                  );
+                  // Get all roles with rappel:true for current edition or custom script, sorted by type
+                  const typeOrder = ["Habitant", "Étranger", "Acolyte", "Démon"];
+                  const rappelRoles = (edition === "script personnalisé"
+                    ? customScriptPool
+                    : roles.filter((r) => r.edition === edition)
+                  )
+                    .filter((r) => r.rappel)
+                    .sort((a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type));
                   // Get rappel icon paths
                   const rappelIcons = rappelRolesSelected.map(
                     (r) => `icons/icon_${normalizeNom(r.nom)}.png`
@@ -1921,8 +1936,8 @@ export default function App() {
                               src={`icons/icon_${normalizeNom(role.nom)}.png`}
                               alt={role.nom}
                               style={{
-                                width: "64px",
-                                height: "64px",
+                                width: "48px",
+                                height: "48px",
                                 objectFit: "contain",
                                 marginBottom: "0.5rem",
                               }}
@@ -2352,11 +2367,12 @@ export default function App() {
                                   >
                                     {[
                                       joueur?.role,
-                                      ...roles.filter(
-                                        (r) =>
-                                          r.edition === edition &&
-                                          r.nom !== joueur?.role?.nom
-                                      ),
+                                      ...((edition === "script personnalisé"
+                                        ? customScriptPool
+                                        : roles.filter((r) => r.edition === edition)
+                                      )
+                                        .filter((r) => r.nom !== joueur?.role?.nom)
+                                        .sort((a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type)))
                                     ]
                                       .filter(Boolean)
                                       .map((r) => (
@@ -2683,8 +2699,8 @@ export default function App() {
           disabled={bluffsValides}
         >
           {choisirBluffsVisible ? "Masquer les bluffs" : "Choisir bluffs"}
-        </button>
-      )}
+       </button>
+     )}
       {choisirBluffsVisible && !bluffsValides && (
         <div
           style={{
