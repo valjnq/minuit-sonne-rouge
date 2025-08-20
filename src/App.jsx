@@ -1481,25 +1481,24 @@ export default function App() {
           >
             Ces rôles ne sont pas en jeu
           </h2>
-          <div style={{ display: "flex", gap: "2rem" }}>
-            {bluffs.map((role) => (
-              <div key={role.nom} style={{ textAlign: "center" }}>
-                <img
-                  src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                  alt={role.nom}
-                  style={{ width: 80, height: 80, objectFit: "contain" }}
-                />
-                <div
-                  style={{
-                    fontFamily: "Cardo, serif",
-                    fontWeight: "bold",
-                    marginTop: 8,
-                  }}
-                >
-                  {role.nom}
-                </div>
-              </div>
-            ))}
+          <div style={{ display: "flex", gap: "1.5rem" }}>
+            {bluffs.length === 3
+              ? rolesBonsNonAttribués
+                  .filter(role => bluffs.some(b => b.nom === role.nom))
+                  .map((role) => (
+                    <img
+                      key={role.nom}
+                      src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                      alt={role.nom}
+                      style={{
+                        height: "48px",
+                        width: "48px",
+                        objectFit: "contain",
+                        marginRight: "0.5rem",
+                      }}
+                    />
+                  ))
+              : null}
           </div>
         </div>
       )}
@@ -1533,14 +1532,174 @@ export default function App() {
                 borderRadius: "8px",
               }}
             >
+      {afficherRepartition && !bluffsValides && (
+        <div
+          style={{
+            marginTop: "2rem",
+            display: "flex",
+            alignItems: "center",
+            background: "#f8f8f8",
+            borderRadius: "16px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            padding: "1rem",
+            cursor: "pointer",
+            border: "2px solid #e0e0e0",
+            width: "fit-content",
+            transition: "background 0.2s, transform 0.2s",
+            opacity: bluffsValides ? 0.5 : 1,
+          }}
+          onClick={() => {
+            setEditBluffsModal(true);
+            setEditBluffsTemp(bluffs.length > 0 ? bluffs : []);
+            setErreurBluffs("");
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "Cardo, serif",
+              fontWeight: "bold",
+              fontSize: "1.3rem",
+              marginRight: "1.5rem",
+              letterSpacing: "1px",
+              color: "#950f13",
+              minWidth: "140px",
+              textAlign: "left",
+            }}
+          >
+            Bluffs du démon
+          </div>
+          <div style={{ display: "flex", gap: "1.5rem" }}>
+            {bluffs.length === 3
+              ? rolesBonsNonAttribués
+                  .filter(role => bluffs.some(b => b.nom === role.nom))
+                  .map((role) => (
+                    <img
+                      key={role.nom}
+                      src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                      alt={role.nom}
+                      style={{
+                        height: "48px",
+                        width: "48px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  ))
+              : ([1,2,3].map((i) => (
+                  <span
+                    key={i}
+                    style={{
+                      fontSize: "2.8rem",
+                      color: "#bbb",
+                      fontWeight: "bold",
+                      lineHeight: 1,
+                      margin: "0 0.2rem"
+                    }}
+                  >
+                    ?
+                  </span>
+                )))}
+          </div>
+        </div>
+      )}
+      {afficherRepartition && choisirBluffsVisible && !bluffsValides && (
+        <div
+          style={{
+            margin: "1rem 0",
+            background: "#fff",
+            borderRadius: 8,
+            padding: "1rem",
+          }}
+        >
+          <h2 style={{ fontFamily: "Cardo, serif" }}>
+            Sélectionne 3 rôles de bluff :
+          </h2>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+            {rolesBonsNonAttribués.map((role) => {
+              const isSelected = bluffs.some((r) => r.nom === role.nom);
+              const isDisabled = !isSelected && bluffs.length >= 3;
+              return (
+                <div
+                  key={role.nom}
+                  onClick={() => {
+                    if (isSelected) {
+                      setBluffs(bluffs.filter((r) => r.nom !== role.nom));
+                    } else if (!isDisabled) {
+                      setBluffs([...bluffs, role]);
+                    }
+                    setErreurBluffs("");
+                  }}
+                  style={{
+                    border: isSelected ? "2px solid #0e74b4" : "1px solid #ccc",
+                    borderRadius: 8,
+                    padding: "0.5rem",
+                    cursor: isDisabled ? "not-allowed" : "pointer",
+                    opacity: isDisabled ? 0.5 : 1,
+                    background: isSelected ? "#e6f0fa" : "#fafafa",
+                    width: 180,
+                    textAlign: "center",
+                  }}
+                >
+                  <img
+                    src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                    alt={role.nom}
+                    style={{ width: 48, height: 48, objectFit: "contain" }}
+                  />
+                  <div
+                    style={{
+                      fontFamily: "Cardo, serif",
+                      fontWeight: "bold",
+                      marginTop: 8,
+                    }}
+                  >
+                    {role.nom}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {erreurBluffs && (
+            <div
+              style={{
+                color: "#950f13",
+                margin: "1rem 0",
+                fontFamily: "Cardo, serif",
+              }}
+            >
+              {erreurBluffs}
+            </div>
+          )}
+          <button
+            onClick={() => {
+              if (bluffs.length !== 3) {
+                setErreurBluffs(
+                  "Il faut sélectionner exactement 3 rôles de bluff."
+                );
+              } else {
+                setBluffsValides(true);
+                setChoisirBluffsVisible(false);
+              }
+            }}
+            style={{
+              ...buttonStyle,
+              marginTop: "1rem",
+              cursor: bluffs.length === 3 ? "pointer" : "not-allowed",
+              opacity: bluffs.length === 3 ? 1 : 0.5,
+            }}
+            disabled={bluffs.length !== 3}
+          >
+            Valider bluffs
+          </button>
+        </div>
+      )}
               {Object.entries(joueursAttribues).map(
-                ([index, joueur]) => (
+                ([index, joueur], idx) => (
                   <div
                     key={index}
                     style={{
                       display: "flex",
                       alignItems: "center",
                       gap: "1rem",
+                      ...(idx === 0 ? { marginTop: "1rem" } : {}),
                       marginBottom: "1rem",
                       background: joueur.mort ? "#e0e0e0" : "#f8f8f8",
                       borderRadius: "16px",
@@ -1677,7 +1836,6 @@ export default function App() {
               {bluffsValides && bluffs.length === 3 && (
                 <div
                   style={{
-                    marginTop: "2rem",
                     display: "flex",
                     alignItems: "center",
                     background: "#f8f8f8",
@@ -1718,18 +1876,22 @@ export default function App() {
                     Bluffs du démon
                   </div>
                   <div style={{ display: "flex", gap: "1.5rem" }}>
-                    {bluffs.map((role) => (
-                      <img
-                        key={role.nom}
-                        src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                        alt={role.nom}
-                        style={{
-                          height: "48px",
-                          width: "48px",
-                          objectFit: "contain",
-                        }}
-                      />
-                    ))}
+                    {bluffs.length === 3
+                      ? rolesBonsNonAttribués
+                          .filter(role => bluffs.some(b => b.nom === role.nom))
+                          .map((role) => (
+                            <img
+                              key={role.nom}
+                              src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                              alt={role.nom}
+                              style={{
+                                height: "48px",
+                                width: "48px",
+                                objectFit: "contain",
+                              }}
+                            />
+                          ))
+                      : null}
                   </div>
                 </div>
               )}
@@ -1857,7 +2019,9 @@ export default function App() {
                     <button
                       onClick={() => {
                         if (editBluffsTemp.length === 3) {
-                          setBluffs(editBluffsTemp);
+                          // Always set bluffs in modal display order
+                          const orderedBluffs = rolesBonsNonAttribués.filter(role => editBluffsTemp.some(b => b.nom === role.nom));
+                          setBluffs(orderedBluffs);
                           setEditBluffsModal(false);
                         }
                       }}
@@ -2425,9 +2589,7 @@ export default function App() {
                                               setJoueursAttribues((prev) => {
                                                 const updated = { ...prev };
                                                 updated[nomEditModal.index] = {
-                                                  ...updated[
-                                                    nomEditModal.index
-                                                  ],
+                                                  ...updated[nomEditModal.index],
                                                   role: r,
                                                 };
                                                 return updated;
@@ -2707,111 +2869,7 @@ export default function App() {
           )}
         </div>
       )}
-      {afficherRepartition && !bluffsValides && (
-        <button
-          onClick={() => {
-            setChoisirBluffsVisible((prev) => !prev);
-            setErreurBluffs("");
-          }}
-          style={{
-            ...buttonStyle,
-            marginTop: "1rem",
-          }}
-          disabled={bluffsValides}
-        >
-          {choisirBluffsVisible ? "Masquer les bluffs" : "Choisir les bluffs"}
-        </button>
-      )}
-      {afficherRepartition && choisirBluffsVisible && !bluffsValides && (
-        <div
-          style={{
-            margin: "1rem 0",
-            background: "#fff",
-            borderRadius: 8,
-            padding: "1rem",
-          }}
-        >
-          <h2 style={{ fontFamily: "Cardo, serif" }}>
-            Sélectionne 3 rôles de bluff :
-          </h2>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-            {rolesBonsNonAttribués.map((role) => {
-              const isSelected = bluffs.some((r) => r.nom === role.nom);
-              const isDisabled = !isSelected && bluffs.length >= 3;
-              return (
-                <div
-                  key={role.nom}
-                  onClick={() => {
-                    if (isSelected) {
-                      setBluffs(bluffs.filter((r) => r.nom !== role.nom));
-                    } else if (!isDisabled) {
-                      setBluffs([...bluffs, role]);
-                    }
-                    setErreurBluffs("");
-                  }}
-                  style={{
-                    border: isSelected ? "2px solid #0e74b4" : "1px solid #ccc",
-                    borderRadius: 8,
-                    padding: "0.5rem",
-                    cursor: isDisabled ? "not-allowed" : "pointer",
-                    opacity: isDisabled ? 0.5 : 1,
-                    background: isSelected ? "#e6f0fa" : "#fafafa",
-                    width: 180,
-                    textAlign: "center",
-                  }}
-                >
-                  <img
-                    src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                    alt={role.nom}
-                    style={{ width: 48, height: 48, objectFit: "contain" }}
-                  />
-                  <div
-                    style={{
-                      fontFamily: "Cardo, serif",
-                      fontWeight: "bold",
-                      marginTop: 8,
-                    }}
-                  >
-                    {role.nom}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          {erreurBluffs && (
-            <div
-              style={{
-                color: "#950f13",
-                margin: "1rem 0",
-                fontFamily: "Cardo, serif",
-              }}
-            >
-              {erreurBluffs}
-            </div>
-          )}
-          <button
-            onClick={() => {
-              if (bluffs.length !== 3) {
-                setErreurBluffs(
-                  "Il faut sélectionner exactement 3 rôles de bluff."
-                );
-              } else {
-                setBluffsValides(true);
-                setChoisirBluffsVisible(false);
-              }
-            }}
-            style={{
-              ...buttonStyle,
-              marginTop: "1rem",
-              cursor: bluffs.length === 3 ? "pointer" : "not-allowed",
-              opacity: bluffs.length === 3 ? 1 : 0.5,
-            }}
-            disabled={bluffs.length !== 3}
-          >
-            Valider bluffs
-          </button>
-        </div>
-      )}
+
       {afficherBluffs && (
         <div
           style={{
@@ -2854,24 +2912,28 @@ export default function App() {
             Ces rôles ne sont pas en jeu
           </h2>
           <div style={{ display: "flex", gap: "2rem" }}>
-            {bluffs.map((role) => (
-              <div key={role.nom} style={{ textAlign: "center" }}>
-                <img
-                  src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                  alt={role.nom}
-                  style={{ width: 80, height: 80, objectFit: "contain" }}
-                />
-                <div
-                  style={{
-                    fontFamily: "Cardo, serif",
-                    fontWeight: "bold",
-                    marginTop: 8,
-                  }}
-                >
-                  {role.nom}
-                </div>
-              </div>
-            ))}
+            {bluffs.length === 3
+              ? rolesBonsNonAttribués
+                  .filter(role => bluffs.some(b => b.nom === role.nom))
+                  .map((role) => (
+                    <div key={role.nom} style={{ textAlign: "center" }}>
+                      <img
+                        src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                        alt={role.nom}
+                        style={{ width: 80, height: 80, objectFit: "contain" }}
+                      />
+                      <div
+                        style={{
+                          fontFamily: "Cardo, serif",
+                          fontWeight: "bold",
+                          marginTop: 8,
+                        }}
+                      >
+                        {role.nom}
+                      </div>
+                    </div>
+                  ))
+              : null}
           </div>
         </div>
       )}
