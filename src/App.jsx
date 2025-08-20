@@ -247,6 +247,28 @@ export default function App() {
     }
   }
 
+  function handleResetRoles() {
+    setSelected([]);
+    setRolesValides(false);
+    setErreurValidation("");
+    setAfficherRoles(true);
+    setBluffs([]);
+    setBluffsValides(false);
+    setChoisirBluffsVisible(false);
+    setAffectationVisible(false);
+    setJoueursAttribues({});
+    setAfficherRepartition(false);
+    setAfficherOrdreReveil(false);
+    setNomEditModal(null);
+    setEditBluffsModal(false);
+    setEditBluffsTemp([]);
+    setCustomScriptVisible(false);
+    setCustomScriptTemp([]);
+    setCustomJetons([]);
+    setNotes("");
+    // Add any other state resets needed for your app
+  }
+
   function tirerAuHasard() {
     if (rolesValides) return;
     const nouvelleSelection = [];
@@ -380,6 +402,7 @@ export default function App() {
     setErreurValidation("");
     setRolesRestants([...selected]);
     setAfficherRoles(false); // Hide roles section automatically
+    
   }
 
   return (
@@ -705,100 +728,81 @@ export default function App() {
           Partager le script
         </button>
       </div>
-      <div style={{ overflowX: "auto", marginBottom: "2rem" }}>
-        <table
-          style={{ borderCollapse: "collapse", fontFamily: "Cardo, serif" }}
-        >
-          <thead>
-            <tr>
-              <th style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
-                Joueurs
-              </th>
-              <th
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "0.5rem",
-                }}
-              >
-                {nbJoueurs}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {lignes.map(({ label, color, type }) => (
-              <tr key={label}>
-                <td
-                  style={{ border: "1px solid #ccc", padding: "0.5rem", color }}
-                >
-                  {label}
-                </td>
-                <td
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "0.25rem",
-                  }}
-                >
-                  <span
-                    style={{
-                      width: "3rem",
-                      textAlign: "center",
-                      display: "inline-block",
-                      color,
-                      fontWeight: "bold",
-                      fontFamily: "Cardo, serif",
-                      fontSize: "1rem",
-                    }}
-                  >
-                    {tableRepartition[nbJoueurs]?.[label] ?? 0}
-                  </span>
-                </td>
+
+
+      <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ borderCollapse: "collapse", fontFamily: "Cardo, serif" }}>
+            <thead>
+              <tr>
+                <th style={{ border: "1px solid #ccc", padding: "0.5rem" }}>Joueurs</th>
+                <th style={{ border: "1px solid #ccc", padding: "0.5rem" }}>{nbJoueurs}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {lignes.map(({ label, color, type }) => (
+                <tr key={label}>
+                  <td style={{ border: "1px solid #ccc", padding: "0.5rem", color }}>{label}</td>
+                  <td style={{ border: "1px solid #ccc", padding: "0.25rem" }}>
+                    <span style={{ width: "3rem", textAlign: "center", display: "inline-block", color, fontWeight: "bold", fontFamily: "Cardo, serif", fontSize: "1rem" }}>
+                      {tableRepartition[nbJoueurs]?.[label] ?? 0}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {/* Red cross button (reset roles) - place here if needed */}
+        <button
+          onClick={handleResetRoles}
+          style={{ marginLeft: "1em", background: "none", border: "none", cursor: "pointer" }}
+          title="Réinitialiser les rôles"
+        >
+        </button>
       </div>
+
 
       <button
         onClick={() => setAfficherRoles((prev) => !prev)}
-        style={{
-          ...buttonStyle,
-          marginBottom: "1rem",
-        }}
+        style={{ ...buttonStyle, marginBottom: "1rem" }}
       >
         {afficherRoles ? "Masquer les rôles" : "Afficher les rôles"}
       </button>
+
       {!rolesValides && (
-        <>
+        <div style={{ display: "flex", flexDirection: "row", gap: "1rem", marginBottom: "1rem" }}>
           <button
             onClick={tirerAuHasard}
-            style={{
-              ...buttonStyle,
-              marginBottom: "1rem",
-            }}
+            style={{ ...buttonStyle }}
           >
             Sélection aléatoire
           </button>
           <button
             onClick={deselectionnerTousLesRoles}
             disabled={selected.length === 0}
-            style={{
-              ...buttonStyle,
-              marginBottom: "1rem",
-              opacity: selected.length === 0 ? 0.5 : 1,
-            }}
+            style={{ ...buttonStyle, opacity: selected.length === 0 ? 0.5 : 1 }}
           >
-            Désélectionner tous les rôles
+            Tout désélectionner
           </button>
           <button
             onClick={handleValiderRoles}
-            style={{
-              ...buttonStyle,
-              marginBottom: "1rem",
-            }}
+            style={{ ...buttonStyle }}
           >
             Valider les rôles
           </button>
-        </>
+        </div>
+      )}
+
+      {rolesValides && !affectationVisible && Object.keys(joueursAttribues).length < nbJoueurs && (
+        <div style={{ display: "flex", flexDirection: "row", gap: "1rem", marginBottom: "1rem" }}>
+          <button
+            onClick={() => setAffectationVisible(true)}
+            style={{ ...buttonStyle }}
+          >
+            Attribuer les rôles
+          </button>
+        </div>
       )}
       {erreurValidation && (
         <div
@@ -907,28 +911,8 @@ export default function App() {
           );
         })}
 
-      {rolesValides && (
-        !affectationVisible ? (
-          <button
-            onClick={() => setAffectationVisible(true)}
-            disabled={Object.keys(joueursAttribues).length === nbJoueurs}
-            style={{
-              ...buttonStyle,
-              cursor:
-                Object.keys(joueursAttribues).length === nbJoueurs
-                  ? "not-allowed"
-                  : "pointer",
-              opacity:
-                Object.keys(joueursAttribues).length === nbJoueurs ? 0.5 : 1,
-              marginBottom: afficherRoles ? "1rem" : undefined,
-            }}
-          >
-            Attribuer les rôles
-          </button>
-        ) : (
-          <div style={{ height: "40px", marginBottom: afficherRoles ? "1rem" : undefined }}></div>
-        )
-      )}
+     
+      
       {rolesValides && (
         <div style={{ marginBottom: "2rem" }}>
           <h1
