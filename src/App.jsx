@@ -930,45 +930,57 @@ export default function App() {
       )}
       {rolesValides && (
         <div style={{ marginBottom: "2rem" }}>
-          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-            <button
-              onClick={() => setAfficherOrdreReveil((prev) => !prev)}
-              style={{
-                ...buttonStyle,
-                marginBottom: "1rem",
-              }}
-            >
-              {afficherOrdreReveil
-                ? "Masquer l'ordre de réveil"
-                : "Afficher l'ordre de réveil"}
-            </button>
-            {/* Montrer les bluffs button next to ordre de réveil */}
-            {/* Removed duplicate 'Montrer les bluffs' button */}
+          <div
+            style={{
+              fontSize: "1.2rem",
+              marginBottom: "0.5rem",
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+              userSelect: "none",
+            }}
+            onClick={() => setAfficherOrdreReveil((prev) => !prev)}
+          >
+           
+            <span>
+              {afficherOrdreReveil ? "▼" : "►"} Ordre de réveil
+            </span>
           </div>
           {afficherOrdreReveil && (
             <>
-              <button
-                onClick={() =>
-                  setOrdreNuitActuelle((prev) =>
-                    prev === "premiere" ? "autres" : "premiere"
-                  )
-                }
-                style={{
-                  ...buttonStyle,
-                  marginBottom: "1rem",
-                }}
-              >
-                {ordreNuitActuelle === "premiere"
-                  ? "Voir l'ordre des autres nuits"
-                  : "Voir l'ordre de la première nuit"}
-              </button>
+              <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
+                <button
+                  onClick={() => setOrdreNuitActuelle("premiere")}
+                  style={{
+                    border: ordreNuitActuelle === "premiere" ? "2px solid #888" : "1px solid #ccc",
+                    borderRadius: "8px 0 0 8px",
+                    padding: "0.5rem 1.2rem",
+                    cursor: "pointer",
+                    background: ordreNuitActuelle === "premiere" ? "#e0e0e0" : "#fafafa",
+                    color: ordreNuitActuelle === "premiere" ? "#222" : "#333",
+                    fontWeight: "bold",
+                    outline: "none",
+                  }}
+                >
+                  Première nuit
+                </button>
+                <button
+                  onClick={() => setOrdreNuitActuelle("autres")}
+                  style={{
+                    border: ordreNuitActuelle === "autres" ? "2px solid #888" : "1px solid #ccc",
+                    borderRadius: "0 8px 8px 0",
+                    padding: "0.5rem 1.2rem",
+                    cursor: "pointer",
+                    background: ordreNuitActuelle === "autres" ? "#e0e0e0" : "#fafafa",
+                    color: ordreNuitActuelle === "autres" ? "#222" : "#333",
+                    fontWeight: "bold",
+                    outline: "none",
+                  }}
+                >
+                  Autres nuits
+                </button>
+              </div>
               <div>
-                <h2 style={{ fontFamily: "Cardo, serif", fontSize: "1.5rem" }}>
-                  Ordre de réveil –{" "}
-                  {ordreNuitActuelle === "premiere"
-                    ? "Première nuit"
-                    : "Autres nuits"}
-                </h2>
                 <div
                   key="crepuscule"
                   style={{
@@ -1494,17 +1506,22 @@ export default function App() {
       {/* Grimoire section comes after bluffs */}
       {Object.keys(joueursAttribues).length === nbJoueurs && (
         <>
-          <button
-            onClick={() => setAfficherRepartition((prev) => !prev)}
+          <div
             style={{
-              ...buttonStyle,
+              fontSize: "1.2rem",
               marginTop: "2rem",
+              marginBottom: "0.5rem",
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+              userSelect: "none",
             }}
+            onClick={() => setAfficherRepartition((prev) => !prev)}
           >
-            {afficherRepartition
-              ? "Masquer le grimoire"
-              : "Afficher le grimoire"}
-          </button>
+            <span>
+              {afficherRepartition ? "▼" : "►"} Grimoire
+            </span>
+          </div>
 
           {afficherRepartition && (
             <div
@@ -2690,7 +2707,7 @@ export default function App() {
           )}
         </div>
       )}
-      {Object.keys(joueursAttribues).length === nbJoueurs && !bluffsValides && (
+      {afficherRepartition && !bluffsValides && (
         <button
           onClick={() => {
             setChoisirBluffsVisible((prev) => !prev);
@@ -2702,10 +2719,10 @@ export default function App() {
           }}
           disabled={bluffsValides}
         >
-          {choisirBluffsVisible ? "Masquer les bluffs" : "Choisir bluffs"}
-       </button>
-     )}
-      {choisirBluffsVisible && !bluffsValides && (
+          {choisirBluffsVisible ? "Masquer les bluffs" : "Choisir les bluffs"}
+        </button>
+      )}
+      {afficherRepartition && choisirBluffsVisible && !bluffsValides && (
         <div
           style={{
             margin: "1rem 0",
