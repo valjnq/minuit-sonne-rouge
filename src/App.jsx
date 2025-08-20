@@ -767,43 +767,39 @@ export default function App() {
       >
         {afficherRoles ? "Masquer les rôles" : "Afficher les rôles"}
       </button>
-      <button
-        onClick={tirerAuHasard}
-        disabled={rolesValides}
-        style={{
-          ...buttonStyle,
-          marginBottom: "1rem",
-          cursor: rolesValides ? "not-allowed" : "pointer",
-          opacity: rolesValides ? 0.5 : 1,
-        }}
-      >
-        Sélection aléatoire
-      </button>
-      <button
-        onClick={deselectionnerTousLesRoles}
-        disabled={rolesValides || selected.length === 0}
-        style={{
-          ...buttonStyle,
-          marginBottom: "1rem",
-          cursor: rolesValides ? "not-allowed" : "pointer",
-          opacity: rolesValides || selected.length === 0 ? 0.5 : 1,
-        }}
-      >
-        Désélectionner tous les rôles
-      </button>
-
-      <button
-        onClick={handleValiderRoles}
-        disabled={rolesValides}
-        style={{
-          ...buttonStyle,
-          marginBottom: "1rem",
-          cursor: rolesValides ? "default" : "pointer",
-          opacity: rolesValides ? 0.5 : 1,
-        }}
-      >
-        Valider les rôles
-      </button>
+      {!rolesValides && (
+        <>
+          <button
+            onClick={tirerAuHasard}
+            style={{
+              ...buttonStyle,
+              marginBottom: "1rem",
+            }}
+          >
+            Sélection aléatoire
+          </button>
+          <button
+            onClick={deselectionnerTousLesRoles}
+            disabled={selected.length === 0}
+            style={{
+              ...buttonStyle,
+              marginBottom: "1rem",
+              opacity: selected.length === 0 ? 0.5 : 1,
+            }}
+          >
+            Désélectionner tous les rôles
+          </button>
+          <button
+            onClick={handleValiderRoles}
+            style={{
+              ...buttonStyle,
+              marginBottom: "1rem",
+            }}
+          >
+            Valider les rôles
+          </button>
+        </>
+      )}
       {erreurValidation && (
         <div
           style={{
@@ -911,44 +907,52 @@ export default function App() {
           );
         })}
 
-      {rolesValides && !affectationVisible && (
-        <button
-          onClick={() => setAffectationVisible(true)}
-          disabled={Object.keys(joueursAttribues).length === nbJoueurs}
-          style={{
-            ...buttonStyle,
-            cursor:
-              Object.keys(joueursAttribues).length === nbJoueurs
-                ? "not-allowed"
-                : "pointer",
-            opacity:
-              Object.keys(joueursAttribues).length === nbJoueurs ? 0.5 : 1,
-          }}
-        >
-          Attribuer les rôles
-        </button>
+      {rolesValides && (
+        !affectationVisible ? (
+          <button
+            onClick={() => setAffectationVisible(true)}
+            disabled={Object.keys(joueursAttribues).length === nbJoueurs}
+            style={{
+              ...buttonStyle,
+              cursor:
+                Object.keys(joueursAttribues).length === nbJoueurs
+                  ? "not-allowed"
+                  : "pointer",
+              opacity:
+                Object.keys(joueursAttribues).length === nbJoueurs ? 0.5 : 1,
+              marginBottom: afficherRoles ? "1rem" : undefined,
+            }}
+          >
+            Attribuer les rôles
+          </button>
+        ) : (
+          <div style={{ height: "40px", marginBottom: afficherRoles ? "1rem" : undefined }}></div>
+        )
       )}
       {rolesValides && (
         <div style={{ marginBottom: "2rem" }}>
-          <div
+          <h1
             style={{
-              fontSize: "1.2rem",
-              marginBottom: "0.5rem",
+              fontFamily: "'Pirata One', cursive",
+              fontSize: "2rem",
+              color: "black",
+              margin: 0,
+              textAlign: "left",
               display: "flex",
               alignItems: "center",
               cursor: "pointer",
               userSelect: "none",
+              marginBottom: "0.5rem",
             }}
             onClick={() => setAfficherOrdreReveil((prev) => !prev)}
           >
-           
             <span>
               {afficherOrdreReveil ? "▼" : "►"} Ordre de réveil
             </span>
-          </div>
+          </h1>
           {afficherOrdreReveil && (
             <>
-              <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
+              <div style={{ display: "flex", gap: 0, marginBottom: "1rem" }}>
                 <button
                   onClick={() => setOrdreNuitActuelle("premiere")}
                   style={{
@@ -1505,22 +1509,26 @@ export default function App() {
       {/* Grimoire section comes after bluffs */}
       {Object.keys(joueursAttribues).length === nbJoueurs && (
         <>
-          <div
+          <h1
             style={{
-              fontSize: "1.2rem",
+              fontFamily: "'Pirata One', cursive",
+              fontSize: "2rem",
+              color: "black",
               marginTop: "2rem",
               marginBottom: "0.5rem",
+              textAlign: "left",
               display: "flex",
               alignItems: "center",
               cursor: "pointer",
               userSelect: "none",
+             
             }}
             onClick={() => setAfficherRepartition((prev) => !prev)}
           >
             <span>
               {afficherRepartition ? "▼" : "►"} Grimoire
             </span>
-          </div>
+          </h1>
 
           {afficherRepartition && (
             <div
@@ -2940,33 +2948,34 @@ export default function App() {
       {/* Jetons info section (above notes) */}
       <div
         style={{
-          background: "#444",
-          borderRadius: "12px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-          padding: "1.2rem 1.5rem 1.5rem 1.5rem",
           marginBottom: "2rem",
           marginTop: "2rem",
           fontFamily: "Cardo, serif",
-          color: "#fff",
+          color: "#222",
           maxWidth: "1200px",
-          marginLeft: "auto",
+          marginLeft: 0,
           marginRight: "auto",
         }}
       >
-        <div
+        <h1
           style={{
-            fontWeight: "bold",
-            fontSize: "1.2rem",
+            fontFamily: "'Pirata One', cursive",
+            fontSize: "2rem",
+            color: "black",
+            margin: 0,
             marginBottom: "0.5rem",
+            textAlign: "left",
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+            userSelect: "none",
           }}
+          onClick={() => setJetonsInfoVisible((v) => !v)}
         >
-          <span
-            style={{ cursor: "pointer" }}
-            onClick={() => setJetonsInfoVisible((v) => !v)}
-          >
+          <span>
             {jetonsInfoVisible ? "▼" : "►"} Communication
           </span>
-        </div>
+        </h1>
         {jetonsInfoVisible && (
           <>
             {/* Rôles button for communication */}
@@ -3562,40 +3571,46 @@ export default function App() {
 
       <div
         style={{
-          background: "#444",
-          borderRadius: "12px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-          padding: "1.2rem 1.5rem 1.5rem 1.5rem",
           marginBottom: "2rem",
           marginTop: "2rem",
           fontFamily: "Cardo, serif",
-          color: "#fff",
-          maxWidth: "800px",
-          marginLeft: "auto",
-          marginRight: "auto",
         }}
       >
         <div
           style={{
-            fontWeight: "bold",
-            fontSize: "1.2rem",
-            marginBottom: "0.5rem",
+            fontFamily: "Cardo, serif",
+            color: "black",
+            display: "block",
           }}
         >
-          <span
-            style={{ cursor: "pointer" }}
+          <h1
+            style={{
+              fontFamily: "'Pirata One', cursive",
+              fontSize: "2rem",
+              color: "black",
+              margin: 0,
+              textAlign: "left",
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+              userSelect: "none",
+            }}
             onClick={() => setAfficherNotes((v) => !v)}
           >
-            {afficherNotes ? "▼" : "►"} Notes
-          </span>
+            <span style={{display: "flex", alignItems: "center"}}>
+              {afficherNotes ? "▼" : "►"}
+              <span style={{marginLeft: "0.5rem"}}>Notes</span>
+            </span>
+          </h1>
         </div>
+
         {afficherNotes && (
           <div
             style={{
-              margin: "1.5rem 0 0 0",
-              display: "flex",
+              marginTop: "1rem",
+              color: "black",
+              display: "block",
               flexDirection: "column",
-              alignItems: "center",
             }}
           >
             <textarea
@@ -3604,17 +3619,15 @@ export default function App() {
               rows={10}
               style={{
                 width: "600px",
-                maxWidth: "90vw",
                 fontFamily: "Cardo, serif",
                 fontSize: "1.2rem",
-                borderRadius: 12,
-                border: "1px solid #fff",
-                padding: "1.5rem",
+                borderRadius: 0,
+                border: "1px solid #ccc",
+                padding: "0.5rem",
                 resize: "vertical",
-                background: "#fffbe6",
+                background: "white",
                 color: "#222",
-                boxShadow: "0 2px 16px rgba(0,0,0,0.2)",
-                marginBottom: "2rem",
+                marginBottom: "1rem",
               }}
             />
           </div>
