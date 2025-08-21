@@ -178,16 +178,30 @@ export default function App() {
     }
   }, [customScriptVisible]);
   const [afficherGrimoire, setAfficherGrimoire] = useState(false);
+  // Control open/close of Paramètres and Rôles sections
+  const [openSetup, setOpenSetup] = useState(true);
+  const [openRolesDetails, setOpenRolesDetails] = useState(true);
+  const grimoireRef = useRef(null);
 
   const urlPDF = {
     "Sombre présage": "docs/minuitsonnerouge-sombrepresage.pdf",
     "Parfums d’hystérie": "docs/minuitsonnerouge-parfumsdhysterie.pdf",
     "Crépuscule funeste": "docs/minuitsonnerouge-crepusculefuneste.pdf",
   };
+  // When all roles are attributed, close Paramètres & Rôles, open Grimoire
+  useEffect(() => {
+    const allAttributed = Object.keys(joueursAttribues).length === nbJoueurs && nbJoueurs > 0;
+    if (allAttributed) {
+      if (openSetup) setOpenSetup(false);
+      if (openRolesDetails) setOpenRolesDetails(false);
+      if (!afficherRepartition) setAfficherRepartition(true);
+    }
+  }, [joueursAttribues, nbJoueurs]);
+
 
   useEffect(() => {
     setSelected([]);
-    setErreurValidation("");
+    setErreurValidation(""); 
     if (edition === "Script personnalisé") {
       setCustomScriptVisible(true);
     } else {
@@ -263,6 +277,10 @@ export default function App() {
     setCustomScriptTemp([]);
     setCustomJetons([]);
     setNotes("");
+  
+    setOpenSetup(true);
+    setOpenRolesDetails(true);
+    setAfficherRepartition(false);
   }
 
   function tirerAuHasard() {
@@ -394,9 +412,7 @@ export default function App() {
     // }));
     setRolesValides(true);
     setErreurValidation("");
-    setRolesRestants([...selected]);
-    setAfficherRoles(false); // Hide roles section automatically
-    
+    setRolesRestants([...selected]);    
   }
 
   return (
@@ -475,7 +491,7 @@ export default function App() {
       </div>
 
 {/* === SETUP (collapsible) === */}
-<details id="setup" className="collapsible" open style={{ marginBottom: "1.5rem" }}>
+<details id="setup" className="collapsible" open={openSetup} onToggle={(e) => setOpenSetup(e.currentTarget.open)} style={{ marginBottom: "1.5rem" }}>
   <summary>Paramètres</summary>
 
   {/* --- Ligne d’options --- */}
@@ -604,7 +620,7 @@ export default function App() {
 </details>
 
 
-  <details className="collapsible" style={{ marginBottom: "1.5rem" }} open>
+  <details className="collapsible" style={{ marginBottom: "1.5rem" }} open={openRolesDetails} onToggle={(e) => setOpenRolesDetails(e.currentTarget.open)}>
   <summary>Rôles</summary>
         <div style={{ marginTop: "1rem" }}>
           {!rolesValides && (
@@ -1338,6 +1354,7 @@ export default function App() {
               userSelect: "none",
              
             }}
+            ref={grimoireRef}
             onClick={() => setAfficherRepartition((prev) => !prev)}
           >
             <span className="caret">{afficherRepartition ? "▼" : "►"}</span><span>Grimoire</span>
