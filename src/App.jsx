@@ -189,12 +189,9 @@ export default function App() {
     setErreurValidation("");
     if (edition === "Script personnalisé") {
       setCustomScriptVisible(true);
-      // Only clear temp if edition changes from something else
-      // (do not clear if just opening/closing modal)
-      // No action here: keep customScriptTemp as is
     } else {
       setCustomScriptVisible(false);
-      setCustomScriptTemp([]); // clear temp if leaving custom script
+      setCustomScriptTemp([]); 
     }
   }, [edition]);
 
@@ -207,12 +204,11 @@ export default function App() {
     { label: "Demons", color: "#950f13", type: "Démon" },
   ];
 
-  // Compute how many of each type are currently selected
-  // ...existing code...
+
 
   const maxParType = tableRepartition[nbJoueurs];
 
-  // For custom script, show only the custom pool as available roles; otherwise, filter by edition
+
   const rolesFiltres =
     edition === "Script personnalisé"
       ? customScriptPool
@@ -763,72 +759,68 @@ export default function App() {
       </div>
 
 
-      <button
-        onClick={() => setAfficherRoles((prev) => !prev)}
-        style={{ ...buttonStyle, marginBottom: "1rem" }}
-      >
-        {afficherRoles ? "Masquer les rôles" : "Afficher les rôles"}
-      </button>
-
-      {!rolesValides && (
-        <div style={{ display: "flex", flexDirection: "row", gap: "1rem", marginBottom: "1rem" }}>
-          <button
-            onClick={tirerAuHasard}
-            style={{ ...buttonStyle }}
-          >
-            Sélection aléatoire
-          </button>
-          <button
-            onClick={deselectionnerTousLesRoles}
-            disabled={selected.length === 0}
-            style={{ ...buttonStyle, opacity: selected.length === 0 ? 0.5 : 1 }}
-          >
-            Tout désélectionner
-          </button>
-          <button
-            onClick={handleValiderRoles}
-            style={{ ...buttonStyle }}
-          >
-            Valider les rôles
-          </button>
-        </div>
-      )}
-
-      {rolesValides && !affectationVisible && Object.keys(joueursAttribues).length < nbJoueurs && (
-        <div style={{ display: "flex", flexDirection: "row", gap: "1rem", marginBottom: "1rem" }}>
-          <button
-            onClick={() => setAffectationVisible(true)}
-            style={{ ...buttonStyle }}
-          >
-            Attribuer les rôles
-          </button>
-        </div>
-      )}
-      {erreurValidation && (
-        <div
-          style={{
-            color: "#950f13",
-            marginBottom: "1rem",
-            fontFamily: "Cardo, serif",
-          }}
-        >
-          {erreurValidation}
-        </div>
-      )}
-
-      {/* ROLES DISPLAY BLOCK - restored to main return */}
-
-      {afficherRoles &&
-        lignes.map(({ type, label }) => {
-          const rolesDuType = rolesFiltres.filter((r) => r.type === type);
-          if (rolesDuType.length === 0) return null;
-          // Count selected for this type
-          const selectedCount = selected.filter((r) => r.type === type).length;
-          // Get expected count from tableRepartition
-          const expectedCount = maxParType[label];
+      <details style={{ marginBottom: "1.5rem" }}>
+  <summary style={{ fontFamily: "'Pirata One', cursive", fontWeight: "bold", fontSize: "2rem", cursor: "pointer" }}>Rôles</summary>
+        <div style={{ marginTop: "1rem" }}>
+          {!rolesValides && (
+            <div style={{ display: "flex", flexDirection: "row", gap: "1rem", marginBottom: "1rem" }}>
+              <button
+                onClick={tirerAuHasard}
+                style={{ ...buttonStyle }}
+              >
+                Sélection aléatoire
+              </button>
+              <button
+                onClick={deselectionnerTousLesRoles}
+                disabled={selected.length === 0}
+                style={{ ...buttonStyle, opacity: selected.length === 0 ? 0.5 : 1 }}
+              >
+                Tout désélectionner
+              </button>
+              <button
+                onClick={handleValiderRoles}
+                style={{ ...buttonStyle }}
+              >
+                Valider les rôles
+              </button>
+            </div>
+          )}
+          {rolesValides && !affectationVisible && Object.keys(joueursAttribues).length < nbJoueurs && (
+            <div style={{ display: "flex", flexDirection: "row", gap: "1rem", marginBottom: "1rem" }}>
+              <button
+                onClick={() => setAffectationVisible(true)}
+                style={{ ...buttonStyle }}
+              >
+                Attribuer les rôles
+              </button>
+            </div>
+          )}
+          {erreurValidation && (
+            <div
+              style={{
+                color: "#950f13",
+                marginBottom: "1rem",
+                fontFamily: "Cardo, serif",
+              }}
+            >
+              {erreurValidation}
+            </div>
+          )}
+          {/* ROLES DISPLAY BLOCK - restored to main return */}
+          {lignes.map(({ type, label }) => {
+            const rolesDuType = rolesFiltres.filter((r) => r.type === type);
+            if (rolesDuType.length === 0) return null;
+            // Count selected for this type
+            const selectedCount = selected.filter((r) => r.type === type).length;
+            // Get expected count from tableRepartition
+            const expectedCount = maxParType[label];
+            // Choose color for summary
+            let summaryColor = "#222";
+            if (type === "Habitant" || type === "Étranger") summaryColor = "#0e74b4";
+            if (type === "Acolyte" || type === "Démon") summaryColor = "#950f13";
             return (
-              <details key={type} style={{ marginBottom: "1rem" }}>
-                <summary style={{ fontWeight: "bold", fontSize: "1.2rem", cursor: "pointer" }}>
+              <details key={type} style={{ marginBottom: "1rem" }} open>
+                <summary style={{ fontWeight: "bold", fontSize: "1.2rem", cursor: "pointer", color: summaryColor }}>
                   {label} ({selectedCount}/{expectedCount})
                 </summary>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "0.5rem" }}>
@@ -903,7 +895,9 @@ export default function App() {
                 </div>
               </details>
             );
-        })}
+          })}
+        </div>
+      </details>
 
      
       
