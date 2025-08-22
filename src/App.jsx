@@ -746,18 +746,16 @@ export default function App() {
           {lignes.map(({ type, label }) => {
             const rolesDuType = rolesFiltres.filter((r) => r.type === type);
             if (rolesDuType.length === 0) return null;
-            // Count selected for this type
-            const selectedCount = selected.filter(
-              (r) => r.type === type
-            ).length;
-            // Get expected count from tableRepartition
+            const selectedCount = selected.filter((r) => r.type === type).length;
             const expectedCount = maxParType[label];
-            // Choose color for summary
             let summaryColor = "#222";
-            if (type === "Habitant" || type === "Étranger")
-              summaryColor = "#0e74b4";
-            if (type === "Acolyte" || type === "Démon")
-              summaryColor = "#950f13";
+            if (type === "Habitant" || type === "Étranger") summaryColor = "#0e74b4";
+            if (type === "Acolyte" || type === "Démon") summaryColor = "#950f13";
+            // Regroupe les rôles par paires
+            const rolePairs = [];
+            for (let i = 0; i < rolesDuType.length; i += 2) {
+              rolePairs.push(rolesDuType.slice(i, i + 2));
+            }
             return (
               <details key={type} style={{ marginBottom: "1rem" }} open>
                 <summary
@@ -770,86 +768,83 @@ export default function App() {
                 >
                   {label} ({selectedCount}/{expectedCount})
                 </summary>
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "0.5rem",
-                    marginTop: "0.5rem",
-                  }}
-                >
-                  {rolesDuType.map((role) => {
-                    const isSelected = selected.some((r) => r.nom === role.nom);
-                    const greyed = rolesValides && !isSelected;
-                    const isDisabled = greyed;
-                    return (
-                      <div
-                        key={role.nom}
-                        onClick={() => {
-                          if (rolesValides || isDisabled) return;
-                          toggleRole(role);
-                        }}
-                        style={{
-                          border: isSelected
-                            ? role.alignement === "Bon"
-                              ? "2px solid #0e74b4"
-                              : "2px solid #950f13"
-                            : "1px solid #ccc",
-                          borderRadius: 8,
-                          padding: "0.5rem",
-                          cursor:
-                            isDisabled || rolesValides
-                              ? "not-allowed"
-                              : "pointer",
-                          opacity: isDisabled ? 0.5 : 1,
-                          background: isSelected
-                            ? role.alignement === "Bon"
-                              ? "#e6f0fa"
-                              : "#fae6e6"
-                            : "#fafafa",
-                          width: 220,
-                          minHeight: 90,
-                          textAlign: "center",
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <img
-                          src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                          alt={role.nom}
-                          style={{
-                            height: 48,
-                            width: 48,
-                            objectFit: "contain",
-                          }}
-                        />
-                        <div
-                          style={{
-                            fontFamily: "'IM Fell English SC', serif",
-                            fontSize: "1.1rem",
-                            color:
-                              role.alignement === "Bon" ? "#0e74b4" : "#950f13",
-                            fontWeight: "bold",
-                            marginTop: 8,
-                          }}
-                        >
-                          {role.nom}
-                        </div>
-                        <div
-                          style={{
-                            fontFamily: "Cardo, serif",
-                            fontSize: "0.95rem",
-                            maxWidth: "30ch",
-                            marginTop: 4,
-                          }}
-                        >
-                          {role.pouvoir}
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div style={{ marginTop: "0.5rem" }}>
+                  {rolePairs.map((pair, idx) => (
+                    <div key={idx} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                      {pair.map((role) => {
+                        const isSelected = selected.some((r) => r.nom === role.nom);
+                        const greyed = rolesValides && !isSelected;
+                        const isDisabled = greyed;
+                        return (
+                          <div
+                            key={role.nom}
+                            onClick={() => {
+                              if (rolesValides || isDisabled) return;
+                              toggleRole(role);
+                            }}
+                            style={{
+                              border: isSelected
+                                ? role.alignement === "Bon"
+                                  ? "2px solid #0e74b4"
+                                  : "2px solid #950f13"
+                                : "1px solid #ccc",
+                              borderRadius: 8,
+                              padding: "0.5rem",
+                              cursor:
+                                isDisabled || rolesValides
+                                  ? "not-allowed"
+                                  : "pointer",
+                              opacity: isDisabled ? 0.5 : 1,
+                              background: isSelected
+                                ? role.alignement === "Bon"
+                                  ? "#e6f0fa"
+                                  : "#fae6e6"
+                                : "#fafafa",
+                              width: 220,
+                              minHeight: 90,
+                              textAlign: "center",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <img
+                              src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                              alt={role.nom}
+                              style={{
+                                height: 48,
+                                width: 48,
+                                objectFit: "contain",
+                              }}
+                            />
+                            <div
+                              style={{
+                                fontFamily: "'IM Fell English SC', serif",
+                                fontSize: "1.1rem",
+                                color:
+                                  role.alignement === "Bon" ? "#0e74b4" : "#950f13",
+                                fontWeight: "bold",
+                                marginTop: 8,
+                              }}
+                            >
+                              {role.nom}
+                            </div>
+                            <div
+                              style={{
+                                fontFamily: "Cardo, serif",
+                                fontSize: "0.95rem",
+                                maxWidth: "30ch",
+                                marginTop: 4,
+                              }}
+                            >
+                              {role.pouvoir}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
                 </div>
               </details>
             );
