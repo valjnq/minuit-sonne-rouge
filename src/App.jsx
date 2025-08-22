@@ -168,6 +168,8 @@ export default function App() {
   const [bluffsValides, setBluffsValides] = useState(false);
   const [afficherNotes, setAfficherNotes] = useState(false);
   const [notes, setNotes] = useState("");
+  const tousAttribues =
+  nbJoueurs > 0 && Object.keys(joueursAttribues).length === nbJoueurs;
   function clearNotes() {
     setNotes("");
   }
@@ -192,16 +194,13 @@ export default function App() {
     "Parfums d’hystérie": "docs/minuitsonnerouge-parfumsdhysterie.pdf",
     "Crépuscule funeste": "docs/minuitsonnerouge-crepusculefuneste.pdf",
   };
-  // When all roles are attributed, close Paramètres & Rôles, open Grimoire
-  useEffect(() => {
-    const allAttributed =
-      Object.keys(joueursAttribues).length === nbJoueurs && nbJoueurs > 0;
-    if (allAttributed) {
-      if (openSetup) setOpenSetup(false);
-      if (openRolesDetails) setOpenRolesDetails(false);
-      if (!afficherRepartition) setAfficherRepartition(true);
-    }
-  }, [joueursAttribues, nbJoueurs]);
+// Quand on passe de "pas tous attribués" -> "tous attribués"
+useEffect(() => {
+  if (!tousAttribues) return;
+  setOpenSetup(false);
+  setOpenRolesDetails(false);
+  setAfficherRepartition(true); // ouvre Grimoire à l’apparition
+}, [tousAttribues]);
 
   useEffect(() => {
     setSelected([]);
@@ -1464,7 +1463,7 @@ export default function App() {
             </div>
           )}
           {/* Grimoire section comes after bluffs */}
-
+{tousAttribues && (
           <details
             className="collapsible"
             ref={grimoireRef}
@@ -1483,16 +1482,7 @@ export default function App() {
               }}
             >
               <details className="collapsible" open>
-                <summary
-                  style={{
-                    fontFamily: "Cardo, serif",
-                    fontSize: "1.3rem",
-                    fontWeight: "bold",
-                    color: "#950f13",
-                  }}
-                >
-                  Bluffs du démon
-                </summary>
+                <summary>Bluffs du démon</summary>
                 {afficherRepartition && !bluffsValides && (
                   <>
                     <div
@@ -1665,15 +1655,7 @@ export default function App() {
                   )}
               </details>
               <details className="collapsible" open>
-                <summary
-                  style={{
-                    fontFamily: "Cardo, serif",
-                    fontSize: "1.3rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Joueurs
-                </summary>
+                <summary> Joueurs</summary>
                 {Object.entries(joueursAttribues).map(
                   ([index, joueur], idx) => (
                     <div
@@ -2842,6 +2824,7 @@ export default function App() {
                 })()}
             </div>
           </details>
+          )}
           {qrCodeVisible && (
             <div
               style={{
@@ -3048,488 +3031,467 @@ export default function App() {
               marginRight: "auto",
             }}
           >
-            <h1
-              style={{
-                fontFamily: "'Pirata One', cursive",
-                fontSize: "2rem",
-                color: "black",
-                margin: 0,
-                marginBottom: "0.5rem",
-                textAlign: "left",
-                display: "flex",
-                alignItems: "center",
-                cursor: "pointer",
-                userSelect: "none",
-              }}
-              onClick={() => setJetonsInfoVisible((v) => !v)}
+            <details
+              className="collapsible"
+              open={jetonsInfoVisible}
+              onToggle={(e) => setJetonsInfoVisible(e.currentTarget.open)}
             >
-              <span className="caret">{jetonsInfoVisible ? "▼" : "►"}</span>
-              <span>Communication</span>
-            </h1>
-            {jetonsInfoVisible && (
-              <>
-                {/* Rôles button for communication */}
+              <summary>Communication</summary>
+              {/* Rôles button for communication */}
+              <div
+                style={{
+                  width: "100%",
+                  marginBottom: "1rem",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <button
+                  style={{
+                    ...buttonStyle,
+                    background: "#222",
+                    color: "#fff",
+                    fontWeight: "bold",
+                    fontSize: "1.1rem",
+                    minWidth: "180px",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                  }}
+                  onClick={() => setRolesModalOpen(true)}
+                >
+                  Rôles
+                </button>
+              </div>
+              {/* Modal for roles selection */}
+              {rolesModalOpen && (
                 <div
                   style={{
-                    width: "100%",
-                    marginBottom: "1rem",
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: "rgba(0,0,0,0.7)",
+                    zIndex: 400,
                     display: "flex",
-                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
-                  <button
-                    style={{
-                      ...buttonStyle,
-                      background: "#222",
-                      color: "#fff",
-                      fontWeight: "bold",
-                      fontSize: "1.1rem",
-                      minWidth: "180px",
-                      boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                    }}
-                    onClick={() => setRolesModalOpen(true)}
-                  >
-                    Rôles
-                  </button>
-                </div>
-                {/* Modal for roles selection */}
-                {rolesModalOpen && (
                   <div
                     style={{
-                      position: "fixed",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      backgroundColor: "rgba(0,0,0,0.7)",
-                      zIndex: 400,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      background: "#fff",
+                      color: "#222",
+                      borderRadius: "10px",
+                      padding: "2rem",
+                      minWidth: "320px",
+                      maxHeight: "80vh",
+                      overflowY: "auto",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                      position: "relative",
                     }}
                   >
-                    <div
+                    <button
+                      onClick={() => setRolesModalOpen(false)}
                       style={{
-                        background: "#fff",
-                        color: "#222",
-                        borderRadius: "10px",
-                        padding: "2rem",
-                        minWidth: "320px",
-                        maxHeight: "80vh",
-                        overflowY: "auto",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                        position: "relative",
+                        position: "absolute",
+                        top: "1rem",
+                        right: "1rem",
+                        fontSize: "1.5rem",
+                        color: "#333",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
                       }}
                     >
-                      <button
-                        onClick={() => setRolesModalOpen(false)}
-                        style={{
-                          position: "absolute",
-                          top: "1rem",
-                          right: "1rem",
-                          fontSize: "1.5rem",
-                          color: "#333",
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                        }}
-                      >
-                        ×
-                      </button>
-                      <h2 style={{ marginBottom: "1rem" }}>Choisir un rôle</h2>
-                      {/* Group roles by type */}
-                      {(() => {
-                        const types = {};
-                        rolesFiltres.forEach((role) => {
-                          if (!types[role.type]) types[role.type] = [];
-                          types[role.type].push(role);
-                        });
-                        const typeOrder = [
-                          "Habitant",
-                          "Étranger",
-                          "Acolyte",
-                          "Démon",
-                        ];
-                        return typeOrder
-                          .filter((type) => types[type])
-                          .map((type) => (
-                            <div key={type} style={{ marginBottom: "1.2rem" }}>
-                              <div
-                                style={{
-                                  fontWeight: "bold",
-                                  fontSize: "1.1rem",
-                                  marginBottom: "0.5rem",
-                                  color: "#222",
-                                }}
-                              >
-                                {type}
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  gap: "0.5rem",
-                                }}
-                              >
-                                {types[type].map((role) => (
-                                  <button
-                                    key={role.nom}
-                                    style={{
-                                      background: "#eee",
-                                      color: "#222",
-                                      border: "1px solid #bbb",
-                                      borderRadius: "6px",
-                                      fontWeight: "bold",
-                                      fontSize: "1rem",
-                                      padding: "0.4rem 0.8rem",
-                                      marginBottom: "0.3rem",
-                                      cursor: "pointer",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: "0.5rem",
-                                    }}
-                                    onClick={() => {
-                                      setSelectedRole(role);
-                                      setRolesModalOpen(false);
-                                    }}
-                                  >
-                                    <img
-                                      src={getRoleIcon(role)}
-                                      alt={role.nom}
-                                      style={{
-                                        width: "28px",
-                                        height: "28px",
-                                        borderRadius: "4px",
-                                        background: "#fff",
-                                        border: "1px solid #ccc",
-                                      }}
-                                      onError={(e) => {
-                                        e.target.style.display = "none";
-                                      }}
-                                    />
-                                    {role.nom}
-                                  </button>
-                                ))}
-                              </div>
+                      ×
+                    </button>
+                    <h2 style={{ marginBottom: "1rem" }}>Choisir un rôle</h2>
+                    {/* Group roles by type */}
+                    {(() => {
+                      const types = {};
+                      rolesFiltres.forEach((role) => {
+                        if (!types[role.type]) types[role.type] = [];
+                        types[role.type].push(role);
+                      });
+                      const typeOrder = [
+                        "Habitant",
+                        "Étranger",
+                        "Acolyte",
+                        "Démon",
+                      ];
+                      return typeOrder
+                        .filter((type) => types[type])
+                        .map((type) => (
+                          <div key={type} style={{ marginBottom: "1.2rem" }}>
+                            <div
+                              style={{
+                                fontWeight: "bold",
+                                fontSize: "1.1rem",
+                                marginBottom: "0.5rem",
+                                color: "#222",
+                              }}
+                            >
+                              {type}
                             </div>
-                          ));
-                      })()}
-                    </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: "0.5rem",
+                              }}
+                            >
+                              {types[type].map((role) => (
+                                <button
+                                  key={role.nom}
+                                  style={{
+                                    background: "#eee",
+                                    color: "#222",
+                                    border: "1px solid #bbb",
+                                    borderRadius: "6px",
+                                    fontWeight: "bold",
+                                    fontSize: "1rem",
+                                    padding: "0.4rem 0.8rem",
+                                    marginBottom: "0.3rem",
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "0.5rem",
+                                  }}
+                                  onClick={() => {
+                                    setSelectedRole(role);
+                                    setRolesModalOpen(false);
+                                  }}
+                                >
+                                  <img
+                                    src={getRoleIcon(role)}
+                                    alt={role.nom}
+                                    style={{
+                                      width: "28px",
+                                      height: "28px",
+                                      borderRadius: "4px",
+                                      background: "#fff",
+                                      border: "1px solid #ccc",
+                                    }}
+                                    onError={(e) => {
+                                      e.target.style.display = "none";
+                                    }}
+                                  />
+                                  {role.nom}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        ));
+                    })()}
                   </div>
-                )}
-                {/* Modal for displaying selected role */}
-                {selectedRole && (
+                </div>
+              )}
+              {/* Modal for displaying selected role */}
+              {selectedRole && (
+                <div
+                  style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: "#000",
+                    zIndex: 401,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   <div
                     style={{
-                      position: "fixed",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      backgroundColor: "#000",
-                      zIndex: 401,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      background: "#111",
+                      color: "#fff",
+                      borderRadius: "12px",
+                      padding: "2.5rem 2rem",
+                      minWidth: "320px",
+                      boxShadow: "0 2px 12px rgba(0,0,0,0.4)",
+                      position: "relative",
+                      textAlign: "center",
                     }}
                   >
-                    <div
+                    <button
+                      onClick={() => setSelectedRole(null)}
                       style={{
-                        background: "#111",
+                        position: "absolute",
+                        top: "1rem",
+                        right: "1rem",
+                        fontSize: "1.5rem",
                         color: "#fff",
-                        borderRadius: "12px",
-                        padding: "2.5rem 2rem",
-                        minWidth: "320px",
-                        boxShadow: "0 2px 12px rgba(0,0,0,0.4)",
-                        position: "relative",
-                        textAlign: "center",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
                       }}
                     >
-                      <button
-                        onClick={() => setSelectedRole(null)}
-                        style={{
-                          position: "absolute",
-                          top: "1rem",
-                          right: "1rem",
-                          fontSize: "1.5rem",
-                          color: "#fff",
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                        }}
-                      >
-                        ×
-                      </button>
-                      <img
-                        src={getRoleIcon(selectedRole)}
-                        alt={selectedRole.nom}
-                        style={{
-                          width: "64px",
-                          height: "64px",
-                          borderRadius: "8px",
-                          background: "#fff",
-                          border: "2px solid #fff",
-                          marginBottom: "1rem",
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
-                      />
-                      <h2 style={{ marginBottom: "1.2rem", fontSize: "2rem" }}>
-                        {selectedRole.nom}
-                      </h2>
-                      <div style={{ fontSize: "1rem" }}>
-                        {selectedRole.description}
-                      </div>
+                      ×
+                    </button>
+                    <img
+                      src={getRoleIcon(selectedRole)}
+                      alt={selectedRole.nom}
+                      style={{
+                        width: "64px",
+                        height: "64px",
+                        borderRadius: "8px",
+                        background: "#fff",
+                        border: "2px solid #fff",
+                        marginBottom: "1rem",
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
+                    />
+                    <h2 style={{ marginBottom: "1.2rem", fontSize: "2rem" }}>
+                      {selectedRole.nom}
+                    </h2>
+                    <div style={{ fontSize: "1rem" }}>
+                      {selectedRole.description}
                     </div>
                   </div>
-                )}
+                </div>
+              )}
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "1rem 2rem",
+                  marginBottom: "1.2rem",
+                }}
+              >
+                {/* First row */}
+                <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
+                  {jetonsInfoButtons.slice(0, 3).map((btn) => (
+                    <button
+                      key={btn.page}
+                      onClick={() => setJetonInfoPage(btn.page)}
+                      style={{
+                        background: btn.color,
+                        color: btn.textColor,
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: "bold",
+                        fontSize: "1.1rem",
+                        padding: "0.5rem 0.8rem",
+                        flex: 1,
+                        minWidth: "180px",
+                        marginBottom: "0.5rem",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {btn.label}
+                    </button>
+                  ))}
+                </div>
+                {/* Second row */}
+                <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
+                  {jetonsInfoButtons.slice(3, 6).map((btn) => (
+                    <button
+                      key={btn.page}
+                      onClick={() => setJetonInfoPage(btn.page)}
+                      style={{
+                        background: btn.color,
+                        color: btn.textColor,
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: "bold",
+                        fontSize: "1.1rem",
+                        padding: "0.5rem 0.8rem",
+                        flex: 1,
+                        minWidth: "180px",
+                        marginBottom: "0.5rem",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {btn.label}
+                    </button>
+                  ))}
+                </div>
+                {/* Third row */}
+                <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
+                  {jetonsInfoButtons.slice(6, 10).map((btn) => (
+                    <button
+                      key={btn.page}
+                      onClick={() => setJetonInfoPage(btn.page)}
+                      style={{
+                        background: btn.color,
+                        color: btn.textColor,
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: "bold",
+                        fontSize: "1.1rem",
+                        padding: "0.5rem 0.8rem",
+                        flex: 1,
+                        minWidth: "180px",
+                        marginBottom: "0.5rem",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {btn.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "1.1rem",
+                  marginTop: "1rem",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                Messages personnalisés
+              </div>
+              <button
+                style={{
+                  background: "#7db3e6",
+                  color: "#234",
+                  border: "none",
+                  borderRadius: "6px",
+                  fontWeight: "bold",
+                  fontSize: "1.1rem",
+                  padding: "0.5rem 0.8rem",
+                  minWidth: "220px",
+                  marginBottom: "0.5rem",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                  cursor: "pointer",
+                }}
+                onClick={() => setAddCustomJetonVisible(true)}
+              >
+                Ajouter un message
+              </button>
+              {/* Modal for custom jeton info */}
+              {addCustomJetonVisible && (
+                <div
+                  style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: "rgba(0,0,0,0.7)",
+                    zIndex: 300,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      background: "#fff",
+                      color: "#222",
+                      borderRadius: "10px",
+                      padding: "2rem",
+                      minWidth: "320px",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                      position: "relative",
+                    }}
+                  >
+                    <button
+                      onClick={() => setAddCustomJetonVisible(false)}
+                      style={{
+                        position: "absolute",
+                        top: "1rem",
+                        right: "1rem",
+                        fontSize: "1.5rem",
+                        color: "#333",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      ✖
+                    </button>
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "1.2rem",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      Ajouter un message personnalisé
+                    </div>
+                    <input
+                      type="text"
+                      value={customJetonText}
+                      onChange={(e) => setCustomJetonText(e.target.value)}
+                      style={{
+                        width: "100%",
+                        fontSize: "1.1rem",
+                        padding: "0.5rem",
+                        marginBottom: "1rem",
+                        borderRadius: "5px",
+                        border: "1px solid #ccc",
+                        fontFamily: "Cardo, serif",
+                      }}
+                      placeholder="Texte du message"
+                    />
+                    <button
+                      style={{
+                        background: "#7db3e6",
+                        color: "#234",
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: "bold",
+                        fontSize: "1.1rem",
+                        padding: "0.5rem 1.2rem",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        if (customJetonText.trim()) {
+                          setCustomJetons([
+                            ...customJetons,
+                            customJetonText.trim(),
+                          ]);
+                          setCustomJetonText("");
+                          setAddCustomJetonVisible(false);
+                        }
+                      }}
+                    >
+                      Ajouter
+                    </button>
+                  </div>
+                </div>
+              )}
+              {/* Render custom jetons as buttons */}
+              {customJetons.length > 0 && (
                 <div
                   style={{
                     display: "flex",
                     flexWrap: "wrap",
-                    gap: "1rem 2rem",
-                    marginBottom: "1.2rem",
+                    gap: "0.5rem",
+                    marginTop: "0.5rem",
                   }}
                 >
-                  {/* First row */}
-                  <div
-                    style={{ display: "flex", gap: "0.5rem", width: "100%" }}
-                  >
-                    {jetonsInfoButtons.slice(0, 3).map((btn) => (
-                      <button
-                        key={btn.page}
-                        onClick={() => setJetonInfoPage(btn.page)}
-                        style={{
-                          background: btn.color,
-                          color: btn.textColor,
-                          border: "none",
-                          borderRadius: "6px",
-                          fontWeight: "bold",
-                          fontSize: "1.1rem",
-                          padding: "0.5rem 0.8rem",
-                          flex: 1,
-                          minWidth: "180px",
-                          marginBottom: "0.5rem",
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {btn.label}
-                      </button>
-                    ))}
-                  </div>
-                  {/* Second row */}
-                  <div
-                    style={{ display: "flex", gap: "0.5rem", width: "100%" }}
-                  >
-                    {jetonsInfoButtons.slice(3, 6).map((btn) => (
-                      <button
-                        key={btn.page}
-                        onClick={() => setJetonInfoPage(btn.page)}
-                        style={{
-                          background: btn.color,
-                          color: btn.textColor,
-                          border: "none",
-                          borderRadius: "6px",
-                          fontWeight: "bold",
-                          fontSize: "1.1rem",
-                          padding: "0.5rem 0.8rem",
-                          flex: 1,
-                          minWidth: "180px",
-                          marginBottom: "0.5rem",
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {btn.label}
-                      </button>
-                    ))}
-                  </div>
-                  {/* Third row */}
-                  <div
-                    style={{ display: "flex", gap: "0.5rem", width: "100%" }}
-                  >
-                    {jetonsInfoButtons.slice(6, 10).map((btn) => (
-                      <button
-                        key={btn.page}
-                        onClick={() => setJetonInfoPage(btn.page)}
-                        style={{
-                          background: btn.color,
-                          color: btn.textColor,
-                          border: "none",
-                          borderRadius: "6px",
-                          fontWeight: "bold",
-                          fontSize: "1.1rem",
-                          padding: "0.5rem 0.8rem",
-                          flex: 1,
-                          minWidth: "180px",
-                          marginBottom: "0.5rem",
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {btn.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: "1.1rem",
-                    marginTop: "1rem",
-                    marginBottom: "0.5rem",
-                  }}
-                >
-                  Messages personnalisés
-                </div>
-                <button
-                  style={{
-                    background: "#7db3e6",
-                    color: "#234",
-                    border: "none",
-                    borderRadius: "6px",
-                    fontWeight: "bold",
-                    fontSize: "1.1rem",
-                    padding: "0.5rem 0.8rem",
-                    minWidth: "220px",
-                    marginBottom: "0.5rem",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => setAddCustomJetonVisible(true)}
-                >
-                  Ajouter un message
-                </button>
-                {/* Modal for custom jeton info */}
-                {addCustomJetonVisible && (
-                  <div
-                    style={{
-                      position: "fixed",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      backgroundColor: "rgba(0,0,0,0.7)",
-                      zIndex: 300,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <div
+                  {customJetons.map((txt, idx) => (
+                    <button
+                      key={idx}
                       style={{
-                        background: "#fff",
-                        color: "#222",
-                        borderRadius: "10px",
-                        padding: "2rem",
-                        minWidth: "320px",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                        position: "relative",
+                        background: "#7db3e6",
+                        color: "#234",
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: "bold",
+                        fontSize: "1.1rem",
+                        padding: "0.5rem 0.8rem",
+                        minWidth: "180px",
+                        marginBottom: "0.5rem",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                        cursor: "pointer",
                       }}
+                      onClick={() => setJetonInfoPage(`custom-${idx}`)}
                     >
-                      <button
-                        onClick={() => setAddCustomJetonVisible(false)}
-                        style={{
-                          position: "absolute",
-                          top: "1rem",
-                          right: "1rem",
-                          fontSize: "1.5rem",
-                          color: "#333",
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                        }}
-                      >
-                        ✖
-                      </button>
-                      <div
-                        style={{
-                          fontWeight: "bold",
-                          fontSize: "1.2rem",
-                          marginBottom: "1rem",
-                        }}
-                      >
-                        Ajouter un message personnalisé
-                      </div>
-                      <input
-                        type="text"
-                        value={customJetonText}
-                        onChange={(e) => setCustomJetonText(e.target.value)}
-                        style={{
-                          width: "100%",
-                          fontSize: "1.1rem",
-                          padding: "0.5rem",
-                          marginBottom: "1rem",
-                          borderRadius: "5px",
-                          border: "1px solid #ccc",
-                          fontFamily: "Cardo, serif",
-                        }}
-                        placeholder="Texte du message"
-                      />
-                      <button
-                        style={{
-                          background: "#7db3e6",
-                          color: "#234",
-                          border: "none",
-                          borderRadius: "6px",
-                          fontWeight: "bold",
-                          fontSize: "1.1rem",
-                          padding: "0.5rem 1.2rem",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          if (customJetonText.trim()) {
-                            setCustomJetons([
-                              ...customJetons,
-                              customJetonText.trim(),
-                            ]);
-                            setCustomJetonText("");
-                            setAddCustomJetonVisible(false);
-                          }
-                        }}
-                      >
-                        Ajouter
-                      </button>
-                    </div>
-                  </div>
-                )}
-                {/* Render custom jetons as buttons */}
-                {customJetons.length > 0 && (
-                  <div
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "0.5rem",
-                      marginTop: "0.5rem",
-                    }}
-                  >
-                    {customJetons.map((txt, idx) => (
-                      <button
-                        key={idx}
-                        style={{
-                          background: "#7db3e6",
-                          color: "#234",
-                          border: "none",
-                          borderRadius: "6px",
-                          fontWeight: "bold",
-                          fontSize: "1.1rem",
-                          padding: "0.5rem 0.8rem",
-                          minWidth: "180px",
-                          marginBottom: "0.5rem",
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => setJetonInfoPage(`custom-${idx}`)}
-                      >
-                        {txt}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
+                      {txt}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </details>
           </div>
 
           {/* Jeton info modal/page */}

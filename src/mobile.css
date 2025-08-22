@@ -199,3 +199,40 @@ a.button {
   margin-block: 1rem;
 }
 
+/* ---- Collapsibles uniformes partout ---- */
+details.collapsible > summary {
+  font-family: "Cardo, serif";
+  font-weight: bold;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.2;
+}
+details.collapsible {
+  margin-bottom: 1.5rem;
+}
+details.collapsible > summary::-webkit-details-marker {
+  display: none;
+}
+details.collapsible > summary::marker {
+  content: "";
+}
+details.collapsible > summary::before {
+  content: "►";
+  display: inline-block;
+  width: 1.2em;
+  text-align: center;
+  transform: translateY(1px);
+  transition: transform 0.15s ease;
+}
+details.collapsible[open] > summary::before {
+  content: "▼";
+  transform: translateY(1px);
+}
+
+/* Espacement du contenu quand le collapsible est ouvert */
+.collapsible-body {
+  margin-top: 0.75rem;
+}
