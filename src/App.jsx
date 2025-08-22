@@ -167,6 +167,9 @@ export default function App() {
   const [bluffsValides, setBluffsValides] = useState(false);
   const [afficherNotes, setAfficherNotes] = useState(false);
   const [notes, setNotes] = useState("");
+  function clearNotes() {
+    setNotes("");
+  }
   const [customScriptVisible, setCustomScriptVisible] = useState(false);
   const [customScriptPool, setCustomScriptPool] = useState([]);
   const [customScriptTemp, setCustomScriptTemp] = useState([]);
@@ -190,7 +193,8 @@ export default function App() {
   };
   // When all roles are attributed, close Paramètres & Rôles, open Grimoire
   useEffect(() => {
-    const allAttributed = Object.keys(joueursAttribues).length === nbJoueurs && nbJoueurs > 0;
+    const allAttributed =
+      Object.keys(joueursAttribues).length === nbJoueurs && nbJoueurs > 0;
     if (allAttributed) {
       if (openSetup) setOpenSetup(false);
       if (openRolesDetails) setOpenRolesDetails(false);
@@ -198,15 +202,14 @@ export default function App() {
     }
   }, [joueursAttribues, nbJoueurs]);
 
-
   useEffect(() => {
     setSelected([]);
-    setErreurValidation(""); 
+    setErreurValidation("");
     if (edition === "Script personnalisé") {
       setCustomScriptVisible(true);
     } else {
       setCustomScriptVisible(false);
-      setCustomScriptTemp([]); 
+      setCustomScriptTemp([]);
     }
   }, [edition]);
 
@@ -219,10 +222,7 @@ export default function App() {
     { label: "Demons", color: "#950f13", type: "Démon" },
   ];
 
-
-
   const maxParType = tableRepartition[nbJoueurs];
-
 
   const rolesFiltres =
     edition === "Script personnalisé"
@@ -277,7 +277,7 @@ export default function App() {
     setCustomScriptTemp([]);
     setCustomJetons([]);
     setNotes("");
-  
+
     setOpenSetup(true);
     setOpenRolesDetails(true);
     setAfficherRepartition(false);
@@ -412,13 +412,12 @@ export default function App() {
     // }));
     setRolesValides(true);
     setErreurValidation("");
-    setRolesRestants([...selected]);    
+    setRolesRestants([...selected]);
   }
 
   return (
-    
     <div style={{ padding: "2rem" }}>
-<style>{`
+      <style>{`
   /* Unifie les triangles des sections repliables */
   details.collapsible > summary {
     font-family: 'Pirata One', cursive;
@@ -471,7 +470,7 @@ export default function App() {
             whiteSpace: "nowrap",
           }}
         >
-        Minuit sonne rouge
+          Minuit sonne rouge
         </span>
         <img
           src={"icons/grimoire.png"}
@@ -490,172 +489,248 @@ export default function App() {
         </h1>
       </div>
 
-{/* === SETUP (collapsible) === */}
-<details id="setup" className="collapsible" open={openSetup} onToggle={(e) => setOpenSetup(e.currentTarget.open)} style={{ marginBottom: "1.5rem" }}>
-  <summary>Paramètres</summary>
-
-  {/* --- Ligne d’options --- */}
-  <div
-    style={{
-      marginTop: "1rem",
-      marginBottom: "1rem",
-      display: "flex",
-      alignItems: "center",
-      gap: "2rem",
-    }}
-  >
-    <label style={{ display: "inline-flex", alignItems: "center", gap: "1rem" }}>
-      Nombre de joueurs :
-      <select
-        value={nbJoueurs}
-        onChange={(e) => setNbJoueurs(Number(e.target.value))}
-        disabled={rolesValides}
-        style={{ marginLeft: "0.5rem", fontSize: "1rem", fontFamily: "Cardo, serif" }}
+      {/* === SETUP (collapsible) === */}
+      <details
+        id="setup"
+        className="collapsible"
+        open={openSetup}
+        onToggle={(e) => setOpenSetup(e.currentTarget.open)}
+        style={{ marginBottom: "1.5rem" }}
       >
-        {Array.from({ length: 11 }, (_, i) => i + 5).map((n) => (
-          <option key={n} value={n}>{n}</option>
-        ))}
-      </select>
-    </label>
+        <summary>Paramètres</summary>
 
-    <label style={{ display: "inline-flex", alignItems: "center", gap: "1rem" }}>
-      Édition :
-      <select
-        value={edition}
-        onChange={(e) => setEdition(e.target.value)}
-        disabled={rolesValides}
-        style={{ marginLeft: "0.5rem" }}
-      >
-        {[...new Set(roles.map((r) => r.edition))].map((ed) => (
-          <option key={ed} value={ed}>{ed}</option>
-        ))}
-        <option value="Script personnalisé">Script personnalisé</option>
-      </select>
-
-      {edition === "Script personnalisé" && (
-        <button
-          type="button"
-          onClick={() => {
-            setCustomScriptVisible(true);
-            if (customScriptPool.length > 0 && customScriptTemp.length === 0) {
-              setCustomScriptTemp(customScriptPool);
-            }
-          }}
-          disabled={rolesValides}
+        {/* --- Ligne d’options --- */}
+        <div
           style={{
-            ...buttonStyle,
-            marginLeft: "1rem",
-            cursor: rolesValides ? "not-allowed" : "pointer",
-            opacity: rolesValides ? 0.5 : 1,
+            marginTop: "1rem",
+            marginBottom: "1rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "2rem",
           }}
         >
-          Choisir les rôles
-        </button>
-      )}
-    </label>
+          <label
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            Nombre de joueurs :
+            <select
+              value={nbJoueurs}
+              onChange={(e) => setNbJoueurs(Number(e.target.value))}
+              disabled={rolesValides}
+              style={{
+                marginLeft: "0.5rem",
+                fontSize: "1rem",
+                fontFamily: "Cardo, serif",
+              }}
+            >
+              {Array.from({ length: 11 }, (_, i) => i + 5).map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </label>
 
-    <button
-      onClick={() => setQrCodeVisible(true)}
-      style={{
-        ...buttonStyle,
-        cursor:
-          customScriptPool.length === 0 && edition === "Script personnalisé"
-            ? "not-allowed"
-            : "pointer",
-        opacity:
-          customScriptPool.length === 0 && edition === "Script personnalisé"
-            ? 0.5
-            : 1,
-      }}
-      disabled={customScriptPool.length === 0 && edition === "Script personnalisé"}
-    >
-      Partager le script
-    </button>
-  </div>
+          <label
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            Édition :
+            <select
+              value={edition}
+              onChange={(e) => setEdition(e.target.value)}
+              disabled={rolesValides}
+              style={{ marginLeft: "0.5rem" }}
+            >
+              {[...new Set(roles.map((r) => r.edition))].map((ed) => (
+                <option key={ed} value={ed}>
+                  {ed}
+                </option>
+              ))}
+              <option value="Script personnalisé">Script personnalisé</option>
+            </select>
+            {edition === "Script personnalisé" && (
+              <button
+                type="button"
+                onClick={() => {
+                  setCustomScriptVisible(true);
+                  if (
+                    customScriptPool.length > 0 &&
+                    customScriptTemp.length === 0
+                  ) {
+                    setCustomScriptTemp(customScriptPool);
+                  }
+                }}
+                disabled={rolesValides}
+                style={{
+                  ...buttonStyle,
+                  marginLeft: "1rem",
+                  cursor: rolesValides ? "not-allowed" : "pointer",
+                  opacity: rolesValides ? 0.5 : 1,
+                }}
+              >
+                Choisir les rôles
+              </button>
+            )}
+          </label>
 
-  {/* --- Tableau de répartition --- */}
-  <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
-    <div style={{ overflowX: "auto" }}>
-      <table style={{ borderCollapse: "collapse", fontFamily: "Cardo, serif" }}>
-        <thead>
-          <tr>
-            <th style={{ border: "1px solid #ccc", padding: "0.5rem" }}>Joueurs</th>
-            <th style={{ border: "1px solid #ccc", padding: "0.5rem" }}>{nbJoueurs}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {lignes.map(({ label, color }) => (
-            <tr key={label}>
-              <td style={{ border: "1px solid #ccc", padding: "0.5rem", color }}>{label}</td>
-              <td style={{ border: "1px solid #ccc", padding: "0.25rem" }}>
-                <span
-                  style={{
-                    width: "3rem",
-                    textAlign: "center",
-                    display: "inline-block",
-                    color,
-                    fontWeight: "bold",
-                    fontFamily: "Cardo, serif",
-                    fontSize: "1rem",
-                  }}
-                >
-                  {tableRepartition[nbJoueurs]?.[label] ?? 0}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          <button
+            onClick={() => setQrCodeVisible(true)}
+            style={{
+              ...buttonStyle,
+              cursor:
+                customScriptPool.length === 0 &&
+                edition === "Script personnalisé"
+                  ? "not-allowed"
+                  : "pointer",
+              opacity:
+                customScriptPool.length === 0 &&
+                edition === "Script personnalisé"
+                  ? 0.5
+                  : 1,
+            }}
+            disabled={
+              customScriptPool.length === 0 && edition === "Script personnalisé"
+            }
+          >
+            Partager le script
+          </button>
+        </div>
 
-    {/* Bouton reset (croix rouge) si tu veux le conserver ici */}
-    <button
-      onClick={handleResetRoles}
-      style={{ marginLeft: "1em", background: "none", border: "none", cursor: "pointer" }}
-      title="Réinitialiser les rôles"
-    >
-      {/* (ton icône si besoin) */}
-    </button>
-  </div>
-</details>
+        {/* --- Tableau de répartition --- */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "0.5rem",
+          }}
+        >
+          <div style={{ overflowX: "auto" }}>
+            <table
+              style={{ borderCollapse: "collapse", fontFamily: "Cardo, serif" }}
+            >
+              <thead>
+                <tr>
+                  <th style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
+                    Joueurs
+                  </th>
+                  <th style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
+                    {nbJoueurs}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {lignes.map(({ label, color }) => (
+                  <tr key={label}>
+                    <td
+                      style={{
+                        border: "1px solid #ccc",
+                        padding: "0.5rem",
+                        color,
+                      }}
+                    >
+                      {label}
+                    </td>
+                    <td
+                      style={{ border: "1px solid #ccc", padding: "0.25rem" }}
+                    >
+                      <span
+                        style={{
+                          width: "3rem",
+                          textAlign: "center",
+                          display: "inline-block",
+                          color,
+                          fontWeight: "bold",
+                          fontFamily: "Cardo, serif",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        {tableRepartition[nbJoueurs]?.[label] ?? 0}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
+          {/* Bouton reset (croix rouge) si tu veux le conserver ici */}
+          <button
+            onClick={handleResetRoles}
+            style={{
+              marginLeft: "1em",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+            }}
+            title="Réinitialiser les rôles"
+          >
+            {/* (ton icône si besoin) */}
+          </button>
+        </div>
+      </details>
 
-  <details className="collapsible" style={{ marginBottom: "1.5rem" }} open={openRolesDetails} onToggle={(e) => setOpenRolesDetails(e.currentTarget.open)}>
-  <summary>Rôles</summary>
+      <details
+        className="collapsible"
+        style={{ marginBottom: "1.5rem" }}
+        open={openRolesDetails}
+        onToggle={(e) => setOpenRolesDetails(e.currentTarget.open)}
+      >
+        <summary>Rôles</summary>
         <div style={{ marginTop: "1rem" }}>
           {!rolesValides && (
-            <div style={{ display: "flex", flexDirection: "row", gap: "1rem", marginBottom: "1rem" }}>
-              <button
-                onClick={tirerAuHasard}
-                style={{ ...buttonStyle }}
-              >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "1rem",
+                marginBottom: "1rem",
+              }}
+            >
+              <button onClick={tirerAuHasard} style={{ ...buttonStyle }}>
                 Sélection aléatoire
               </button>
               <button
                 onClick={deselectionnerTousLesRoles}
                 disabled={selected.length === 0}
-                style={{ ...buttonStyle, opacity: selected.length === 0 ? 0.5 : 1 }}
+                style={{
+                  ...buttonStyle,
+                  opacity: selected.length === 0 ? 0.5 : 1,
+                }}
               >
                 Tout désélectionner
               </button>
-              <button
-                onClick={handleValiderRoles}
-                style={{ ...buttonStyle }}
-              >
+              <button onClick={handleValiderRoles} style={{ ...buttonStyle }}>
                 Valider les rôles
               </button>
             </div>
           )}
-          {rolesValides && !affectationVisible && Object.keys(joueursAttribues).length < nbJoueurs && (
-            <div style={{ display: "flex", flexDirection: "row", gap: "1rem", marginBottom: "1rem" }}>
-              <button
-                onClick={() => setAffectationVisible(true)}
-                style={{ ...buttonStyle }}
+          {rolesValides &&
+            !affectationVisible &&
+            Object.keys(joueursAttribues).length < nbJoueurs && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "1rem",
+                  marginBottom: "1rem",
+                }}
               >
-                Attribuer les rôles
-              </button>
-            </div>
-          )}
+                <button
+                  onClick={() => setAffectationVisible(true)}
+                  style={{ ...buttonStyle }}
+                >
+                  Attribuer les rôles
+                </button>
+              </div>
+            )}
           {erreurValidation && (
             <div
               style={{
@@ -672,19 +747,37 @@ export default function App() {
             const rolesDuType = rolesFiltres.filter((r) => r.type === type);
             if (rolesDuType.length === 0) return null;
             // Count selected for this type
-            const selectedCount = selected.filter((r) => r.type === type).length;
+            const selectedCount = selected.filter(
+              (r) => r.type === type
+            ).length;
             // Get expected count from tableRepartition
             const expectedCount = maxParType[label];
             // Choose color for summary
             let summaryColor = "#222";
-            if (type === "Habitant" || type === "Étranger") summaryColor = "#0e74b4";
-            if (type === "Acolyte" || type === "Démon") summaryColor = "#950f13";
+            if (type === "Habitant" || type === "Étranger")
+              summaryColor = "#0e74b4";
+            if (type === "Acolyte" || type === "Démon")
+              summaryColor = "#950f13";
             return (
               <details key={type} style={{ marginBottom: "1rem" }} open>
-                <summary style={{ fontWeight: "bold", fontSize: "1.2rem", cursor: "pointer", color: summaryColor }}>
+                <summary
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                    cursor: "pointer",
+                    color: summaryColor,
+                  }}
+                >
                   {label} ({selectedCount}/{expectedCount})
                 </summary>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "0.5rem" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "0.5rem",
+                    marginTop: "0.5rem",
+                  }}
+                >
                   {rolesDuType.map((role) => {
                     const isSelected = selected.some((r) => r.nom === role.nom);
                     const greyed = rolesValides && !isSelected;
@@ -726,7 +819,11 @@ export default function App() {
                         <img
                           src={`icons/icon_${normalizeNom(role.nom)}.png`}
                           alt={role.nom}
-                          style={{ height: 48, width: 48, objectFit: "contain" }}
+                          style={{
+                            height: 48,
+                            width: 48,
+                            objectFit: "contain",
+                          }}
                         />
                         <div
                           style={{
@@ -760,8 +857,6 @@ export default function App() {
         </div>
       </details>
 
-     
-      
       {rolesValides && (
         <div style={{ marginBottom: "2rem" }}>
           <h1
@@ -779,7 +874,8 @@ export default function App() {
             }}
             onClick={() => setAfficherOrdreReveil((prev) => !prev)}
           >
-            <span className="caret">{afficherOrdreReveil ? "▼" : "►"}</span><span>Ordre de réveil</span>
+            <span className="caret">{afficherOrdreReveil ? "▼" : "►"}</span>
+            <span>Ordre de réveil</span>
           </h1>
           {afficherOrdreReveil && (
             <>
@@ -787,11 +883,15 @@ export default function App() {
                 <button
                   onClick={() => setOrdreNuitActuelle("premiere")}
                   style={{
-                    border: ordreNuitActuelle === "premiere" ? "2px solid #888" : "1px solid #ccc",
+                    border:
+                      ordreNuitActuelle === "premiere"
+                        ? "2px solid #888"
+                        : "1px solid #ccc",
                     borderRadius: "8px 0 0 8px",
                     padding: "0.5rem 1.2rem",
                     cursor: "pointer",
-                    background: ordreNuitActuelle === "premiere" ? "#e0e0e0" : "#fafafa",
+                    background:
+                      ordreNuitActuelle === "premiere" ? "#e0e0e0" : "#fafafa",
                     color: ordreNuitActuelle === "premiere" ? "#222" : "#333",
                     fontWeight: "bold",
                     outline: "none",
@@ -802,11 +902,15 @@ export default function App() {
                 <button
                   onClick={() => setOrdreNuitActuelle("autres")}
                   style={{
-                    border: ordreNuitActuelle === "autres" ? "2px solid #888" : "1px solid #ccc",
+                    border:
+                      ordreNuitActuelle === "autres"
+                        ? "2px solid #888"
+                        : "1px solid #ccc",
                     borderRadius: "0 8px 8px 0",
                     padding: "0.5rem 1.2rem",
                     cursor: "pointer",
-                    background: ordreNuitActuelle === "autres" ? "#e0e0e0" : "#fafafa",
+                    background:
+                      ordreNuitActuelle === "autres" ? "#e0e0e0" : "#fafafa",
                     color: ordreNuitActuelle === "autres" ? "#222" : "#333",
                     fontWeight: "bold",
                     outline: "none",
@@ -1173,7 +1277,10 @@ export default function App() {
                     if (!newAttribues[i] && availableRoles.length > 0) {
                       const roleAuto = availableRoles[0];
                       let alignementAuto = "Maléfique";
-                      if (roleAuto.type === "Habitant" || roleAuto.type === "Étranger") {
+                      if (
+                        roleAuto.type === "Habitant" ||
+                        roleAuto.type === "Étranger"
+                      ) {
                         alignementAuto = "Bon";
                       }
                       newAttribues[i] = {
@@ -1316,28 +1423,34 @@ export default function App() {
           >
             Ces rôles ne sont pas en jeu
           </h2>
-          <div style={{ display: "flex", gap: "1.5rem" }}>
+          <div style={{ display: "flex", gap: "2rem" }}>
             {bluffs.length === 3
               ? rolesBonsNonAttribués
-                  .filter(role => bluffs.some(b => b.nom === role.nom))
+                  .filter((role) => bluffs.some((b) => b.nom === role.nom))
                   .map((role) => (
-                    <img
-                      key={role.nom}
-                      src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                      alt={role.nom}
-                      style={{
-                        height: "48px",
-                        width: "48px",
-                        objectFit: "contain",
-                        marginRight: "0.5rem",
-                      }}
-                    />
+                    <div key={role.nom} style={{ textAlign: "center" }}>
+                      <img
+                        src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                        alt={role.nom}
+                        style={{ width: 80, height: 80, objectFit: "contain" }}
+                      />
+                      <div
+                        style={{
+                          fontFamily: "Cardo, serif",
+                          fontWeight: "bold",
+                          marginTop: 8,
+                        }}
+                      >
+                        {role.nom}
+                      </div>
+                    </div>
                   ))
               : null}
           </div>
         </div>
       )}
       {/* Grimoire section comes after bluffs */}
+
       {Object.keys(joueursAttribues).length === nbJoueurs && (
         <>
           <h1
@@ -1352,15 +1465,16 @@ export default function App() {
               alignItems: "center",
               cursor: "pointer",
               userSelect: "none",
-             
             }}
             ref={grimoireRef}
             onClick={() => setAfficherRepartition((prev) => !prev)}
           >
-            <span className="caret">{afficherRepartition ? "▼" : "►"}</span><span>Grimoire</span>
+            <span className="caret">{afficherRepartition ? "▼" : "►"}</span>
+            <span>Grimoire</span>
           </h1>
 
           {afficherRepartition && (
+            
             <div
               style={{
                 marginTop: "1rem",
@@ -1369,309 +1483,346 @@ export default function App() {
                 padding: "1rem",
                 borderRadius: "8px",
               }}
-            >
-      {afficherRepartition && !bluffsValides && (
-        <div
-          style={{
-            marginTop: "2rem",
-            display: "flex",
-            alignItems: "center",
-            background: "#f8f8f8",
-            borderRadius: "16px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-            padding: "1rem",
-            cursor: "pointer",
-            border: "2px solid #e0e0e0",
-            width: "fit-content",
-            transition: "background 0.2s, transform 0.2s",
-            opacity: bluffsValides ? 0.5 : 1,
-          }}
-          onClick={() => {
-            setEditBluffsModal(true);
-            setEditBluffsTemp(bluffs.length > 0 ? bluffs : []);
-            setErreurBluffs("");
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "Cardo, serif",
-              fontWeight: "bold",
-              fontSize: "1.3rem",
-              marginRight: "1.5rem",
-              letterSpacing: "1px",
-              color: "#950f13",
-              minWidth: "140px",
-              textAlign: "left",
-            }}
-          >
-            Bluffs du démon
-          </div>
-          <div style={{ display: "flex", gap: "1.5rem" }}>
-            {bluffs.length === 3
-              ? rolesBonsNonAttribués
-                  .filter(role => bluffs.some(b => b.nom === role.nom))
-                  .map((role) => (
-                    <img
-                      key={role.nom}
-                      src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                      alt={role.nom}
-                      style={{
-                        height: "48px",
-                        width: "48px",
-                        objectFit: "contain",
-                      }}
-                    />
-                  ))
-              : ([1,2,3].map((i) => (
-                  <span
-                    key={i}
-                    style={{
-                      fontSize: "2.8rem",
-                      color: "#bbb",
-                      fontWeight: "bold",
-                      lineHeight: 1,
-                      margin: "0 0.2rem"
-                    }}
-                  >
-                    ?
-                  </span>
-                )))}
-          </div>
-        </div>
-      )}
-      {afficherRepartition && choisirBluffsVisible && !bluffsValides && (
-        <div
-          style={{
-            margin: "1rem 0",
-            background: "#fff",
-            borderRadius: 8,
-            padding: "1rem",
-          }}
-        >
-          <h2 style={{ fontFamily: "Cardo, serif" }}>
-            Sélectionne 3 rôles de bluff :
-          </h2>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-            {rolesBonsNonAttribués.map((role) => {
-              const isSelected = bluffs.some((r) => r.nom === role.nom);
-              const isDisabled = !isSelected && bluffs.length >= 3;
-              return (
-                <div
-                  key={role.nom}
-                  onClick={() => {
-                    if (isSelected) {
-                      setBluffs(bluffs.filter((r) => r.nom !== role.nom));
-                    } else if (!isDisabled) {
-                      setBluffs([...bluffs, role]);
-                    }
-                    setErreurBluffs("");
-                  }}
-                  style={{
-                    border: isSelected ? "2px solid #0e74b4" : "1px solid #ccc",
-                    borderRadius: 8,
-                    padding: "0.5rem",
-                    cursor: isDisabled ? "not-allowed" : "pointer",
-                    opacity: isDisabled ? 0.5 : 1,
-                    background: isSelected ? "#e6f0fa" : "#fafafa",
-                    width: 180,
-                    textAlign: "center",
-                  }}
-                >
-                  <img
-                    src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                    alt={role.nom}
-                    style={{ width: 48, height: 48, objectFit: "contain" }}
-                  />
+            ><details className="collapsible" open>
+              <summary style={{ fontFamily: 'Cardo, serif', fontSize: '1.3rem', fontWeight: 'bold', color: '#950f13' }}>Bluffs du démon</summary>
+              {afficherRepartition && !bluffsValides && (
+                <>
                   <div
                     style={{
-                      fontFamily: "Cardo, serif",
-                      fontWeight: "bold",
-                      marginTop: 8,
-                    }}
-                  >
-                    {role.nom}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          {erreurBluffs && (
-            <div
-              style={{
-                color: "#950f13",
-                margin: "1rem 0",
-                fontFamily: "Cardo, serif",
-              }}
-            >
-              {erreurBluffs}
-            </div>
-          )}
-          <button
-            onClick={() => {
-              if (bluffs.length !== 3) {
-                setErreurBluffs(
-                  "Il faut sélectionner exactement 3 rôles de bluff."
-                );
-              } else {
-                setBluffsValides(true);
-                setChoisirBluffsVisible(false);
-              }
-            }}
-            style={{
-              ...buttonStyle,
-              marginTop: "1rem",
-              cursor: bluffs.length === 3 ? "pointer" : "not-allowed",
-              opacity: bluffs.length === 3 ? 1 : 0.5,
-            }}
-            disabled={bluffs.length !== 3}
-          >
-            Valider bluffs
-          </button>
-        </div>
-      )}
-              {Object.entries(joueursAttribues).map(
-                ([index, joueur], idx) => (
-                  <div
-                    key={index}
-                    style={{
+                      marginTop: "2rem",
                       display: "flex",
                       alignItems: "center",
-                      gap: "1rem",
-                      ...(idx === 0 ? { marginTop: "1rem" } : {}),
-                      marginBottom: "1rem",
-                      background: joueur.mort ? "#e0e0e0" : "#f8f8f8",
+                      background: "#f8f8f8",
                       borderRadius: "16px",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
                       padding: "1rem",
-                      transition: "background 0.2s, transform 0.2s",
                       cursor: "pointer",
-                      position: "relative",
                       border: "2px solid #e0e0e0",
+                      width: "fit-content",
+                      transition: "background 0.2s, transform 0.2s",
+                      opacity: bluffsValides ? 0.5 : 1,
                     }}
-                    onClick={() => setNomEditModal({ index, nom: joueur.nom })}
-                    onTouchStart={(e) =>
-                      (e.currentTarget.style.background = joueur.mort
-                        ? "#d0d0d0"
-                        : "#e6f0fa")
-                    }
-                    onTouchEnd={(e) =>
-                      (e.currentTarget.style.background = joueur.mort
-                        ? "#e0e0e0"
-                        : "#f8f8f8")
-                    }
-                    onMouseDown={(e) =>
-                      (e.currentTarget.style.background = joueur.mort
-                        ? "#d0d0d0"
-                        : "#e6f0fa")
-                    }
-                    onMouseUp={(e) =>
-                      (e.currentTarget.style.background = joueur.mort
-                        ? "#e0e0e0"
-                        : "#f8f8f8")
-                    }
+                    onClick={() => {
+                      setEditBluffsModal(true);
+                      setEditBluffsTemp(bluffs.length > 0 ? bluffs : []);
+                      setErreurBluffs("");
+                    }}
                   >
-                    <img
-                      src={`icons/icon_${normalizeNom(joueur.role.nom)}.png`}
-                      alt={joueur.role.nom}
-                      style={{
-                        height: "48px",
-                        width: "48px",
-                        objectFit: "contain",
-                        marginRight: "0.5rem",
-                       // filter: joueur.mort ? "grayscale(1) brightness(1)" : "none",
-                      }}
-                    />
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                        <span
-                          style={{
-                            flex: 1,
-                            fontFamily: "Cardo, serif",
-                            fontWeight: "bold",
-                            fontSize: "1.2rem",
-                            color:
-                              joueur.alignement === "Bon"
-                                ? "#0e74b4"
-                                : joueur.alignement === "Maléfique"
-                                ? "#950f13"
-                                : "#222",
-                            padding: "0.5rem 0",
-                            borderRadius: "8px",
-                            textAlign: "left",
-                            userSelect: "none",
-                        //    textDecoration: joueur.mort ? "line-through" : "none",
-                          }}
-                        >
-                          {joueur.nom}
-                        </span>
-                      {joueur.mort && (
-                        <span
-                          style={{
-                            marginLeft: "0.5rem",
-                            fontSize: "1.3rem",
-                            verticalAlign: "middle",
-                          }}
-                        >
-                          <img
-                            src="icons/mort.png"
-                            alt="Mort icon"
-                            style={{
-                              width: 32,
-                              height: 32,
-                              verticalAlign: "middle",
+
+                    <div style={{ display: "flex", gap: "1.5rem" }}>
+                      {bluffs.length === 3
+                        ? rolesBonsNonAttribués
+                            .filter((role) =>
+                              bluffs.some((b) => b.nom === role.nom)
+                            )
+                            .map((role) => (
+                              <img
+                                key={role.nom}
+                                src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                                alt={role.nom}
+                                style={{
+                                  height: "48px",
+                                  width: "48px",
+                                  objectFit: "contain",
+                                }}
+                              />
+                            ))
+                        : [1, 2, 3].map((i) => (
+                            <span
+                              key={i}
+                              style={{
+                                fontSize: "2.8rem",
+                                color: "#bbb",
+                                fontWeight: "bold",
+                                lineHeight: 1,
+                                margin: "0 0.2rem",
+                              }}
+                            >
+                              ?
+                            </span>
+                          ))}
+                    </div>
+                  </div>
+                </>
+              )}
+              {afficherRepartition &&
+                choisirBluffsVisible &&
+                !bluffsValides && (
+                  <div
+                    style={{
+                      margin: "1rem 0",
+                      background: "#fff",
+                      borderRadius: 8,
+                      padding: "1rem",
+                    }}
+                  >
+                    <h2 style={{ fontFamily: "Cardo, serif" }}>
+                      Sélectionne 3 rôles de bluff :
+                    </h2>
+                    <div
+                      style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}
+                    >
+                      {rolesBonsNonAttribués.map((role) => {
+                        const isSelected = bluffs.some(
+                          (r) => r.nom === role.nom
+                        );
+                        const isDisabled = !isSelected && bluffs.length >= 3;
+                        return (
+                          <div
+                            key={role.nom}
+                            onClick={() => {
+                              if (isSelected) {
+                                setBluffs(
+                                  bluffs.filter((r) => r.nom !== role.nom)
+                                );
+                              } else if (!isDisabled) {
+                                setBluffs([...bluffs, role]);
+                              }
+                              setErreurBluffs("");
                             }}
-                          />
-                        </span>
-                      )}
-                      {/* Vote icon after mort icon if mort is true */}
-                      {joueur.mort && joueur.token && (
-                        <span
-                          style={{
-                            marginLeft: "0.2rem",
-                            fontSize: "1.3rem",
-                            verticalAlign: "middle",
-                          }}
-                        >
-                          <img
-                            src="icons/vote.png"
-                            alt="Vote icon"
                             style={{
-                              width: 32,
-                              height: 32,
-                              verticalAlign: "middle",
-                            }}
-                          />
-                        </span>
-                      )}
-                      {/* Rappel icons after mort and vote icons */}
-                      {(Array.isArray(joueur.rappelRoles) ? joueur.rappelRoles : []).map(
-                        (r, idx) => (
-                          <span
-                            key={r.nom}
-                            style={{
-                              marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
-                              fontSize: "1.3rem",
-                              verticalAlign: "middle",
+                              border: isSelected
+                                ? "2px solid #0e74b4"
+                                : "1px solid #ccc",
+                              borderRadius: 8,
+                              padding: "0.5rem",
+                              cursor: isDisabled ? "not-allowed" : "pointer",
+                              opacity: isDisabled ? 0.5 : 1,
+                              background: isSelected ? "#e6f0fa" : "#fafafa",
+                              width: 180,
+                              textAlign: "center",
                             }}
                           >
                             <img
-                              src={`icons/icon_${normalizeNom(r.nom)}.png`}
-                              alt={r.nom}
+                              src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                              alt={role.nom}
                               style={{
-                                width: 36,
-                                height: 36,
-                                verticalAlign: "middle",
+                                width: 48,
+                                height: 48,
                                 objectFit: "contain",
                               }}
                             />
-                          </span>
-                        )
-                      )}
+                            <div
+                              style={{
+                                fontFamily: "Cardo, serif",
+                                fontWeight: "bold",
+                                marginTop: 8,
+                              }}
+                            >
+                              {role.nom}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
+                    {erreurBluffs && (
+                      <div
+                        style={{
+                          color: "#950f13",
+                          margin: "1rem 0",
+                          fontFamily: "Cardo, serif",
+                        }}
+                      >
+                        {erreurBluffs}
+                      </div>
+                    )}
+                    <button
+                      onClick={() => {
+                        if (bluffs.length !== 3) {
+                          setErreurBluffs(
+                            "Il faut sélectionner exactement 3 rôles de bluff."
+                          );
+                        } else {
+                          setBluffsValides(true);
+                          setChoisirBluffsVisible(false);
+                        }
+                      }}
+                      style={{
+                        ...buttonStyle,
+                        marginTop: "1rem",
+                        cursor: bluffs.length === 3 ? "pointer" : "not-allowed",
+                        opacity: bluffs.length === 3 ? 1 : 0.5,
+                      }}
+                      disabled={bluffs.length !== 3}
+                    >
+                      Valider bluffs
+                    </button>
                   </div>
-                )
-              )}
+                )}
+                </details>
+                      <details className="collapsible" open>
+                  <summary style={{ fontFamily: 'Cardo, serif', fontSize: '1.3rem', fontWeight: 'bold' }}>Joueurs</summary>
+                  {Object.entries(joueursAttribues).map(([index, joueur], idx) => (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                    ...(idx === 0 ? { marginTop: "1rem" } : {}),
+                    marginBottom: "1rem",
+                    background: joueur.mort ? "#e0e0e0" : "#f8f8f8",
+                    borderRadius: "16px",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                    padding: "1rem",
+                    transition: "background 0.2s, transform 0.2s",
+                    cursor: "pointer",
+                    position: "relative",
+                    border: "2px solid #e0e0e0",
+                  }}
+                  onClick={() => setNomEditModal({ index, nom: joueur.nom })}
+                  onTouchStart={(e) =>
+                    (e.currentTarget.style.background = joueur.mort
+                      ? "#d0d0d0"
+                      : "#e6f0fa")
+                  }
+                  onTouchEnd={(e) =>
+                    (e.currentTarget.style.background = joueur.mort
+                      ? "#e0e0e0"
+                      : "#f8f8f8")
+                  }
+                  onMouseDown={(e) =>
+                    (e.currentTarget.style.background = joueur.mort
+                      ? "#d0d0d0"
+                      : "#e6f0fa")
+                  }
+                  onMouseUp={(e) =>
+                    (e.currentTarget.style.background = joueur.mort
+                      ? "#e0e0e0"
+                      : "#f8f8f8")
+                  }
+                >
+                  <img
+                    src={`icons/icon_${normalizeNom(joueur.role.nom)}.png`}
+                    alt={joueur.role.nom}
+                    style={{
+                      height: "48px",
+                      width: "48px",
+                      objectFit: "contain",
+                      marginRight: "0.5rem",
+                      // filter: joueur.mort ? "grayscale(1) brightness(1)" : "none",
+                    }}
+                  />
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <span
+                      style={{
+                        flex: 1,
+                        fontFamily: "Cardo, serif",
+                        fontWeight: "bold",
+                        fontSize: "1.2rem",
+                        color:
+                          joueur.alignement === "Bon"
+                            ? "#0e74b4"
+                            : joueur.alignement === "Maléfique"
+                            ? "#950f13"
+                            : "#222",
+                        padding: "0.5rem 0",
+                        borderRadius: "8px",
+                        textAlign: "left",
+                        userSelect: "none",
+                        //    textDecoration: joueur.mort ? "line-through" : "none",
+                      }}
+                    >
+                      {joueur.nom}
+                    </span>
+                    {joueur.mort && (
+                      <span
+                        style={{
+                          marginLeft: "0.5rem",
+                          fontSize: "1.3rem",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <img
+                          src="icons/mort.png"
+                          alt="Mort icon"
+                          style={{
+                            width: 32,
+                            height: 32,
+                            verticalAlign: "middle",
+                          }}
+                        />
+                      </span>
+                    )}
+                    {/* Vote icon after mort icon if mort is true */}
+                    {joueur.mort && joueur.token && (
+                      <span
+                        style={{
+                          marginLeft: "0.2rem",
+                          fontSize: "1.3rem",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <img
+                          src="icons/vote.png"
+                          alt="Vote icon"
+                          style={{
+                            width: 32,
+                            height: 32,
+                            verticalAlign: "middle",
+                          }}
+                        />
+                      </span>
+                    )}
+
+                    {(Array.isArray(joueur.anciensRoles)
+                      ? joueur.anciensRoles
+                      : []
+                    ).map((r, idx) => (
+                      <span
+                        key={`${r.nom}-${idx}`}
+                        title={`Ancien rôle : ${r.nom}`}
+                        style={{
+                          marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <img
+                          src={`icons/icon_${normalizeNom(r.nom)}.png`}
+                          alt={r.nom}
+                          style={{
+                            width: 32,
+                            height: 32,
+                            verticalAlign: "middle",
+                            objectFit: "contain",
+                            filter:
+                              "grayscale(1) brightness(0.9) contrast(0.9)",
+                            opacity: 0.85,
+                          }}
+                        />
+                      </span>
+                    ))}
+
+                    {(Array.isArray(joueur.rappelRoles)
+                      ? joueur.rappelRoles
+                      : []
+                    ).map((r, idx) => (
+                      <span
+                        key={r.nom}
+                        style={{
+                          marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
+                          fontSize: "1.3rem",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <img
+                          src={`icons/icon_${normalizeNom(r.nom)}.png`}
+                          alt={r.nom}
+                          style={{
+                            width: 36,
+                            height: 36,
+                            verticalAlign: "middle",
+                            objectFit: "contain",
+                          }}
+                        />
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+</details>
               {/* Bluffs du démon section */}
-              {bluffsValides && bluffs.length === 3 && (
+              {bluffsValides && bluffs.length === 3 ? (
                 <div
                   style={{
                     display: "flex",
@@ -1716,7 +1867,9 @@ export default function App() {
                   <div style={{ display: "flex", gap: "1.5rem" }}>
                     {bluffs.length === 3
                       ? rolesBonsNonAttribués
-                          .filter(role => bluffs.some(b => b.nom === role.nom))
+                          .filter((role) =>
+                            bluffs.some((b) => b.nom === role.nom)
+                          )
                           .map((role) => (
                             <img
                               key={role.nom}
@@ -1732,7 +1885,7 @@ export default function App() {
                       : null}
                   </div>
                 </div>
-              )}
+              ) : null}
               {/* Modal for editing bluffs */}
               {typeof setEditBluffsModal !== "undefined" && editBluffsModal && (
                 <div
@@ -1785,7 +1938,7 @@ export default function App() {
                         marginBottom: "1rem",
                       }}
                     >
-                      Modifier les bluffs du démon
+                      Attribuer les bluffs du démon
                     </div>
                     <div
                       style={{
@@ -1858,7 +2011,10 @@ export default function App() {
                       onClick={() => {
                         if (editBluffsTemp.length === 3) {
                           // Always set bluffs in modal display order
-                          const orderedBluffs = rolesBonsNonAttribués.filter(role => editBluffsTemp.some(b => b.nom === role.nom));
+                          const orderedBluffs = rolesBonsNonAttribués.filter(
+                            (role) =>
+                              editBluffsTemp.some((b) => b.nom === role.nom)
+                          );
                           setBluffs(orderedBluffs);
                           setEditBluffsModal(false);
                         }
@@ -1879,7 +2035,7 @@ export default function App() {
                       }}
                       disabled={editBluffsTemp.length !== 3}
                     >
-                      Valider les bluffs
+                      Valider
                     </button>
                   </div>
                 </div>
@@ -1890,13 +2046,22 @@ export default function App() {
                   const joueur = joueursAttribues[nomEditModal.index];
                   const role = joueur?.role;
                   // Get all roles with rappel:true for current edition or custom script, sorted by type
-                  const typeOrder = ["Habitant", "Étranger", "Acolyte", "Démon"];
-                  const rappelRoles = (edition === "Script personnalisé"
-                    ? customScriptPool
-                    : roles.filter((r) => r.edition === edition)
+                  const typeOrder = [
+                    "Habitant",
+                    "Étranger",
+                    "Acolyte",
+                    "Démon",
+                  ];
+                  const rappelRoles = (
+                    edition === "Script personnalisé"
+                      ? customScriptPool
+                      : roles.filter((r) => r.edition === edition)
                   )
                     .filter((r) => r.rappel)
-                    .sort((a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type));
+                    .sort(
+                      (a, b) =>
+                        typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type)
+                    );
                   // Get rappel icon paths
                   const rappelIcons = rappelRolesSelected.map(
                     (r) => `icons/icon_${normalizeNom(r.nom)}.png`
@@ -2013,6 +2178,7 @@ export default function App() {
                             border: "1px solid #ccc",
                             fontFamily: "Cardo, serif",
                           }}
+                          placeholder="Nom du joueur"
                         />
                         {/* Alignment switch */}
                         {role && (
@@ -2048,7 +2214,8 @@ export default function App() {
                                     updated[nomEditModal.index] = {
                                       ...updated[nomEditModal.index],
                                       alignement:
-                                        updated[nomEditModal.index].alignement === "Bon"
+                                        updated[nomEditModal.index]
+                                          .alignement === "Bon"
                                           ? "Maléfique"
                                           : "Bon",
                                       alignementFixe: true,
@@ -2100,9 +2267,39 @@ export default function App() {
                                     : "#950f13",
                               }}
                             >
-                              {joueur?.alignement === "Bon" ? "Bon" : "Maléfique"}
+                              {joueur?.alignement === "Bon"
+                                ? "Bon"
+                                : "Maléfique"}
                             </span>
-                            {/* Rappel icons next to alignment */}
+
+                            {/* Icônes des anciens rôles (grisées) — avant les rappels */}
+                            {(Array.isArray(joueur?.anciensRoles)
+                              ? joueur.anciensRoles
+                              : []
+                            ).map((r, idx) => (
+                              <span
+                                key={`modal-ancien-${r.nom}-${idx}`}
+                                title={`Ancien rôle : ${r.nom}`}
+                                style={{
+                                  marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
+                                  verticalAlign: "middle",
+                                }}
+                              >
+                                <img
+                                  src={`icons/icon_${normalizeNom(r.nom)}.png`}
+                                  alt={r.nom}
+                                  style={{
+                                    width: 32,
+                                    height: 32,
+                                    verticalAlign: "middle",
+                                    objectFit: "contain",
+                                    filter:
+                                      "grayscale(1) brightness(0.9) contrast(0.9)",
+                                    opacity: 0.85,
+                                  }}
+                                />
+                              </span>
+                            ))}
                             {joueur?.rappelRoles &&
                               joueur.rappelRoles.length > 0 &&
                               joueur.rappelRoles.map((r, idx) => (
@@ -2224,22 +2421,26 @@ export default function App() {
                                           padding: "0.5rem",
                                           borderRadius: 8,
                                           border: "1px solid #bbb",
-                                          background:
-                                            (joueursAttribues[nomEditModal.index]?.rappelRoles || []).some(
-                                              (selected) => selected.nom === r.nom
-                                            )
-                                              ? "#bdbdbdff"
-                                              : "#f5f5f5",
+                                          background: (
+                                            joueursAttribues[nomEditModal.index]
+                                              ?.rappelRoles || []
+                                          ).some(
+                                            (selected) => selected.nom === r.nom
+                                          )
+                                            ? "#bdbdbdff"
+                                            : "#f5f5f5",
                                           color: "#222",
                                           fontFamily: "Cardo, serif",
                                           fontSize: "1rem",
                                           cursor: "pointer",
-                                          boxShadow:
-                                            (joueursAttribues[nomEditModal.index]?.rappelRoles || []).some(
-                                              (selected) => selected.nom === r.nom
-                                            )
-                                              ? "0 2px 8px rgba(230,192,125,0.15)"
-                                              : "none",
+                                          boxShadow: (
+                                            joueursAttribues[nomEditModal.index]
+                                              ?.rappelRoles || []
+                                          ).some(
+                                            (selected) => selected.nom === r.nom
+                                          )
+                                            ? "0 2px 8px rgba(230,192,125,0.15)"
+                                            : "none",
                                           display: "flex",
                                           flexDirection: "column",
                                           alignItems: "center",
@@ -2248,15 +2449,19 @@ export default function App() {
                                         onClick={() => {
                                           // Toggle role selection and update joueursAttribues immediately
                                           setJoueursAttribues((attribues) => {
-                                            const current = attribues[nomEditModal.index]?.rappelRoles || [];
+                                            const current =
+                                              attribues[nomEditModal.index]
+                                                ?.rappelRoles || [];
                                             let newRoles;
                                             if (
                                               current.some(
-                                                (selected) => selected.nom === r.nom
+                                                (selected) =>
+                                                  selected.nom === r.nom
                                               )
                                             ) {
                                               newRoles = current.filter(
-                                                (selected) => selected.nom !== r.nom
+                                                (selected) =>
+                                                  selected.nom !== r.nom
                                               );
                                             } else {
                                               newRoles = [...current, r];
@@ -2387,12 +2592,20 @@ export default function App() {
                                   >
                                     {[
                                       joueur?.role,
-                                      ...((edition === "Script personnalisé"
+                                      ...(edition === "Script personnalisé"
                                         ? customScriptPool
-                                        : roles.filter((r) => r.edition === edition)
+                                        : roles.filter(
+                                            (r) => r.edition === edition
+                                          )
                                       )
-                                        .filter((r) => r.nom !== joueur?.role?.nom)
-                                        .sort((a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type)))
+                                        .filter(
+                                          (r) => r.nom !== joueur?.role?.nom
+                                        )
+                                        .sort(
+                                          (a, b) =>
+                                            typeOrder.indexOf(a.type) -
+                                            typeOrder.indexOf(b.type)
+                                        ),
                                     ]
                                       .filter(Boolean)
                                       .map((r) => (
@@ -2426,12 +2639,28 @@ export default function App() {
                                             if (r.nom !== joueur?.role?.nom) {
                                               setJoueursAttribues((prev) => {
                                                 const updated = { ...prev };
+                                                const current =
+                                                  updated[nomEditModal.index] ||
+                                                  {};
+                                                const oldRole = current.role;
+                                                const history = Array.isArray(
+                                                  current.anciensRoles
+                                                )
+                                                  ? current.anciensRoles
+                                                  : [];
+                                                const newHistory =
+                                                  oldRole &&
+                                                  oldRole.nom !== r.nom
+                                                    ? [oldRole, ...history]
+                                                    : history;
                                                 updated[nomEditModal.index] = {
-                                                  ...updated[nomEditModal.index],
+                                                  ...current,
                                                   role: r,
+                                                  anciensRoles: newHistory,
                                                 };
                                                 return updated;
                                               });
+
                                               // Update selected roles for ordre de réveil
                                               setSelected((prevSelected) => {
                                                 // Remove the old role and add the new one
@@ -2499,20 +2728,31 @@ export default function App() {
                                   const newRole = roles.find(
                                     (r) => r.nom === remplacerRole
                                   );
+
                                   setJoueursAttribues((prev) => {
                                     const updated = { ...prev };
-                                    // Si alignementFixe est déjà true, on ne touche pas à l'alignement
+                                    const current =
+                                      updated[nomEditModal.index] || {};
+                                    const oldRole = current.role;
+                                    const history = Array.isArray(
+                                      current.anciensRoles
+                                    )
+                                      ? current.anciensRoles
+                                      : [];
+                                    const newHistory =
+                                      oldRole && oldRole.nom !== newRole.nom
+                                        ? [oldRole, ...history]
+                                        : history;
                                     updated[nomEditModal.index] = {
-                                      ...updated[nomEditModal.index],
+                                      ...current,
                                       role: newRole,
+                                      anciensRoles: newHistory,
                                       alignementFixe: true,
-                                      alignement:
-                                        updated[nomEditModal.index].alignementFixe
-                                          ? updated[nomEditModal.index].alignement
-                                          : updated[nomEditModal.index].alignement,
+                                      alignement: current.alignement,
                                     };
                                     return updated;
                                   });
+
                                   setShowRemplacerDropdown(false);
                                   setRemplacerRole(null);
                                 }}
@@ -2752,7 +2992,7 @@ export default function App() {
           <div style={{ display: "flex", gap: "2rem" }}>
             {bluffs.length === 3
               ? rolesBonsNonAttribués
-                  .filter(role => bluffs.some(b => b.nom === role.nom))
+                  .filter((role) => bluffs.some((b) => b.nom === role.nom))
                   .map((role) => (
                     <div key={role.nom} style={{ textAlign: "center" }}>
                       <img
@@ -2802,7 +3042,8 @@ export default function App() {
           }}
           onClick={() => setJetonsInfoVisible((v) => !v)}
         >
-          <span className="caret">{jetonsInfoVisible ? "▼" : "►"}</span><span>Communication</span>
+          <span className="caret">{jetonsInfoVisible ? "▼" : "►"}</span>
+          <span>Communication</span>
         </h1>
         {jetonsInfoVisible && (
           <>
@@ -3354,7 +3595,8 @@ export default function App() {
                   ? "Ces rôles ne sont pas en jeu"
                   : jetonInfoPage.startsWith("custom-")
                   ? customJetons[parseInt(jetonInfoPage.split("-")[1])]
-                  : jetonsInfoButtons.find((btn) => btn.page === jetonInfoPage)?.content}
+                  : jetonsInfoButtons.find((btn) => btn.page === jetonInfoPage)
+                      ?.content}
               </div>
               {/* If the message is 'Ces rôles ne sont pas en jeu', show the roles icons and names below, otherwise just the message */}
               {jetonInfoPage === "not-in-game" &&
@@ -3426,7 +3668,8 @@ export default function App() {
             }}
             onClick={() => setAfficherNotes((v) => !v)}
           >
-            <span className="caret">{afficherNotes ? "▼" : "►"}</span><span>Notes</span>
+            <span className="caret">{afficherNotes ? "▼" : "►"}</span>
+            <span>Notes</span>
           </h1>
         </div>
 
@@ -3456,6 +3699,14 @@ export default function App() {
                 marginBottom: "1rem",
               }}
             />
+            <div>
+              <button
+                style={{ ...buttonStyle, marginTop: "0.5rem" }}
+                onClick={clearNotes}
+              >
+                Effacer les notes
+              </button>
+            </div>
           </div>
         )}
       </div>
