@@ -124,17 +124,17 @@ export default function App() {
   const [showRemplacerDropdown, setShowRemplacerDropdown] = useState(false);
   const [remplacerRole, setRemplacerRole] = useState(null);
   const base = {
-  5: { Habitants: 3, Étrangers: 0, Acolytes: 1, Démons: 1 },
-  6: { Habitants: 3, Étrangers: 1, Acolytes: 1, Démons: 1 },
-  7: { Habitants: 5, Étrangers: 0, Acolytes: 1, Démons: 1 },
-  8: { Habitants: 5, Étrangers: 1, Acolytes: 1, Démons: 1 },
-  9: { Habitants: 5, Étrangers: 2, Acolytes: 1, Démons: 1 },
-  10: { Habitants: 7, Étrangers: 0, Acolytes: 2, Démons: 1 },
-  11: { Habitants: 7, Étrangers: 1, Acolytes: 2, Démons: 1 },
-  12: { Habitants: 7, Étrangers: 2, Acolytes: 2, Démons: 1 },
-  13: { Habitants: 9, Étrangers: 0, Acolytes: 3, Démons: 1 },
-  14: { Habitants: 9, Étrangers: 1, Acolytes: 3, Démons: 1 },
-  15: { Habitants: 9, Étrangers: 2, Acolytes: 3, Démons: 1 },
+    5: { Habitants: 3, Étrangers: 0, Acolytes: 1, Démons: 1 },
+    6: { Habitants: 3, Étrangers: 1, Acolytes: 1, Démons: 1 },
+    7: { Habitants: 5, Étrangers: 0, Acolytes: 1, Démons: 1 },
+    8: { Habitants: 5, Étrangers: 1, Acolytes: 1, Démons: 1 },
+    9: { Habitants: 5, Étrangers: 2, Acolytes: 1, Démons: 1 },
+    10: { Habitants: 7, Étrangers: 0, Acolytes: 2, Démons: 1 },
+    11: { Habitants: 7, Étrangers: 1, Acolytes: 2, Démons: 1 },
+    12: { Habitants: 7, Étrangers: 2, Acolytes: 2, Démons: 1 },
+    13: { Habitants: 9, Étrangers: 0, Acolytes: 3, Démons: 1 },
+    14: { Habitants: 9, Étrangers: 1, Acolytes: 3, Démons: 1 },
+    15: { Habitants: 9, Étrangers: 2, Acolytes: 3, Démons: 1 },
   };
 
   const [selected, setSelected] = useState([]);
@@ -219,7 +219,7 @@ export default function App() {
     { label: "Habitants", color: "#0e74b4", type: "Habitant" },
     { label: "Étrangers", color: "#0e74b4", type: "Étranger" },
     { label: "Acolytes", color: "#950f13", type: "Acolyte" },
-  { label: "Démons", color: "#950f13", type: "Démon" },
+    { label: "Démons", color: "#950f13", type: "Démon" },
   ];
 
   const maxParType = tableRepartition[nbJoueurs];
@@ -244,7 +244,7 @@ export default function App() {
     } else {
       // Only enforce the Demon cap
       if (role.type === "Démon") {
-  const max = maxParType.Démons;
+        const max = maxParType.Démons;
         const dejaPris = selected.filter((r) => r.type === "Démon").length;
         if (dejaPris < max) {
           setSelected((prev) => [...prev, role]);
@@ -387,13 +387,13 @@ export default function App() {
       Habitants: 0,
       Étrangers: 0,
       Acolytes: 0,
-  Démons: 0,
+      Démons: 0,
     };
     selected.forEach((r) => {
       if (r.type === "Habitant") repartition.Habitants++;
       else if (r.type === "Étranger") repartition["Étrangers"]++;
       else if (r.type === "Acolyte") repartition.Acolytes++;
-  else if (r.type === "Démon") repartition.Démons++;
+      else if (r.type === "Démon") repartition.Démons++;
     });
     // Stricter validation: check repartition matches number of players
     const totalRoles = Object.values(repartition).reduce((a, b) => a + b, 0);
@@ -784,12 +784,19 @@ export default function App() {
                 if (type === "Acolyte" || type === "Démon")
                   summaryColor = "#950f13";
                 return (
-                  <details key={type} style={{ marginBottom: "1rem" }} open>
+                  <details
+                    key={type}
+                    className="collapsible"
+                    style={{ marginBottom: "1rem" }}
+                    open
+                  >
                     <summary
                       style={{
-                        fontWeight: "bold",
-                        fontSize: "1.2rem",
-                        cursor: "pointer",
+                        // fontWeight: "bold",
+                        fontSize: "calc(var(--h2-size) * 0.9)",
+                        fontFamily: "'Cardo', serif",
+                        padding: "1rem",
+                        // cursor: "pointer",
                         color: summaryColor,
                       }}
                     >
@@ -1475,12 +1482,23 @@ export default function App() {
                   marginTop: "1rem",
                   backgroundColor: "white",
                   color: "black",
-                  padding: "1rem",
+                  //padding: "1rem",
                   borderRadius: "8px",
                 }}
               >
                 <details className="collapsible" open>
-                  <summary>Bluffs du démon</summary>
+                  <summary
+                    style={{
+                      // fontWeight: "bold",
+                      fontSize: "calc(var(--h2-size) * 0.9)",
+                      fontFamily: "'Cardo', serif",
+                      padding: "1rem",
+                      // cursor: "pointer",
+                      color: "#950f13",
+                    }}
+                  >
+                    Bluffs du démon
+                  </summary>
                   {afficherRepartition && !bluffsValides && (
                     <>
                       <div
@@ -1660,7 +1678,16 @@ export default function App() {
                     )}
                 </details>
                 <details className="collapsible" open>
-                  <summary> Joueurs</summary>
+                  <summary
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "calc(var(--h2-size) * 0.9)",
+                      fontFamily: "'Cardo', serif",
+                      padding: "1rem",
+                    }}
+                  >
+                    Joueurs
+                  </summary>
                   {Object.entries(joueursAttribues).map(
                     ([index, joueur], idx) => (
                       <div
@@ -2203,14 +2230,6 @@ export default function App() {
                                 marginBottom: "1rem",
                               }}
                             >
-                              <span
-                                style={{
-                                  fontFamily: "Cardo, serif",
-                                  fontSize: "1.1rem",
-                                }}
-                              >
-                                Alignement :
-                              </span>
                               <label
                                 style={{
                                   display: "inline-flex",
@@ -3706,15 +3725,15 @@ export default function App() {
                     marginBottom: "0rem",
                   }}
                 />
-                <div>
-                  <button
-                    className="btn"
-                    style={{ ...buttonStyle }}
-                    onClick={clearNotes}
-                  >
-                    Effacer les notes
-                  </button>
-                </div>
+                  <div style={{ marginTop: "1rem" }}>
+                    <button
+                      className="btn"
+                      style={{ ...buttonStyle }}
+                      onClick={clearNotes}
+                    >
+                      Effacer les notes
+                    </button>
+                  </div>
               </div>{" "}
               {/* ← ferme le conteneur des notes */}
             </details>{" "}
