@@ -258,7 +258,7 @@ const UTILS = [
 
 // 1) Chauffer les autres éditions en idle, juste après le montage
 useEffect(() => {
-  const ALL = ["Sombre présage", "Parfums d'hystérie", "Crépuscule funeste"];
+  const ALL = ["Sombre présage", "Parfum d'hystérie", "Crépuscule funeste"];
   const others = ALL.filter((e) => e !== edition);
   const warmUp = async () => {
     for (const e of others) {
