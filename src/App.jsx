@@ -926,20 +926,37 @@ export default function App() {
                   >
                     {["Habitant", "Étranger", "Acolyte", "Démon"].map(
                       (type) => (
-                        <div key={type}>
-                          <div
+                        <details
+                          key={type}
+                          className="collapsible"
+                          open
+                          style={{ marginBottom: ".5rem" }}
+                        >
+                          <summary
                             style={{
+                              color: colorForType(type), // couleur selon l’alignement
                               fontWeight: "bold",
-                              marginBottom: ".5rem",
+                              fontSize: "calc(var(--h2-size) * 1)",
+                              fontFamily: "Cardo, serif",
                             }}
                           >
-                            {type}
-                          </div>
+                            {typeToPlural[type]}{" "}
+                            <span style={{ opacity: 1 }}>
+                              (
+                              {
+                                customScriptTemp.filter((x) => x.type === type)
+                                  .length
+                              })
+                            </span>
+                          </summary>
+
+                          {/* grille 2 colonnes de boutons (icône + nom coloré) */}
                           <div
                             style={{
                               display: "grid",
-                              gridTemplateColumns: "repeat(2, minmax(0, 1fr))", // 2 par ligne
+                              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
                               gap: ".5rem",
+                              marginTop: ".5rem",
                             }}
                           >
                             {roles
@@ -1002,7 +1019,7 @@ export default function App() {
                                 );
                               })}
                           </div>
-                        </div>
+                        </details>
                       )
                     )}
                   </div>
