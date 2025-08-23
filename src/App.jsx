@@ -519,6 +519,7 @@ export default function App() {
                 display: "flex",
                 alignItems: "center",
                 gap: "2rem",
+                flexWrap: "wrap",
               }}
             >
               <label
@@ -526,6 +527,9 @@ export default function App() {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "0.5rem",
+                  flexBasis: "100%",
+                  fontSize: "1rem",
+                  fontFamily: "Cardo, serif",
                 }}
               >
                 Nombre de joueurs :
@@ -547,143 +551,227 @@ export default function App() {
                 </select>
               </label>
 
-              <label
+              {/* --- Tableau de répartition --- */}
+              <div
                 style={{
-                  display: "inline-flex",
+                  display: "flex",
                   alignItems: "center",
-                  gap: "0.5rem",
+                  marginBottom: "0.5rem",
+                  flexWrap: "wrap",
                 }}
               >
-                Édition :
-                <select
-                  value={edition}
-                  onChange={(e) => setEdition(e.target.value)}
-                  disabled={rolesValides}
-                  style={{ marginLeft: "0.5rem" }}
+                <div
+                  style={{
+                    overflowX: "auto",
+                    flexBasis: "100%",
+                    marginBottom: "0.5rem",
+                  }}
                 >
-                  {[...new Set(roles.map((r) => r.edition))].map((ed) => (
-                    <option key={ed} value={ed}>
-                      {ed}
-                    </option>
-                  ))}
-                  <option value="Script personnalisé">
-                    Script personnalisé
-                  </option>
-                </select>
-                {edition === "Script personnalisé" && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCustomScriptVisible(true);
-                      if (
-                        customScriptPool.length > 0 &&
-                        customScriptTemp.length === 0
-                      ) {
-                        setCustomScriptTemp(customScriptPool);
-                      }
-                    }}
-                    disabled={rolesValides}
+                  <table
                     style={{
-                      ...buttonStyle,
-                      marginLeft: "1rem",
-                      cursor: rolesValides ? "not-allowed" : "pointer",
-                      opacity: rolesValides ? 0.5 : 1,
+                      borderCollapse: "collapse",
+                      fontFamily: "Cardo, serif",
+                      width: "100%",
+                      tableLayout: "fixed",
+                      border: "1px solid black",
                     }}
                   >
-                    Choisir les rôles
-                  </button>
-                )}
-              </label>
+                    <tbody>
+                      <tr>
+                        {/* Habitant */}
+                        <td
+                          style={{
+                            padding: "0.5rem",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            color:
+                              lignes.find((l) => l.label === "Habitants")
+                                ?.color || "#222",
+                            border: "1px solid black",
+                          }}
+                        >
+                          Habitants
+                        </td>
+                        <td
+                          style={{
+                            padding: "0.5rem 0.75rem",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            color:
+                              lignes.find((l) => l.label === "Habitants")
+                                ?.color || "#222",
+                            border: "1px solid black",
+                          }}
+                        >
+                          {tableRepartition[nbJoueurs]?.["Habitants"] ?? 0}
+                        </td>
 
-              <button
-                onClick={() => setQrCodeVisible(true)}
-                style={{
-                  ...buttonStyle,
-                  cursor:
-                    customScriptPool.length === 0 &&
-                    edition === "Script personnalisé"
-                      ? "not-allowed"
-                      : "pointer",
-                  opacity:
-                    customScriptPool.length === 0 &&
-                    edition === "Script personnalisé"
-                      ? 0.5
-                      : 1,
-                }}
-                disabled={
-                  customScriptPool.length === 0 &&
-                  edition === "Script personnalisé"
-                }
-              >
-                Partager le script
-              </button>
-            </div>
+                        {/* Séparateur vertical + Acolytes */}
+                        <td
+                          style={{
+                            borderLeft: "1px solid #000",
+                            padding: "0.5rem 0.75rem",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            color:
+                              lignes.find((l) => l.label === "Acolytes")
+                                ?.color || "#222",
+                            border: "1px solid black",
+                          }}
+                        >
+                          Acolytes
+                        </td>
+                        <td
+                          style={{
+                            padding: "0.5rem 0.75rem",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            color:
+                              lignes.find((l) => l.label === "Acolytes")
+                                ?.color || "#222",
+                            border: "1px solid black",
+                          }}
+                        >
+                          {tableRepartition[nbJoueurs]?.["Acolytes"] ?? 0}
+                        </td>
+                      </tr>
 
-            {/* --- Tableau de répartition --- */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "0.5rem",
-              }}
-            >
-              <div style={{ overflowX: "auto" }}>
-                <table
+                      <tr>
+                        {/* Étrangers */}
+                        <td
+                          style={{
+                            padding: "0.5rem",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            color:
+                              lignes.find((l) => l.label === "Étrangers")
+                                ?.color || "#222",
+                            border: "1px solid black",
+                          }}
+                        >
+                          Étrangers
+                        </td>
+                        <td
+                          style={{
+                            padding: "0.5rem 0.75rem",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            color:
+                              lignes.find((l) => l.label === "Étrangers")
+                                ?.color || "#222",
+                            border: "1px solid black",
+                          }}
+                        >
+                          {tableRepartition[nbJoueurs]?.["Étrangers"] ?? 0}
+                        </td>
+
+                        {/* Séparateur vertical + Démons */}
+                        <td
+                          style={{
+                            borderLeft: "1px solid #000",
+                            padding: "0.5rem 0.75rem",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            color:
+                              lignes.find((l) => l.label === "Démons")?.color ||
+                              "#222",
+                            border: "1px solid black",
+                          }}
+                        >
+                          Démons
+                        </td>
+                        <td
+                          style={{
+                            padding: "0.5rem 0.75rem",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            color:
+                              lignes.find((l) => l.label === "Démons")?.color ||
+                              "#222",
+                            border: "1px solid black",
+                          }}
+                        >
+                          {tableRepartition[nbJoueurs]?.["Démons"] ?? 0}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <label
                   style={{
-                    borderCollapse: "collapse",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    marginTop: "0.5rem",
+                    fontSize: "1rem",
                     fontFamily: "Cardo, serif",
                   }}
                 >
-                  <thead>
-                    <tr>
-                      <th
-                        style={{ border: "1px solid #ccc", padding: "0.5rem" }}
-                      >
-                        Joueurs
-                      </th>
-                      <th
-                        style={{ border: "1px solid #ccc", padding: "0.5rem" }}
-                      >
-                        {nbJoueurs}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {lignes.map(({ label, color }) => (
-                      <tr key={label}>
-                        <td
-                          style={{
-                            border: "1px solid #ccc",
-                            padding: "0.5rem",
-                            color,
-                          }}
-                        >
-                          {label}
-                        </td>
-                        <td
-                          style={{
-                            border: "1px solid #ccc",
-                            padding: "0.25rem",
-                          }}
-                        >
-                          <span
-                            style={{
-                              width: "3rem",
-                              textAlign: "center",
-                              display: "inline-block",
-                              color,
-                              fontWeight: "bold",
-                              fontFamily: "Cardo, serif",
-                              fontSize: "1rem",
-                            }}
-                          >
-                            {tableRepartition[nbJoueurs]?.[label] ?? 0}
-                          </span>
-                        </td>
-                      </tr>
+                  <div style={{ marginBottom: "0rem" }}>
+                    Sélectionner l'édition :
+                  </div>
+                  <select
+                    value={edition}
+                    onChange={(e) => setEdition(e.target.value)}
+                    disabled={rolesValides}
+                    style={{ marginLeft: "0.5rem" }}
+                  >
+                    {[...new Set(roles.map((r) => r.edition))].map((ed) => (
+                      <option key={ed} value={ed}>
+                        {ed}
+                      </option>
                     ))}
-                  </tbody>
-                </table>
+                    <option value="Script personnalisé">
+                      Script personnalisé
+                    </option>
+                  </select>
+                  {edition === "Script personnalisé" && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCustomScriptVisible(true);
+                        if (
+                          customScriptPool.length > 0 &&
+                          customScriptTemp.length === 0
+                        ) {
+                          setCustomScriptTemp(customScriptPool);
+                        }
+                      }}
+                      disabled={rolesValides}
+                      style={{
+                        ...buttonStyle,
+                        marginLeft: "1rem",
+                        cursor: rolesValides ? "not-allowed" : "pointer",
+                        opacity: rolesValides ? 0.5 : 1,
+                      }}
+                    >
+                      Choisir les rôles
+                    </button>
+                  )}
+                </label>
+
+                <button
+                  onClick={() => setQrCodeVisible(true)}
+                  style={{
+                    ...buttonStyle,
+                    cursor:
+                      customScriptPool.length === 0 &&
+                      edition === "Script personnalisé"
+                        ? "not-allowed"
+                        : "pointer",
+                    opacity:
+                      customScriptPool.length === 0 &&
+                      edition === "Script personnalisé"
+                        ? 0.5
+                        : 1,
+                  }}
+                  disabled={
+                    customScriptPool.length === 0 &&
+                    edition === "Script personnalisé"
+                  }
+                >
+                  Partager le script
+                </button>
               </div>
 
               {/* Bouton reset (croix rouge) si tu veux le conserver ici */}
@@ -3725,15 +3813,15 @@ export default function App() {
                     marginBottom: "0rem",
                   }}
                 />
-                  <div style={{ marginTop: "1rem" }}>
-                    <button
-                      className="btn"
-                      style={{ ...buttonStyle }}
-                      onClick={clearNotes}
-                    >
-                      Effacer les notes
-                    </button>
-                  </div>
+                <div style={{ marginTop: "1rem" }}>
+                  <button
+                    className="btn"
+                    style={{ ...buttonStyle }}
+                    onClick={clearNotes}
+                  >
+                    Effacer les notes
+                  </button>
+                </div>
               </div>{" "}
               {/* ← ferme le conteneur des notes */}
             </details>{" "}
