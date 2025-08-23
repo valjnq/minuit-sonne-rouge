@@ -30,6 +30,17 @@ const buttonStyle = {
 };
 
 export default function App() {
+  // Préchargement des icônes de rôles pour éviter la latence
+  useEffect(() => {
+    // Récupère tous les rôles possibles (édition courante et script personnalisé)
+    const allRoles = edition === "Script personnalisé"
+      ? customScriptPool
+      : roles.filter((r) => r.edition === edition);
+    allRoles.forEach((role) => {
+      const img = new window.Image();
+      img.src = getRoleIcon(role);
+    });
+  }, [edition, customScriptPool, roles]);
   // Style pour aligner les icônes des boutons rôles en haut
   const roleButtonStyle = {
     display: "flex",
