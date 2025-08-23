@@ -79,10 +79,10 @@ export default function App() {
       textColor: "black",
     },
     {
-      label: "Veux-tu utiliser ton pouvoir ?",
+      label: "Utiliser ton pouvoir ?",
       color: "#6294f9ff",
       page: "use-power",
-      content: "Veux-tu utiliser ton pouvoir?",
+      content: "Utiliser ton pouvoir?",
       textColor: "black",
     },
   ];
