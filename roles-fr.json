@@ -1,0 +1,633 @@
+[
+  {
+    "nom": "Lavandière",
+    "edition": "Sombre présage",
+    "pouvoir": "Tu commences la partie en sachant que parmi 2 joueurs, l’un est un habitant spécifique.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordrePremiereNuit": 15,
+    "rappel": true
+  },
+  {
+    "nom": "Bibliothécaire",
+    "edition": "Sombre présage",
+    "pouvoir": "Tu commences la partie en sachant que parmi 2 joueurs, l’un est un étranger spécifique (ou bien qu’aucun étranger n’est en jeu).",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordrePremiereNuit": 16,
+    "rappel": true
+  },
+  {
+    "nom": "Enquêteur",
+    "edition": "Sombre présage",
+    "pouvoir": "Tu commences la partie en sachant que parmi 2 joueurs, l’un est un acolyte spécifique.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordrePremiereNuit": 17,
+    "rappel": true
+  },
+  {
+    "nom": "Fossoyeur",
+    "edition": "Sombre présage",
+    "pouvoir": "Chaque nuit (sauf la 1ère), tu apprends le rôle de la personne exécutée aujourd’hui.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 38,
+    "rappel": true
+  },
+  {
+    "nom": "Vierge",
+    "edition": "Sombre présage",
+    "pouvoir": "La 1ère fois que tu es nominé, si le joueur qui te nomine est un habitant, il est immédiatement exécuté.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "rappel": true
+  },
+  {
+    "nom": "Pourfendeur",
+    "edition": "Sombre présage",
+    "pouvoir": "Une fois par partie, durant la journée, tu peux choisir un joueur publiquement. S’il est le démon, il meurt.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "rappel": true
+  },
+  {
+    "nom": "Soldat",
+    "edition": "Sombre présage",
+    "pouvoir": "Tu es immunisé aux attaques du démon la nuit.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "rappel": false
+  },
+  {
+    "nom": "Maire",
+    "edition": "Sombre présage",
+    "pouvoir": "S’il reste 3 joueurs en vie et qu’il n’y a pas d’exécution, ton camp l’emporte. Si tu devais mourir la nuit, un autre joueur peut mourir à ta place.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "rappel": false
+  },
+  {
+    "nom": "Cuisinier",
+    "edition": "Sombre présage",
+    "pouvoir": "Tu commences la partie en connaissant le nombre de paires de joueurs maléfiques (2 joueurs assis côte à côte font une paire).",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordrePremiereNuit": 18,
+    "rappel": false
+  },
+  {
+    "nom": "Empathe",
+    "edition": "Sombre présage",
+    "pouvoir": "Chaque nuit, tu apprends combien de joueurs maléfiques se trouvent parmi tes voisins vivants.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 36,
+    "ordrePremiereNuit": 19,
+    "rappel": false
+  },
+  {
+    "nom": "Voyante",
+    "edition": "Sombre présage",
+    "pouvoir": "Chaque nuit, choisis 2 joueurs. Tu apprends si l’un d’eux est le démon. Un joueur bon (toujours le même) peut t’apparaître comme un démon s’il est choisi.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 37,
+    "ordrePremiereNuit": 20,
+    "rappel": true
+  },
+  {
+    "nom": "Moine",
+    "edition": "Sombre présage",
+    "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur autre que toi. Ce joueur est protégé des attaques du démon cette nuit.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 8,
+    "rappel": true  
+  },
+  {
+    "nom": "Guetteur",
+    "edition": "Sombre présage",
+    "pouvoir": "Si tu meurs la nuit, tu es réveillé pour choisir un joueur. Tu apprends son rôle.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 35,
+    "rappel": false
+  },
+  {
+    "nom": "Majordome",
+    "edition": "Sombre présage",
+    "pouvoir": "Chaque nuit, choisis un autre joueur que toi. Demain, tu ne peux voter que s’il vote aussi.",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "ordreAutresNuits": 45,
+    "rappel": true
+  },
+  {
+    "nom": "Ivrogne",
+    "edition": "Sombre présage",
+    "pouvoir": "Tu ne sais pas que tu es l’ivrogne. Tu penses que tu es un habitant et tu es ivre (ton pouvoir ne fonctionne pas).",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "rappel": true  
+  },
+  {
+    "nom": "Recluse",
+    "edition": "Sombre présage",
+    "pouvoir": "Certains rôles peuvent te croire maléfique (soit un acolyte, soit un démon), même morte.",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "rappel": false
+  },
+  {
+    "nom": "Saint",
+    "edition": "Sombre présage",
+    "pouvoir": "Si tu meurs exécuté, ton camp perd la partie.",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "rappel": false
+  },
+  {
+    "nom": "Empoisonneuse",
+    "edition": "Sombre présage",
+    "pouvoir": "Chaque nuit, choisis un joueur. Il est empoisonné jusqu’au crépuscule (son pouvoir ne fonctionne pas).",
+    "type": "Acolyte",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 3,
+    "ordrePremiereNuit": 6,
+    "rappel": true
+  },
+  {
+    "nom": "Espion",
+    "edition": "Sombre présage",
+    "pouvoir": "Chaque nuit, tu vois le grimoire qui contient tout ce que le conteur sait. Certains rôles peuvent te croire bon (soit un habitant, soit un étranger), même mort.",
+    "type": "Acolyte",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 46,
+    "ordrePremiereNuit": 26,
+    "rappel": false
+  },
+  {
+    "nom": "Séductrice",
+    "edition": "Sombre présage",
+    "pouvoir": "S’il y a 5 joueurs ou plus en vie et que le démon meurt, tu deviens le démon.",
+    "type": "Acolyte",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 13,
+    "rappel": true
+  },
+  {
+    "nom": "Baron",
+    "edition": "Sombre présage",
+    "pouvoir": "Il y a 2 étrangers de plus et 2 habitants de moins dans la partie. [+2 étrangers]",
+    "type": "Acolyte",
+    "alignement": "Maléfique",
+    "rappel": false
+  },
+  {
+    "nom": "Diablotin",
+    "edition": "Sombre présage",
+    "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur. Il meurt. Si tu te tues de cette manière, un acolyte devient le Diablotin.",
+    "type": "Démon",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 16,
+    "rappel": true
+  },
+  {
+    "nom": "Horloger",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Tu commences la partie en connaissant le nombre de places séparant le démon de son acolyte le plus proche.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordrePremiereNuit": 23,
+    "rappel": false
+  },
+  {
+    "nom": "Rêveur",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit, choisis un joueur autre que toi. Tu apprends deux rôles (un bon et un maléfique). Le joueur choisi a l’un de ces deux rôles.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 39,
+    "ordrePremiereNuit": 24,
+    "rappel": false
+  },
+  {
+    "nom": "Sage",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Si le démon te tue, tu apprends qu’il se trouve parmi deux joueurs.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 30,
+    "rappel": false
+  },
+  {
+    "nom": "Artiste",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Une fois par partie, durant la journée, tu peux poser une question en privé au conteur. Il ne peut répondre que par oui ou par non.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "rappel": true
+  },
+  {
+    "nom": "Savant",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque jour, tu peux consulter le conteur en privé pour apprendre 2 informations. L’une d’elles est fausse (tu ne sais pas laquelle).",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "rappel": false
+  },
+  {
+    "nom": "Fille aux fleurs",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit (sauf la 1ère), tu apprends si un démon a voté aujourd’hui.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 40,
+    "rappel": true
+  },
+  {
+    "nom": "Oracle",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit, tu apprends combien de joueurs morts sont maléfiques.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 42,
+    "rappel": false
+  },
+  {
+    "nom": "Jongleur",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Le 1er jour, tu peux deviner le rôle de jusqu’à 5 personnes en public. La nuit, tu apprends combien de bonnes réponses tu as.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 44,
+    "rappel": true
+  },
+  {
+    "nom": "Mathématicien",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit, tu apprends combien de pouvoirs ont dysfonctionné à cause d’autres pouvoirs depuis l’aube.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 48,
+    "ordrePremiereNuit": 28,
+    "rappel": true
+  },
+  {
+    "nom": "Couturière",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Une fois par jeu, durant la nuit, choisis 2 joueurs autres que toi. Tu apprends s’ils sont du même alignement.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 43,
+    "ordrePremiereNuit": 25,
+    "rappel": true
+  },
+  {
+    "nom": "Crieur",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit (sauf la 1ère), tu apprends si un acolyte a nominé quelqu’un aujourd’hui.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 41,
+    "rappel": true
+  },
+  {
+    "nom": "Charmeur de serpents",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit, choisis un joueur en vie. S’il est un démon, vous échangez de rôle et d’alignement, et il devient empoisonné.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 7,
+    "ordrePremiereNuit": 8,
+    "rappel": true
+  },
+  {
+    "nom": "Philosophe",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Une fois par partie, durant la nuit, choisis un rôle bon. Tu en gagnes le pouvoir (s’il était déjà en jeu, le joueur au rôle choisi devient ivre).",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 1,
+    "ordrePremiereNuit": 1,
+    "rappel": true
+  },
+  {
+    "nom": "Bien-aimée",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Si tu meurs, un joueur devient ivre.",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "ordreAutresNuits": 29,
+    "rappel": true
+  },
+  {
+    "nom": "Barbier",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Si tu es mort aujourd’hui ou cette nuit, un démon peut échanger le rôle de 2 joueurs (leur alignement ne change pas et il ne peut pas choisir un autre démon).",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "ordreAutresNuits": 28,
+    "rappel": true
+  },
+  {
+    "nom": "Sorcière",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit, choisis un joueur. S’il nomine quelqu’un le lendemain, il meurt. Tu perds ce pouvoir s’il ne reste que 3 joueurs en vie.",
+    "type": "Acolyte",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 10,
+    "ordrePremiereNuit": 12,
+    "rappel": true
+  },
+  {
+    "nom": "Lobotomiste",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit, choisis un joueur et un rôle bon : il doit prétendre qu’il est ce rôle le lendemain ou il risque d’être exécuté.",
+    "type": "Acolyte",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 11,
+    "ordrePremiereNuit": 13,
+    "rappel": true
+  },
+  {
+    "nom": "Guenaude",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur. Il devient un rôle de ton choix (s’il n’est pas déjà en jeu). Il garde son alignement. Si un démon est créé ainsi, les morts cette nuit sont arbitraires.",
+    "type": "Acolyte",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 12,
+    "rappel": false
+  },
+  {
+    "nom": "Jumeau maléfique",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Toi et un joueur bon vous connaissez. Si ce joueur bon est exécuté, le mal gagne la partie. Le bien ne peut gagner la partie tant que les deux jumeaux sont en vie.",
+    "type": "Acolyte",
+    "alignement": "Maléfique",
+    "ordrePremiereNuit": 11,
+    "rappel": true
+  },
+  {
+    "nom": "Fang Gu",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur. Il meurt. Le 1er étranger que tu tues rejoint le mal et devient Fang Gu (tu meurs à sa place). Cet effet ne peut s’activer qu’une fois par partie. [+1 étranger]",
+    "type": "Démon",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 21,
+    "rappel": true
+  },
+  {
+    "nom": "Vigormortis",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur. Il meurt. Les acolytes tués ainsi gardent leur pouvoir et empoisonnent l’habitant le plus proche d’eux.  [-1 étranger]",
+    "type": "Démon",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 24,
+    "rappel": true
+  },
+  {
+    "nom": "No Dashii",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur. Il meurt. Les 2 habitants les plus proches de toi sont empoisonnés.",
+    "type": "Démon",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 22,
+    "rappel": true
+  },
+  {
+    "nom": "Vortox",
+    "edition": "Parfums d’hystérie",
+    "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur. Il meurt. Les pouvoirs des habitants donnent de fausses informations. Chaque jour, si aucune exécution n’a eu lieu, le mal gagne la partie.",
+    "type": "Démon",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 23,
+    "rappel": true
+  },
+  {
+    "nom": "Tisanière",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Tant que tes 2 voisins vivants sont bons, ils ne peuvent pas mourir.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 5,
+    "rappel": true
+  },
+  {
+    "nom": "Aubergiste",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Chaque nuit (sauf la 1ère), choisis 2 joueurs. Ils ne peuvent pas mourir cette nuit mais l’un d’eux est ivre jusqu’à la prochaine nuit (tu ne sais pas lequel).",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "rappel": true
+  },
+  {
+    "nom": "Femme de chambre",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Chaque nuit, choisis 2 joueurs autres que toi. Tu apprends combien se sont réveillés cette nuit à cause de leur pouvoir.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 47,
+    "ordrePremiereNuit": 27,
+    "rappel": false
+  },
+  {
+    "nom": "Professeur",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Une fois par partie, durant la nuit (sauf la 1ère), choisis un joueur mort. Si c’est un habitant, il revient à la vie.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 31,
+    "rappel": true
+  },
+  {
+    "nom": "Commère",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Chaque jour, tu peux faire une déclaration publiquement. Si elle est vraie, un joueur meurt durant la nuit.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 27,
+    "rappel": true
+  },
+  {
+    "nom": "Exorciste",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur (différent de la veille). Si tu choisis le démon, il ne se réveille pas cette nuit et il apprend ton rôle.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 15,
+    "rappel": true
+  },
+  {
+    "nom": "Grand-mère",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Tu commences la partie en connaissant le rôle d’un joueur bon. Si le démon tue ce joueur, tu meurs aussi.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 34,
+    "ordrePremiereNuit": 22,
+    "rappel": true
+  },
+  {
+    "nom": "Barde",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Quand un acolyte est exécuté, tous les joueurs deviennent ivres jusqu’au crépuscule du lendemain.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "rappel": true
+  },
+  {
+    "nom": "Accroc au jeu",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur et devine son rôle. Si tu te trompes, tu meurs.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 6,
+    "rappel": true
+  },
+  {
+    "nom": "Pacifiste",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Les joueurs bons ont une chance de ne pas mourir s’ils sont exécutés.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "rappel": false
+  },
+  {
+    "nom": "Brute",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Chaque nuit, le premier joueur à te choisir avec son pouvoir devient ivre jusqu’au crépuscule. Ton alignement devient le même que le sien.",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "rappel": true
+  },
+  {
+    "nom": "Marin",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Tu ne peux pas mourir. Chaque nuit, choisis un joueur vivant. L’un de vous deux devient ivre jusqu’au crépuscule (tu ne sais pas lequel).",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "ordreAutresNuits": 2,
+    "ordrePremiereNuit": 5,
+    "rappel": true
+  },
+  {
+    "nom": "Lunatique",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Tu penses être le démon mais tu ne l’es pas. Le démon sait qui tu es et qui tu choisis la nuit.",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "ordreAutresNuits": 14,
+    "ordrePremiereNuit": 3,
+    "rappel": true
+  },
+  {
+    "nom": "Bouffon",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "La 1ère fois que tu devrais mourir, tu ne meurs pas.",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "rappel": true
+  },
+  {
+    "nom": "Bricoleur",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Tu peux mourir n’importe quand.",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "ordreAutresNuits": 32,
+    "rappel": true
+  },
+  {
+    "nom": "Bohémienne",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Quand tu apprends ta mort, choisis un joueur vivant publiquement. Cette nuit, si c’était un joueur bon, il meurt.",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "ordreAutresNuits": 33,
+    "rappel": true
+  },
+  {
+    "nom": "Courtisane",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Une fois par partie, durant la nuit, choisis un rôle. Le joueur au rôle choisi devient ivre durant 3 jours et 3 nuits.",
+    "type": "Habitant",
+    "alignement": "Bon",
+    "ordreAutresNuits": 4,
+    "rappel": true
+  },
+  {
+    "nom": "Parrain",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Tu commences la partie en connaissant quels étrangers sont dans la partie. Si un étranger meurt la journée, choisis un joueur durant la nuit. Il meurt. [+1 ou -1 étranger]",
+    "type": "Acolyte",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 26,
+    "ordrePremiereNuit": 9,
+    "rappel": true
+  },
+  {
+    "nom": "Avocat du diable",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Chaque nuit, choisis un joueur vivant (différent de la nuit dernière). S’il est exécuté le lendemain, il ne meurt pas.",
+    "type": "Acolyte",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 9,
+    "ordrePremiereNuit": 10,
+    "rappel": true
+  },
+  {
+    "nom": "Assassin",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Une fois par partie, durant la nuit (sauf la 1ère), choisis un joueur. Il meurt, même s’il ne peut pas mourir.",
+    "type": "Acolyte",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 25,
+    "rappel": true
+  },
+  {
+    "nom": "Conspirateur",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Si le démon meurt exécuté (terminant la partie), la partie continue pour un jour de plus. Si un joueur est exécuté, son camp perd la partie.",
+    "type": "Acolyte",
+    "alignement": "Maléfique"
+  },
+  {
+    "nom": "Zombuul",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Chaque nuit (sauf la 1ère), si personne n’est mort la journée, choisis un joueur. Il meurt. La 1ère fois que tu meurs, tu survis mais tu apparais comme mort aux autres joueurs.",
+    "type": "Démon",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 17,
+    "rappel": true
+  },
+  {
+    "nom": "Pukka",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Chaque nuit, choisis un joueur. Il devient empoisonné. Le joueur précédemment empoisonné de la sorte meurt et n’est plus empoisonné.",
+    "type": "Démon",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 18,
+    "ordrePremiereNuit": 14,
+    "rappel": true
+  },
+  {
+    "nom": "Shabaloth",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Chaque nuit (sauf la 1ère), choisis 2 joueurs. Ils meurent. Un joueur tué ainsi la nuit précédente a une chance d’être recraché (il revient à la vie).",
+    "type": "Démon",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 19,
+    "rappel": true
+  },
+  {
+    "nom": "Po",
+    "edition": "Crépuscule funeste",
+    "pouvoir": "Chaque nuit (sauf la 1ère), tu peux choisir un joueur. Il meurt. Si tu n’as choisi personne la dernière fois, choisis 3 joueurs à la place.",
+    "type": "Démon",
+    "alignement": "Maléfique",
+    "ordreAutresNuits": 20,
+    "rappel": true
+  }
+]
