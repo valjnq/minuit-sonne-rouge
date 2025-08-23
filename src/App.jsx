@@ -1,4 +1,3 @@
-// ...existing imports and code...
 import React, { useState, useEffect, useRef } from "react";
 import roles from "./roles-fr.json";
 import QRCode from "react-qr-code";
@@ -30,17 +29,7 @@ const buttonStyle = {
 };
 
 export default function App() {
-  // Préchargement des icônes de rôles pour éviter la latence
-  useEffect(() => {
-    // Récupère tous les rôles possibles (édition courante et script personnalisé)
-    const allRoles = edition === "Script personnalisé"
-      ? customScriptPool
-      : roles.filter((r) => r.edition === edition);
-    allRoles.forEach((role) => {
-      const img = new window.Image();
-      img.src = getRoleIcon(role);
-    });
-  }, [edition, customScriptPool, roles]);
+  
   // Style pour aligner les icônes des boutons rôles en haut
   const roleButtonStyle = {
     display: "flex",
@@ -198,6 +187,29 @@ export default function App() {
   const [customScriptPool, setCustomScriptPool] = useState([]);
   const [customScriptTemp, setCustomScriptTemp] = useState([]);
 
+  // Préchargement des icônes de rôles pour éviter la latence
+  useEffect(() => {
+    // Récupère tous les rôles possibles (édition courante et script personnalisé)
+    const allRoles = edition === "Script personnalisé"
+      ? customScriptPool
+      : roles.filter((r) => r.edition === edition);
+    allRoles.forEach((role) => {
+      const img = new window.Image();
+      img.src = getRoleIcon(role);
+    });
+    // Précharge explicitement les icônes utilitaires
+    [
+      "icons/mort.png",
+      "icons/vote.png",
+      "icons/crepuscule.png",
+      "icons/aube.png",
+      "icons/acolyte.png",
+      "icons/demon.png"
+    ].forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, [edition, customScriptPool, roles]);
   // Ensure customScriptTemp is always initialized from validated pool when opening modal
   useEffect(() => {
     if (
