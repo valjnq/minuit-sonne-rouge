@@ -226,7 +226,7 @@ export default function App() {
   const [openRolesDetails, setOpenRolesDetails] = useState(true);
   const grimoireRef = useRef(null);
 // util pour composer un chemin correct (Vite/GH Pages)
-const withBase = (p) => new URL(p, import.meta.env.BASE_URL).toString();
+const withBase = (p) => `${import.meta.env.BASE_URL || '/'}${p}`;
 
 function preloadImages(urls) {
   return Promise.all(
