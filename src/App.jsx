@@ -755,7 +755,7 @@ export default function App() {
                   <select
                     value={edition}
                     onChange={(e) => setEdition(e.target.value)}
-                    disabled={rolesValides && edition !== "Script personnalisé"} // (optionnel) autorise le switch vers custom
+                    disabled={rolesValides}
                     style={{ marginLeft: "0.5rem" }}
                   >
                     {[...new Set(roles.map((r) => r.edition))].map((ed) => (
