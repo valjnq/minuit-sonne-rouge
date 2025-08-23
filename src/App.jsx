@@ -225,6 +225,51 @@ export default function App() {
   const [openSetup, setOpenSetup] = useState(true);
   const [openRolesDetails, setOpenRolesDetails] = useState(true);
   const grimoireRef = useRef(null);
+// util pour composer un chemin correct (Vite/GH Pages)
+const withBase = (p) => new URL(p, import.meta.env.BASE_URL).toString();
+
+function preloadImages(urls) {
+  return Promise.all(
+    urls.map((src) => new Promise((resolve) => {
+      const img = new Image();
+      img.onload = img.onerror = () => resolve();
+      img.src = src;
+      // Safari 15+ : tente le décodage anticipé
+      if (img.decode) img.decode().catch(() => {});
+    }))
+  );
+}
+
+function roleIconsForEdition(ed) {
+  const pool = ed === "Script personnalisé"
+    ? customScriptPool
+    : roles.filter((r) => r.edition === ed);
+  return pool.map(getRoleIcon);
+}
+
+const UTILS = [
+  "icons/mort.png",
+  "icons/vote.png",
+  "icons/crepuscule.png",
+  "icons/aube.png",
+  "icons/acolyte.png",
+  "icons/demon.png",
+].map(withBase);
+
+// 1) Chauffer les autres éditions en idle, juste après le montage
+useEffect(() => {
+  const ALL = ["Sombre présage", "Parfums d'hystérie", "Crépuscule funeste"];
+  const others = ALL.filter((e) => e !== edition);
+  const warmUp = async () => {
+    for (const e of others) {
+      const urls = [...roleIconsForEdition(e), ...UTILS];
+      await preloadImages(urls);
+    }
+  };
+  if ("requestIdleCallback" in window) requestIdleCallback(warmUp);
+  else setTimeout(warmUp, 500);
+  // pas de dépendances -> une seule fois
+}, []);
 
   const urlPDF = {
     "Sombre présage": "docs/minuitsonnerouge-sombrepresage.pdf",
