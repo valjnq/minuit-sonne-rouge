@@ -30,6 +30,16 @@ const buttonStyle = {
 };
 
 export default function App() {
+  // Style pour aligner les icônes des boutons rôles en haut
+  const roleButtonStyle = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    minWidth: "90px",
+    padding: "0.5rem",
+    gap: "0.3rem",
+  };
   const [jetonsInfoVisible, setJetonsInfoVisible] = useState(false);
   const [jetonInfoPage, setJetonInfoPage] = useState(null);
 
@@ -460,6 +470,21 @@ export default function App() {
       <div className="safe-pads">
         <div className="container" style={{ paddingTop: "1rem" }}>
           <style>{`
+          /* Grille responsive pour les cartes de rôles */
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 colonnes par défaut */
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+}
+
+/* Sur petits écrans, passe en 1 colonne pour éviter le débordement */
+@media (max-width: 420px) {
+  .roles-grid {
+    grid-template-columns: 1fr;
+  }
+}
   /* Unifie les triangles des sections repliables */
   details.collapsible > summary {
     font-family: 'Pirata One', cursive;
@@ -496,45 +521,47 @@ export default function App() {
 
           {/* Titre */}
           <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              marginBottom: "1.5rem",
-              flexWrap: "wrap", // permet au texte de passer à la ligne sur mobile
-            }}
+            style={{ width: "100%", display: "flex", justifyContent: "center" }}
           >
-            <img
-              src={"icons/grimoire.png"}
-              alt="Grimoire"
-              width={40}
-              height={40}
-              style={{ height: "40px", width: "40px" }}
-            />
-
-            <span
+            <div
               style={{
-                fontFamily: "'Pirata One', cursive",
-                fontSize: "var(--title-size)", // <= au lieu du clamp précédent
-                color: "#950f13",
-                fontWeight: "bold",
-                letterSpacing: "1px",
-                whiteSpace: "normal",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.7em",
+                whiteSpace: "nowrap",
+                lineHeight: 1.1,
+                // Le groupe entier grandit/rétrécit selon l'espace dispo
+                fontSize: "clamp(20px, 5vw, 44px)",
+                maxWidth: "min(100%, 1100px)",
               }}
             >
-              Minuit sonne rouge
-            </span>
+              <span
+                style={{
+                  fontFamily: "'Pirata One', cursive",
+                  color: "#950f13",
+                  fontWeight: 700,
+                  letterSpacing: "0.02em",
+                }}
+              >
+                Minuit sonne rouge
+              </span>
 
-            <h1
-              style={{
-                fontFamily: "'Pirata One', cursive",
-                fontSize: "var(--title-size)",
-                margin: 0,
-                textAlign: "left",
-              }}
-            >
-              Grimoire de poche
-            </h1>
+              <img
+                src="icons/grimoire.png"
+                alt="Grimoire"
+                style={{ width: "1.6em", height: "1.6em", flex: "0 0 auto" }}
+              />
+
+              <span
+                style={{
+                  fontFamily: "'Pirata One', cursive",
+                  color: "black",
+                  fontWeight: 700,
+                }}
+              >
+                Grimoire de poche
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -946,7 +973,8 @@ export default function App() {
                               {
                                 customScriptTemp.filter((x) => x.type === type)
                                   .length
-                              })
+                              }
+                              )
                             </span>
                           </summary>
 
@@ -1149,40 +1177,28 @@ export default function App() {
               {lignes.map(({ type, label }) => {
                 const rolesDuType = rolesFiltres.filter((r) => r.type === type);
                 if (rolesDuType.length === 0) return null;
-                const selectedCount = selected.filter(
-                  (r) => r.type === type
-                ).length;
-                const expectedCount = maxParType[label];
-                let summaryColor = "#222";
-                if (type === "Habitant" || type === "Étranger")
-                  summaryColor = "#0e74b4";
-                if (type === "Acolyte" || type === "Démon")
-                  summaryColor = "#950f13";
+                const selectedCount = compteParType[type] || 0;
+                const expectedCount = maxParType[typeToPlural[type]];
                 return (
-                  <details
-                    key={type}
-                    className="collapsible"
-                    style={{ marginBottom: "1rem" }}
-                    open
-                  >
+                  <details key={type} style={{ marginBottom: "1rem" }} open>
                     <summary
                       style={{
-                        // fontWeight: "bold",
-                        fontSize: "calc(var(--h2-size) * 0.9)",
-                        fontFamily: "'Cardo', serif",
-                        padding: "1rem",
-                        // cursor: "pointer",
-                        color: summaryColor,
+                        fontFamily: "Cardo, serif",
+                        fontSize: "0.9rem",
+                        fontWeight: "bold",
+                        color: colorForType(type),
+                        marginBottom: "2rem",
                       }}
                     >
                       {label} ({selectedCount}/{expectedCount})
                     </summary>
                     <div
                       style={{
-                        display: "flex",
-                        flexWrap: "wrap",
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2, 1fr)",
                         gap: "0.5rem",
-                        marginTop: "0.5rem",
+                        marginTop: "1rem",
+                        width: "100%",
                       }}
                     >
                       {rolesDuType.map((role) => {
@@ -1195,8 +1211,8 @@ export default function App() {
                           <div
                             key={role.nom}
                             onClick={() => {
-                              if (rolesValides || isDisabled) return;
-                              toggleRole(role);
+                              if (!isDisabled && !rolesValides)
+                                toggleRole(role);
                             }}
                             className="card-compact"
                             style={{
@@ -1218,38 +1234,46 @@ export default function App() {
                               display: "flex",
                               flexDirection: "column",
                               alignItems: "center",
-                              justifyContent: "center",
+                              justifyContent: "flex-start",
                               borderRadius: 8,
                               textAlign: "center",
+                              width: "100%",
+                              minWidth: "90px",
+                              maxWidth: "180px",
+                              minHeight: "120px",
+                              padding: "0.5rem 0.2rem",
+                              gap: "0.3rem",
                             }}
                           >
                             <img
                               src={`icons/icon_${normalizeNom(role.nom)}.png`}
                               alt={role.nom}
-                              className="icon-lg"
+                              style={{
+                                width: "40px",
+                                height: "40px",
+                                objectFit: "contain",
+                              }}
                             />
-
                             <div
                               style={{
                                 fontFamily: "'IM Fell English SC', serif",
-                                fontSize: "1.1rem",
+                                fontSize: "1rem",
                                 color:
                                   role.alignement === "Bon"
                                     ? "#0e74b4"
                                     : "#950f13",
                                 fontWeight: "bold",
-                                marginTop: 8,
+                                marginTop: 6,
                               }}
                             >
                               {role.nom}
                             </div>
-
                             <div
                               style={{
                                 fontFamily: "Cardo, serif",
-                                fontSize: "0.9rem",
-                                maxWidth: "26ch",
-                                marginTop: 4,
+                                fontSize: "0.8rem",
+                                maxWidth: "22ch",
+                                marginTop: 2,
                               }}
                             >
                               {role.pouvoir}
