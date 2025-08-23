@@ -514,11 +514,11 @@ export default function App() {
             {/* --- Ligne d’options --- */}
             <div
               style={{
-                marginTop: "1rem",
-                marginBottom: "1rem",
+                marginTop: "0.5rem",
+                //marginBottom: "0.5rem",
                 display: "flex",
                 alignItems: "center",
-                gap: "2rem",
+                gap: "0.5rem",
                 flexWrap: "wrap",
               }}
             >
@@ -713,7 +713,7 @@ export default function App() {
                   <select
                     value={edition}
                     onChange={(e) => setEdition(e.target.value)}
-                    disabled={rolesValides}
+                    disabled={rolesValides && edition !== "Script personnalisé"}
                     style={{ marginLeft: "0.5rem" }}
                   >
                     {[...new Set(roles.map((r) => r.edition))].map((ed) => (
@@ -737,7 +737,7 @@ export default function App() {
                           setCustomScriptTemp(customScriptPool);
                         }
                       }}
-                      disabled={rolesValides}
+                      disabled={rolesValides && edition !== "Script personnalisé"}
                       style={{
                         ...buttonStyle,
                         marginLeft: "1rem",
@@ -789,6 +789,171 @@ export default function App() {
               </button>
             </div>
           </details>
+          {customScriptVisible && (
+            <div
+              style={{
+                position: "fixed",
+                inset: 0,
+                background: "rgba(0,0,0,0.6)",
+                zIndex: 500,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div
+                style={{
+                  background: "#fff",
+                  color: "#222",
+                  borderRadius: 12,
+                  padding: "1.5rem",
+                  maxWidth: "900px",
+                  width: "90vw",
+                  maxHeight: "80vh",
+                  overflow: "auto",
+                  position: "relative",
+                  fontFamily: "Cardo, serif",
+                }}
+              >
+                <button
+                  onClick={() => setCustomScriptVisible(false)}
+                  style={{
+                    position: "absolute",
+                    top: "0.75rem",
+                    right: "0.75rem",
+                    border: "none",
+                    background: "none",
+                    fontSize: "1.5rem",
+                    cursor: "pointer",
+                  }}
+                  aria-label="Fermer"
+                >
+                  ×
+                </button>
+
+                <h3 style={{ marginTop: 0, marginBottom: "1rem" }}>
+                  Composer un script personnalisé
+                </h3>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                    gap: "1rem",
+                  }}
+                >
+                  {["Habitant", "Étranger", "Acolyte", "Démon"].map((type) => (
+                    <div key={type}>
+                      <div
+                        style={{ fontWeight: "bold", marginBottom: ".5rem" }}
+                      >
+                        {type}
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: ".25rem",
+                        }}
+                      >
+                        {roles
+                          .filter((r) => r.type === type)
+                          .map((role) => {
+                            const checked = customScriptTemp.some(
+                              (x) => x.nom === role.nom
+                            );
+                            return (
+                              <label
+                                key={role.nom}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: ".5rem",
+                                }}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  onChange={(e) =>
+                                    setCustomScriptTemp((prev) =>
+                                      e.target.checked
+                                        ? [...prev, role]
+                                        : prev.filter((x) => x.nom !== role.nom)
+                                    )
+                                  }
+                                />
+                                <img
+                                  src={getRoleIcon(role)}
+                                  alt=""
+                                  style={{
+                                    width: 24,
+                                    height: 24,
+                                    borderRadius: 4,
+                                    border: "1px solid #ccc",
+                                  }}
+                                  onError={(ev) =>
+                                    (ev.currentTarget.style.display = "none")
+                                  }
+                                />
+                                <span>{role.nom}</span>
+                              </label>
+                            );
+                          })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginTop: "1rem",
+                  }}
+                >
+                  <button
+                    onClick={() => setCustomScriptTemp([])}
+                    style={{
+                      padding: ".5rem 1rem",
+                      borderRadius: 8,
+                      border: "1px solid #bbb",
+                      background: "#f5f5f5",
+                    }}
+                  >
+                    Vider
+                  </button>
+                  <div style={{ display: "flex", gap: ".5rem" }}>
+                    <button
+                      onClick={() => setCustomScriptVisible(false)}
+                      style={{
+                        padding: ".5rem 1rem",
+                        borderRadius: 8,
+                        border: "1px solid #bbb",
+                        background: "#f5f5f5",
+                      }}
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      onClick={() => {
+                        setCustomScriptPool(customScriptTemp);
+                        setCustomScriptVisible(false);
+                      }}
+                      style={{
+                        padding: ".5rem 1rem",
+                        borderRadius: 8,
+                        border: "1px solid #0e74b4",
+                        background: "#0e74b4",
+                        color: "#fff",
+                      }}
+                    >
+                      Valider ({customScriptTemp.length})
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <details
             className="collapsible"
