@@ -29,7 +29,6 @@ const buttonStyle = {
 };
 
 export default function App() {
-  
   // Style pour aligner les icônes des boutons rôles en haut
   const roleButtonStyle = {
     display: "flex",
@@ -46,73 +45,45 @@ export default function App() {
   const jetonsInfoButtons = [
     {
       label: "Voici le démon",
-      color: "#d46a6a",
+      color: "rgba(182, 33, 33, 1)",
       page: "demon",
       content: "Voici le démon",
-      textColor: "#900",
+      textColor: "black",
     },
     {
       label: "Voici tes acolytes",
-      color: "#d46a6a",
+      color: "rgba(182, 33, 33, 1)",
       page: "acolytes",
       content: "Voici tes acolytes",
-      textColor: "#900",
+      textColor: "black",
     },
     {
       label: "Bluffs du démon",
-      color: "#7db3e6",
+      color: "rgba(182, 33, 33, 1)",
       page: "not-in-game",
       content: "Ces rôles ne sont pas en jeu",
-      textColor: "#234",
-    },
-    {
-      label: "Ce rôle t'a sélectionné",
-      color: "#6ab46a",
-      page: "selected-by",
-      content: "Ce rôle t'a sélectionné",
-      textColor: "#234",
-    },
-    {
-      label: "Ce joueur est",
-      color: "#e67db3",
-      page: "player-is",
-      content: "Ce joueur est",
-      textColor: "#234",
+      textColor: "black",
     },
     {
       label: "Tu es",
-      color: "#a37de6",
+      color: "#6294f9ff",
       page: "you-are",
       content: "Tu es",
-      textColor: "#234",
+      textColor: "black",
+    },
+    {
+      label: "Ce joueur est",
+      color: "#6294f9ff",
+      page: "player-is",
+      content: "Ce joueur est",
+      textColor: "black",
     },
     {
       label: "Veux-tu utiliser ton pouvoir ?",
-      color: "#b48a3c",
+      color: "#6294f9ff",
       page: "use-power",
       content: "Veux-tu utiliser ton pouvoir?",
-      textColor: "#234",
-    },
-    {
-      label: "Fais un choix",
-      color: "#b48a3c",
-      page: "make-choice",
-      content: "Fais un choix",
-      textColor: "#234",
-    },
-    {
-      label: "As-tu voté aujourd'hui ?",
-      color: "#e6c07d",
-      page: "voted-today",
-      content: "As-tu voté aujourd'hui ?",
-      textColor: "#234",
-    },
-    {
-      label: "As-tu nominé quelqu'un aujourd'hui ?",
-      color: "#e6c07d",
-      page: "named-today",
-      content: "As-tu nominé quelqu'un aujourd'hui ?",
-      textColor: "#234",
+      textColor: "black",
     },
   ];
 
@@ -190,9 +161,10 @@ export default function App() {
   // Préchargement des icônes de rôles pour éviter la latence
   useEffect(() => {
     // Récupère tous les rôles possibles (édition courante et script personnalisé)
-    const allRoles = edition === "Script personnalisé"
-      ? customScriptPool
-      : roles.filter((r) => r.edition === edition);
+    const allRoles =
+      edition === "Script personnalisé"
+        ? customScriptPool
+        : roles.filter((r) => r.edition === edition);
     allRoles.forEach((role) => {
       const img = new window.Image();
       img.src = getRoleIcon(role);
@@ -204,7 +176,7 @@ export default function App() {
       "icons/crepuscule.png",
       "icons/aube.png",
       "icons/acolyte.png",
-      "icons/demon.png"
+      "icons/demon.png",
     ].forEach((src) => {
       const img = new window.Image();
       img.src = src;
@@ -225,51 +197,55 @@ export default function App() {
   const [openSetup, setOpenSetup] = useState(true);
   const [openRolesDetails, setOpenRolesDetails] = useState(true);
   const grimoireRef = useRef(null);
-// util pour composer un chemin correct (Vite/GH Pages)
-const withBase = (p) => `${import.meta.env.BASE_URL || '/'}${p}`;
+  // util pour composer un chemin correct (Vite/GH Pages)
+  const withBase = (p) => `${import.meta.env.BASE_URL || "/"}${p}`;
 
-function preloadImages(urls) {
-  return Promise.all(
-    urls.map((src) => new Promise((resolve) => {
-      const img = new Image();
-      img.onload = img.onerror = () => resolve();
-      img.src = src;
-      // Safari 15+ : tente le décodage anticipé
-      if (img.decode) img.decode().catch(() => {});
-    }))
-  );
-}
+  function preloadImages(urls) {
+    return Promise.all(
+      urls.map(
+        (src) =>
+          new Promise((resolve) => {
+            const img = new Image();
+            img.onload = img.onerror = () => resolve();
+            img.src = src;
+            // Safari 15+ : tente le décodage anticipé
+            if (img.decode) img.decode().catch(() => {});
+          })
+      )
+    );
+  }
 
-function roleIconsForEdition(ed) {
-  const pool = ed === "Script personnalisé"
-    ? customScriptPool
-    : roles.filter((r) => r.edition === ed);
-  return pool.map(getRoleIcon);
-}
+  function roleIconsForEdition(ed) {
+    const pool =
+      ed === "Script personnalisé"
+        ? customScriptPool
+        : roles.filter((r) => r.edition === ed);
+    return pool.map(getRoleIcon);
+  }
 
-const UTILS = [
-  "icons/mort.png",
-  "icons/vote.png",
-  "icons/crepuscule.png",
-  "icons/aube.png",
-  "icons/acolyte.png",
-  "icons/demon.png",
-].map(withBase);
+  const UTILS = [
+    "icons/mort.png",
+    "icons/vote.png",
+    "icons/crepuscule.png",
+    "icons/aube.png",
+    "icons/acolyte.png",
+    "icons/demon.png",
+  ].map(withBase);
 
-// 1) Chauffer les autres éditions en idle, juste après le montage
-useEffect(() => {
-  const ALL = ["Sombre présage", "Parfum d'hystérie", "Crépuscule funeste"];
-  const others = ALL.filter((e) => e !== edition);
-  const warmUp = async () => {
-    for (const e of others) {
-      const urls = [...roleIconsForEdition(e), ...UTILS];
-      await preloadImages(urls);
-    }
-  };
-  if ("requestIdleCallback" in window) requestIdleCallback(warmUp);
-  else setTimeout(warmUp, 500);
-  // pas de dépendances -> une seule fois
-}, []);
+  // 1) Chauffer les autres éditions en idle, juste après le montage
+  useEffect(() => {
+    const ALL = ["Sombre présage", "Parfum d'hystérie", "Crépuscule funeste"];
+    const others = ALL.filter((e) => e !== edition);
+    const warmUp = async () => {
+      for (const e of others) {
+        const urls = [...roleIconsForEdition(e), ...UTILS];
+        await preloadImages(urls);
+      }
+    };
+    if ("requestIdleCallback" in window) requestIdleCallback(warmUp);
+    else setTimeout(warmUp, 500);
+    // pas de dépendances -> une seule fois
+  }, []);
 
   const urlPDF = {
     "Sombre présage": "docs/minuitsonnerouge-sombrepresage.pdf",
@@ -997,6 +973,7 @@ useEffect(() => {
                     marginTop: 0,
                     marginBottom: "1rem",
                     paddingRight: "2rem",
+                    fontFamily: "Pirata One, cursive",
                   }}
                 >
                   Choisir les rôles du script
@@ -1314,7 +1291,14 @@ useEffect(() => {
                                 flexShrink: 0,
                               }}
                             />
-                            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                            <div
+                              style={{
+                                flex: 1,
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "flex-start",
+                              }}
+                            >
                               <div
                                 style={{
                                   fontFamily: "'IM Fell English SC', serif",
@@ -1336,7 +1320,9 @@ useEffect(() => {
                                   marginTop: "0.2rem",
                                 }}
                               >
-                                {role.description || role.pouvoir || "Pouvoir du rôle..."}
+                                {role.description ||
+                                  role.pouvoir ||
+                                  "Pouvoir du rôle..."}
                               </div>
                             </div>
                           </button>
@@ -3546,28 +3532,80 @@ useEffect(() => {
             >
               <summary>Communication</summary>
               {/* Rôles button for communication */}
-              <div
-                style={{
-                  width: "100%",
-                  marginBottom: "1rem",
-                  display: "flex",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <button
-                  style={{
-                    ...buttonStyle,
-                    background: "#222",
-                    color: "#fff",
-                    fontWeight: "bold",
-                    fontSize: "1.1rem",
-                    minWidth: "180px",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                  }}
-                  onClick={() => setRolesModalOpen(true)}
-                >
-                  Rôles
-                </button>
+              <div style={{ width: "100%", marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.7rem" }}>
+                {jetonsInfoButtons.map((btn, idx) => (
+                  idx === 2 ? (
+                    <React.Fragment key={btn.label + "-roles"}>
+                      <button
+                        key={btn.label}
+                        style={{
+                          ...buttonStyle,
+                          background: btn.color,
+                          color: btn.textColor,
+                          margin: 0,
+                          width: "100%",
+                          alignSelf: "stretch",
+                        }}
+                        onClick={() => setJetonInfoPage(btn.page)}
+                      >
+                        {btn.label}
+                      </button>
+                      <button
+                        key="roles-btn"
+                        style={{
+                          ...buttonStyle,
+                          background: "#222",
+                          color: "#fff",
+                          fontWeight: "bold",
+                          fontSize: "1.1rem",
+                          minWidth: "180px",
+                          boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                        }}
+                        onClick={() => setRolesModalOpen(true)}
+                      >
+                        Rôles
+                      </button>
+                    </React.Fragment>
+                  ) : (
+                    <button
+                      key={btn.label}
+                      style={{
+                        ...buttonStyle,
+                        background: btn.color,
+                        color: btn.textColor,
+                        margin: 0,
+                        width: "100%",
+                        alignSelf: "stretch",
+                      }}
+                      onClick={() => setJetonInfoPage(btn.page)}
+                    >
+                      {btn.label}
+                    </button>
+                  )
+                ))}
+                {/* Ajout des messages personnalisés juste après le dernier bouton Communication */}
+                {customJetons.length > 0 && (
+                  <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "0.2rem" }}>
+                    {customJetons.map((txt, idx) => (
+                      <button
+                        key={"custom-" + idx}
+                        style={{
+                          ...buttonStyle,
+                          background: "#f5e3c3", // beige
+                          color: "#222",
+                          width: "100%",
+                          alignSelf: "stretch",
+                          fontWeight: "bold",
+                          fontSize: "1.1rem",
+                          border: "1px solid #bbb",
+                        }}
+                        onClick={() => setJetonInfoPage(`custom-${idx}`)}
+                      >
+                        {txt}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
               {/* Modal for roles selection */}
               {rolesModalOpen && (
@@ -3576,26 +3614,28 @@ useEffect(() => {
                     position: "fixed",
                     top: 0,
                     left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: "rgba(0,0,0,0.7)",
+                    width: "100vw",
+                    height: "100vh",
+                    backgroundColor: "#fff",
                     zIndex: 400,
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: "stretch",
+                    justifyContent: "stretch",
                   }}
                 >
                   <div
                     style={{
+                      width: "100vw",
+                      height: "100vh",
                       background: "#fff",
                       color: "#222",
-                      borderRadius: "10px",
-                      padding: "2rem",
-                      minWidth: "320px",
-                      maxHeight: "80vh",
-                      overflowY: "auto",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                      borderRadius: 0,
+                      padding: "2rem 2rem 1.2rem 2rem",
+                      boxShadow: "none",
                       position: "relative",
+                      display: "flex",
+                      flexDirection: "column",
+                      overflowY: "auto",
                     }}
                   >
                     <button
@@ -3613,84 +3653,101 @@ useEffect(() => {
                     >
                       ×
                     </button>
-                    <h2 style={{ marginBottom: "1rem" }}>Choisir un rôle</h2>
-                    {/* Group roles by type */}
-                    {(() => {
-                      const types = {};
-                      rolesFiltres.forEach((role) => {
-                        if (!types[role.type]) types[role.type] = [];
-                        types[role.type].push(role);
-                      });
-                      const typeOrder = [
-                        "Habitant",
-                        "Étranger",
-                        "Acolyte",
-                        "Démon",
-                      ];
-                      return typeOrder
-                        .filter((type) => types[type])
-                        .map((type) => (
-                          <div key={type} style={{ marginBottom: "1.2rem" }}>
-                            <div
-                              style={{
-                                fontWeight: "bold",
-                                fontSize: "1.1rem",
-                                marginBottom: "0.5rem",
-                                color: "#222",
-                              }}
-                            >
-                              {type}
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: "0.5rem",
-                              }}
-                            >
-                              {types[type].map((role) => (
-                                <button
-                                  key={role.nom}
-                                  style={{
-                                    background: "#eee",
-                                    color: "#222",
-                                    border: "1px solid #bbb",
-                                    borderRadius: "6px",
-                                    fontWeight: "bold",
-                                    fontSize: "1rem",
-                                    padding: "0.4rem 0.8rem",
-                                    marginBottom: "0.3rem",
-                                    cursor: "pointer",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "0.5rem",
-                                  }}
-                                  onClick={() => {
-                                    setSelectedRole(role);
-                                    setRolesModalOpen(false);
-                                  }}
-                                >
-                                  <img
-                                    src={getRoleIcon(role)}
-                                    alt={role.nom}
+                    <h2 style={{ marginBottom: "1rem", fontWeight: "bold", fontFamily: "Pirata One, cursive", fontSize: "1.35rem" }}>
+                      Afficher un rôle
+                    </h2>
+                    <div style={{ width: "100%" }}>
+                      {(() => {
+                        const types = {};
+                        rolesFiltres.forEach((role) => {
+                          if (!types[role.type]) types[role.type] = [];
+                          types[role.type].push(role);
+                        });
+                        const typeOrder = [
+                          "Habitant",
+                          "Étranger",
+                          "Acolyte",
+                          "Démon",
+                        ];
+                        return typeOrder
+                          .filter((type) => types[type])
+                          .map((type) => (
+                            <div key={type} style={{ marginBottom: "1.2rem" }}>
+                              <div
+                                style={{
+                                  fontWeight: "bold",
+                                  fontSize: "1.1rem",
+                                                                    fontFamily: "IM Fell English SC, serif",
+
+                                  marginBottom: "0.5rem",
+                                  color: "black",
+                                }}
+                              >
+                                 {type}
+                              </div>
+                              <div
+                                style={{
+                                  display: "grid",
+                                  gridTemplateColumns: "1fr",
+                                  gap: "0.5rem",
+                                }}
+                              >
+                                {types[type].map((role) => (
+                                  <button
+                                    key={role.nom}
                                     style={{
-                                      width: "28px",
-                                      height: "28px",
-                                      borderRadius: "4px",
-                                      background: "#fff",
-                                      border: "1px solid #ccc",
+                                      background: "#f7f7fa",
+                                      color: "#156",
+                                      border: "1px solid #cdd",
+                                      borderRadius: "8px",
+                                      fontWeight: "bold",
+                                      fontSize: "1rem",
+                                      padding: "0.4rem 0.7rem 0.4rem 0.5rem",
+                                      marginBottom: "0.2rem",
+                                      cursor: "pointer",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "0.7rem",
+                                      boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                                      transition: "background 0.2s, color 0.2s, border 0.2s",
+                                      minHeight: "40px",
                                     }}
-                                    onError={(e) => {
-                                      e.target.style.display = "none";
+                                    onClick={() => {
+                                      setSelectedRole(role);
+                                      setRolesModalOpen(false);
                                     }}
-                                  />
-                                  {role.nom}
-                                </button>
-                              ))}
+                                  >
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "32px", width: "32px" }}>
+                                      <img
+                                        src={getRoleIcon(role)}
+                                        alt={role.nom}
+                                        style={{
+                                          width: "28px",
+                                          height: "28px",
+                                          borderRadius: "4px",
+                                          border: "none",
+                                          objectFit: "contain",
+                                          display: "block",
+                                        }}
+                                        onError={(e) => {
+                                          e.target.style.display = "none";
+                                        }}
+                                      />
+                                    </div>
+                                    <span style={{ flex: 1, textAlign: "left", display: "block" }}>{role.nom}</span>
+                                  </button>
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        ));
-                    })()}
+                          ));
+                      })()}
+                    </div>
+                    {/* Barre d'action en bas */}
+                    <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", marginTop: "1.2rem" }}>
+                      <button style={{ background: "#eee", color: "#222", border: "1px solid #bbb", borderRadius: "6px", padding: "0.5rem 1.2rem", fontWeight: "bold", cursor: "pointer" }} onClick={() => setRolesModalOpen(false)}>
+                        Fermer
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
@@ -3703,172 +3760,59 @@ useEffect(() => {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    backgroundColor: "#000",
+                    background: "#fff",
                     zIndex: 401,
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
-                  <div
+                  <button
+                    onClick={() => setSelectedRole(null)}
                     style={{
-                      background: "#111",
-                      color: "#fff",
-                      borderRadius: "12px",
-                      padding: "2.5rem 2rem",
-                      minWidth: "320px",
-                      boxShadow: "0 2px 12px rgba(0,0,0,0.4)",
-                      position: "relative",
-                      textAlign: "center",
+                      position: "absolute",
+                      top: "1.2rem",
+                      right: "1.2rem",
+                      fontSize: "2.2rem",
+                      color: "black",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      zIndex: 2,
                     }}
                   >
-                    <button
-                      onClick={() => setSelectedRole(null)}
-                      style={{
-                        position: "absolute",
-                        top: "1rem",
-                        right: "1rem",
-                        fontSize: "1.5rem",
-                        color: "#fff",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                      }}
-                    >
-                      ×
-                    </button>
-                    <img
-                      src={getRoleIcon(selectedRole)}
-                      alt={selectedRole.nom}
-                      style={{
-                        width: "64px",
-                        height: "64px",
-                        borderRadius: "8px",
-                        background: "#fff",
-                        border: "2px solid #fff",
-                        marginBottom: "1rem",
-                      }}
-                      onError={(e) => {
-                        e.target.style.display = "none";
-                      }}
-                    />
-                    <h2 style={{ marginBottom: "1.2rem", fontSize: "2rem" }}>
+                    ×
+                  </button>
+                  <div style={{ width: "100%", maxWidth: "420px", margin: "0 auto", textAlign: "center", padding: "3.5rem 1.5rem 2.5rem 1.5rem", color: selectedRole.alignement === "Bon" ? "#0e74b4" : selectedRole.alignement === "Maléfique" ? "#950f13" : "#222" }}>
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", marginBottom: "2rem" }}>
+                      <img
+                        src={getRoleIcon(selectedRole)}
+                        alt={selectedRole.nom}
+                        style={{
+                          width: "150px",
+                          height: "150px",
+                          background: "none",
+                          borderRadius: 0,
+                          border: "none",
+                          display: "block",
+                        }}
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                        }}
+                      />
+                    </div>
+                    <h2 style={{ marginBottom: "1.2rem", fontSize: "3rem", fontFamily: "IM Fell English SC, serif", fontWeight: 700 }}>
                       {selectedRole.nom}
                     </h2>
-                    <div style={{ fontSize: "1rem" }}>
+                    <div style={{ fontSize: "1.15rem", fontFamily: "Cardo, serif" }}>
                       {selectedRole.description}
                     </div>
                   </div>
                 </div>
               )}
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "1rem 2rem",
-                  marginBottom: "1.2rem",
-                }}
-              >
-                {/* First row */}
-                <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
-                  {jetonsInfoButtons.slice(0, 3).map((btn) => (
-                    <button
-                      key={btn.page}
-                      onClick={() => setJetonInfoPage(btn.page)}
-                      style={{
-                        background: btn.color,
-                        color: btn.textColor,
-                        border: "none",
-                        borderRadius: "6px",
-                        fontWeight: "bold",
-                        fontSize: "1.1rem",
-                        padding: "0.5rem 0.8rem",
-                        flex: 1,
-                        minWidth: "180px",
-                        marginBottom: "0.5rem",
-                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {btn.label}
-                    </button>
-                  ))}
-                </div>
-                {/* Second row */}
-                <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
-                  {jetonsInfoButtons.slice(3, 6).map((btn) => (
-                    <button
-                      key={btn.page}
-                      onClick={() => setJetonInfoPage(btn.page)}
-                      style={{
-                        background: btn.color,
-                        color: btn.textColor,
-                        border: "none",
-                        borderRadius: "6px",
-                        fontWeight: "bold",
-                        fontSize: "1.1rem",
-                        padding: "0.5rem 0.8rem",
-                        flex: 1,
-                        minWidth: "180px",
-                        marginBottom: "0.5rem",
-                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {btn.label}
-                    </button>
-                  ))}
-                </div>
-                {/* Third row */}
-                <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
-                  {jetonsInfoButtons.slice(6, 10).map((btn) => (
-                    <button
-                      key={btn.page}
-                      onClick={() => setJetonInfoPage(btn.page)}
-                      style={{
-                        background: btn.color,
-                        color: btn.textColor,
-                        border: "none",
-                        borderRadius: "6px",
-                        fontWeight: "bold",
-                        fontSize: "1.1rem",
-                        padding: "0.5rem 0.8rem",
-                        flex: 1,
-                        minWidth: "180px",
-                        marginBottom: "0.5rem",
-                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {btn.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "1.1rem",
-                  marginTop: "1rem",
-                  marginBottom: "0.5rem",
-                }}
-              >
-                Messages personnalisés
-              </div>
               <button
-                style={{
-                  background: "#7db3e6",
-                  color: "#234",
-                  border: "none",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                  fontSize: "1.1rem",
-                  padding: "0.5rem 0.8rem",
-                  minWidth: "220px",
-                  marginBottom: "0.5rem",
-                  boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                  cursor: "pointer",
-                }}
+                style={{ ...buttonStyle, width: "100%" }}
                 onClick={() => setAddCustomJetonVisible(true)}
               >
                 Ajouter un message
@@ -3942,7 +3886,7 @@ useEffect(() => {
                     <button
                       style={{
                         background: "#7db3e6",
-                        color: "#234",
+                        color: "black",
                         border: "none",
                         borderRadius: "6px",
                         fontWeight: "bold",
@@ -3964,39 +3908,6 @@ useEffect(() => {
                       Ajouter
                     </button>
                   </div>
-                </div>
-              )}
-              {/* Render custom jetons as buttons */}
-              {customJetons.length > 0 && (
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "0.5rem",
-                    marginTop: "0.5rem",
-                  }}
-                >
-                  {customJetons.map((txt, idx) => (
-                    <button
-                      key={idx}
-                      style={{
-                        background: "#7db3e6",
-                        color: "#234",
-                        border: "none",
-                        borderRadius: "6px",
-                        fontWeight: "bold",
-                        fontSize: "1.1rem",
-                        padding: "0.5rem 0.8rem",
-                        minWidth: "180px",
-                        marginBottom: "0.5rem",
-                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => setJetonInfoPage(`custom-${idx}`)}
-                    >
-                      {txt}
-                    </button>
-                  ))}
                 </div>
               )}
             </details>
@@ -4188,7 +4099,7 @@ useEffect(() => {
                 <div style={{ marginTop: "1rem" }}>
                   <button
                     className="btn"
-                    style={{ ...buttonStyle }}
+                    style={{ ...buttonStyle, width: "100%" }}
                     onClick={clearNotes}
                   >
                     Effacer les notes
