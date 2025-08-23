@@ -195,7 +195,7 @@
   },
   {
     "nom": "Horloger",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Tu commences la partie en connaissant le nombre de places séparant le démon de son acolyte le plus proche.",
     "type": "Habitant",
     "alignement": "Bon",
@@ -204,7 +204,7 @@
   },
   {
     "nom": "Rêveur",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit, choisis un joueur autre que toi. Tu apprends deux rôles (un bon et un maléfique). Le joueur choisi a l’un de ces deux rôles.",
     "type": "Habitant",
     "alignement": "Bon",
@@ -214,7 +214,7 @@
   },
   {
     "nom": "Sage",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Si le démon te tue, tu apprends qu’il se trouve parmi deux joueurs.",
     "type": "Habitant",
     "alignement": "Bon",
@@ -223,7 +223,7 @@
   },
   {
     "nom": "Artiste",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Une fois par partie, durant la journée, tu peux poser une question en privé au conteur. Il ne peut répondre que par oui ou par non.",
     "type": "Habitant",
     "alignement": "Bon",
@@ -231,7 +231,7 @@
   },
   {
     "nom": "Savant",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque jour, tu peux consulter le conteur en privé pour apprendre 2 informations. L’une d’elles est fausse (tu ne sais pas laquelle).",
     "type": "Habitant",
     "alignement": "Bon",
@@ -239,7 +239,7 @@
   },
   {
     "nom": "Fille aux fleurs",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit (sauf la 1ère), tu apprends si un démon a voté aujourd’hui.",
     "type": "Habitant",
     "alignement": "Bon",
@@ -248,7 +248,7 @@
   },
   {
     "nom": "Oracle",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit, tu apprends combien de joueurs morts sont maléfiques.",
     "type": "Habitant",
     "alignement": "Bon",
@@ -257,7 +257,7 @@
   },
   {
     "nom": "Jongleur",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Le 1er jour, tu peux deviner le rôle de jusqu’à 5 personnes en public. La nuit, tu apprends combien de bonnes réponses tu as.",
     "type": "Habitant",
     "alignement": "Bon",
@@ -266,7 +266,7 @@
   },
   {
     "nom": "Mathématicien",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit, tu apprends combien de pouvoirs ont dysfonctionné à cause d’autres pouvoirs depuis l’aube.",
     "type": "Habitant",
     "alignement": "Bon",
@@ -276,7 +276,7 @@
   },
   {
     "nom": "Couturière",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Une fois par jeu, durant la nuit, choisis 2 joueurs autres que toi. Tu apprends s’ils sont du même alignement.",
     "type": "Habitant",
     "alignement": "Bon",
@@ -286,7 +286,7 @@
   },
   {
     "nom": "Crieur",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit (sauf la 1ère), tu apprends si un acolyte a nominé quelqu’un aujourd’hui.",
     "type": "Habitant",
     "alignement": "Bon",
@@ -295,7 +295,7 @@
   },
   {
     "nom": "Charmeur de serpents",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit, choisis un joueur en vie. S’il est un démon, vous échangez de rôle et d’alignement, et il devient empoisonné.",
     "type": "Habitant",
     "alignement": "Bon",
@@ -305,7 +305,7 @@
   },
   {
     "nom": "Philosophe",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Une fois par partie, durant la nuit, choisis un rôle bon. Tu en gagnes le pouvoir (s’il était déjà en jeu, le joueur au rôle choisi devient ivre).",
     "type": "Habitant",
     "alignement": "Bon",
@@ -315,7 +315,7 @@
   },
   {
     "nom": "Bien-aimée",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Si tu meurs, un joueur devient ivre.",
     "type": "Étranger",
     "alignement": "Bon",
@@ -324,7 +324,7 @@
   },
   {
     "nom": "Barbier",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Si tu es mort aujourd’hui ou cette nuit, un démon peut échanger le rôle de 2 joueurs (leur alignement ne change pas et il ne peut pas choisir un autre démon).",
     "type": "Étranger",
     "alignement": "Bon",
@@ -333,7 +333,7 @@
   },
   {
     "nom": "Sorcière",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit, choisis un joueur. S’il nomine quelqu’un le lendemain, il meurt. Tu perds ce pouvoir s’il ne reste que 3 joueurs en vie.",
     "type": "Acolyte",
     "alignement": "Maléfique",
@@ -343,7 +343,7 @@
   },
   {
     "nom": "Lobotomiste",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit, choisis un joueur et un rôle bon : il doit prétendre qu’il est ce rôle le lendemain ou il risque d’être exécuté.",
     "type": "Acolyte",
     "alignement": "Maléfique",
@@ -353,7 +353,7 @@
   },
   {
     "nom": "Guenaude",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur. Il devient un rôle de ton choix (s’il n’est pas déjà en jeu). Il garde son alignement. Si un démon est créé ainsi, les morts cette nuit sont arbitraires.",
     "type": "Acolyte",
     "alignement": "Maléfique",
@@ -362,7 +362,7 @@
   },
   {
     "nom": "Jumeau maléfique",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Toi et un joueur bon vous connaissez. Si ce joueur bon est exécuté, le mal gagne la partie. Le bien ne peut gagner la partie tant que les deux jumeaux sont en vie.",
     "type": "Acolyte",
     "alignement": "Maléfique",
@@ -371,7 +371,7 @@
   },
   {
     "nom": "Fang Gu",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur. Il meurt. Le 1er étranger que tu tues rejoint le mal et devient Fang Gu (tu meurs à sa place). Cet effet ne peut s’activer qu’une fois par partie. [+1 étranger]",
     "type": "Démon",
     "alignement": "Maléfique",
@@ -380,7 +380,7 @@
   },
   {
     "nom": "Vigormortis",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur. Il meurt. Les acolytes tués ainsi gardent leur pouvoir et empoisonnent l’habitant le plus proche d’eux.  [-1 étranger]",
     "type": "Démon",
     "alignement": "Maléfique",
@@ -389,7 +389,7 @@
   },
   {
     "nom": "No Dashii",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur. Il meurt. Les 2 habitants les plus proches de toi sont empoisonnés.",
     "type": "Démon",
     "alignement": "Maléfique",
@@ -398,7 +398,7 @@
   },
   {
     "nom": "Vortox",
-    "edition": "Parfums d’hystérie",
+    "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit (sauf la 1ère), choisis un joueur. Il meurt. Les pouvoirs des habitants donnent de fausses informations. Chaque jour, si aucune exécution n’a eu lieu, le mal gagne la partie.",
     "type": "Démon",
     "alignement": "Maléfique",
