@@ -205,7 +205,7 @@ export default function App() {
 
   const urlPDF = {
     "Sombre présage": "docs/minuitsonnerouge-sombrepresage.pdf",
-    "Parfums d’hystérie": "docs/minuitsonnerouge-parfumsdhysterie.pdf",
+    "Parfum d’hystérie": "docs/minuitsonnerouge-parfumdhysterie.pdf",
     "Crépuscule funeste": "docs/minuitsonnerouge-crepusculefuneste.pdf",
   };
   // Quand on passe de "pas tous attribués" -> "tous attribués"
@@ -1192,15 +1192,7 @@ export default function App() {
                     >
                       {label} ({selectedCount}/{expectedCount})
                     </summary>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(2, 1fr)",
-                        gap: "0.5rem",
-                        marginTop: "1rem",
-                        width: "100%",
-                      }}
-                    >
+                    <div style={{ marginTop: "1rem", width: "100%" }}>
                       {rolesDuType.map((role) => {
                         const isSelected = selected.some(
                           (r) => r.nom === role.nom
@@ -1208,7 +1200,7 @@ export default function App() {
                         const greyed = rolesValides && !isSelected;
                         const isDisabled = greyed;
                         return (
-                          <div
+                          <button
                             key={role.nom}
                             onClick={() => {
                               if (!isDisabled && !rolesValides)
@@ -1232,53 +1224,54 @@ export default function App() {
                                   : "pointer",
                               opacity: isDisabled ? 0.5 : 1,
                               display: "flex",
-                              flexDirection: "column",
+                              flexDirection: "row",
                               alignItems: "center",
                               justifyContent: "flex-start",
                               borderRadius: 8,
-                              textAlign: "center",
+                              textAlign: "left",
                               width: "100%",
-                              minWidth: "90px",
-                              maxWidth: "180px",
-                              minHeight: "120px",
-                              padding: "0.5rem 0.2rem",
-                              gap: "0.3rem",
+                              minHeight: "70px",
+                              padding: "0.7rem 1rem",
+                              gap: "1rem",
+                              marginBottom: "0.5rem",
                             }}
                           >
                             <img
                               src={`icons/icon_${normalizeNom(role.nom)}.png`}
                               alt={role.nom}
                               style={{
-                                width: "40px",
-                                height: "40px",
+                                width: "48px",
+                                height: "48px",
                                 objectFit: "contain",
+                                flexShrink: 0,
                               }}
                             />
-                            <div
-                              style={{
-                                fontFamily: "'IM Fell English SC', serif",
-                                fontSize: "1rem",
-                                color:
-                                  role.alignement === "Bon"
-                                    ? "#0e74b4"
-                                    : "#950f13",
-                                fontWeight: "bold",
-                                marginTop: 6,
-                              }}
-                            >
-                              {role.nom}
+                            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                              <div
+                                style={{
+                                  fontFamily: "'IM Fell English SC', serif",
+                                  fontSize: "1.1rem",
+                                  color:
+                                    role.alignement === "Bon"
+                                      ? "#0e74b4"
+                                      : "#950f13",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {role.nom}
+                              </div>
+                              <div
+                                style={{
+                                  fontFamily: "Cardo, serif",
+                                  fontSize: "0.95rem",
+                                  color: "#222",
+                                  marginTop: "0.2rem",
+                                }}
+                              >
+                                {role.description || role.pouvoir || "Pouvoir du rôle..."}
+                              </div>
                             </div>
-                            <div
-                              style={{
-                                fontFamily: "Cardo, serif",
-                                fontSize: "0.8rem",
-                                maxWidth: "22ch",
-                                marginTop: 2,
-                              }}
-                            >
-                              {role.pouvoir}
-                            </div>
-                          </div>
+                          </button>
                         );
                       })}
                     </div>
