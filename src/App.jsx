@@ -1344,48 +1344,59 @@ export default function App() {
             >
               <summary>Ordre de réveil</summary>
               <>
-                <div style={{ display: "flex", gap: 0, marginBottom: "1rem" }}>
+                {/* Toggle Première nuit / Autres nuits – style alignement */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    width: "100%",
+                    borderRadius: 8,
+                    gap: "0.5rem",
+                    overflow: "hidden",
+                    margin: "0.5rem 0 1rem 0",
+                  }}
+                >
                   <button
+                    type="button"
                     onClick={() => setOrdreNuitActuelle("premiere")}
                     style={{
-                      border:
-                        ordreNuitActuelle === "premiere"
-                          ? "2px solid #888"
-                          : "1px solid #ccc",
-                      borderRadius: "8px 0 0 8px",
-                      padding: "0.5rem 1.2rem",
+                      padding: "0.75rem",
+                      fontFamily: "Cardo, serif",
+                      fontSize: "1.1rem",
                       cursor: "pointer",
+                      border: "none",
+                      color: "white",
                       background:
                         ordreNuitActuelle === "premiere"
-                          ? "#e0e0e0"
-                          : "#fafafa",
-                      color: ordreNuitActuelle === "premiere" ? "#222" : "#333",
-                      fontWeight: "bold",
-                      outline: "none",
+                          ? "#6a6a6aff" // actif
+                          : "rgba(200,200,200,0.3)", // inactif (gris)
+                      transition: "background 0.2s",
                     }}
                   >
                     Première nuit
                   </button>
+
                   <button
+                    type="button"
                     onClick={() => setOrdreNuitActuelle("autres")}
                     style={{
-                      border:
-                        ordreNuitActuelle === "autres"
-                          ? "2px solid #888"
-                          : "1px solid #ccc",
-                      borderRadius: "0 8px 8px 0",
-                      padding: "0.5rem 1.2rem",
+                      padding: "0.75rem",
+                      fontFamily: "Cardo, serif",
+                      fontSize: "1.1rem",
                       cursor: "pointer",
+                      border: "none",
+                      color: "white",
                       background:
-                        ordreNuitActuelle === "autres" ? "#e0e0e0" : "#fafafa",
-                      color: ordreNuitActuelle === "autres" ? "#222" : "#333",
-                      fontWeight: "bold",
-                      outline: "none",
+                        ordreNuitActuelle === "autres"
+                          ? "#6a6a6aff" // actif
+                          : "rgba(200,200,200,0.3)", // inactif (gris)
+                      transition: "background 0.2s",
                     }}
                   >
                     Autres nuits
                   </button>
                 </div>
+
                 <div>
                   <div
                     key="crepuscule"
@@ -1946,375 +1957,346 @@ export default function App() {
                   borderRadius: "8px",
                 }}
               >
-                <details className="collapsible" open>
-                  <summary
-                    style={{
-                      // fontWeight: "bold",
-                      fontSize: "calc(var(--h2-size) * 0.9)",
-                      fontFamily: "'Cardo', serif",
-                      padding: "1rem",
-                      // cursor: "pointer",
-                      color: "#950f13",
-                    }}
-                  >
-                    Bluffs du démon
-                  </summary>
-                  {afficherRepartition && !bluffsValides && (
-                    <>
-                      <div
-                        style={{
-                          marginTop: "2rem",
-                          display: "flex",
-                          alignItems: "center",
-                          background: "#f8f8f8",
-                          borderRadius: "16px",
-                          boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                          padding: "1rem",
-                          cursor: "pointer",
-                          border: "2px solid #e0e0e0",
-                          width: "fit-content",
-                          transition: "background 0.2s, transform 0.2s",
-                          opacity: bluffsValides ? 0.5 : 1,
-                        }}
-                        onClick={() => {
-                          setEditBluffsModal(true);
-                          setEditBluffsTemp(bluffs.length > 0 ? bluffs : []);
-                          setErreurBluffs("");
-                        }}
-                      >
-                        <div style={{ display: "flex", gap: "1.5rem" }}>
-                          {bluffs.length === 3
-                            ? rolesBonsNonAttribués
-                                .filter((role) =>
-                                  bluffs.some((b) => b.nom === role.nom)
-                                )
-                                .map((role) => (
-                                  <img
-                                    key={role.nom}
-                                    src={`icons/icon_${normalizeNom(
-                                      role.nom
-                                    )}.png`}
-                                    alt={role.nom}
-                                    style={{
-                                      height: "48px",
-                                      width: "48px",
-                                      objectFit: "contain",
-                                    }}
-                                  />
-                                ))
-                            : [1, 2, 3].map((i) => (
-                                <span
-                                  key={i}
-                                  style={{
-                                    fontSize: "2.8rem",
-                                    color: "#bbb",
-                                    fontWeight: "bold",
-                                    lineHeight: 1,
-                                    margin: "0 0.2rem",
-                                  }}
-                                >
-                                  ?
-                                </span>
-                              ))}
-                        </div>
-                      </div>
-                    </>
-                  )}
-                  {afficherRepartition &&
-                    choisirBluffsVisible &&
-                    !bluffsValides && (
-                      <div
-                        style={{
-                          margin: "1rem 0",
-                          background: "#fff",
-                          borderRadius: 8,
-                          padding: "1rem",
-                        }}
-                      >
-                        <h2 style={{ fontFamily: "Cardo, serif" }}>
-                          Sélectionne 3 rôles de bluff :
-                        </h2>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: "0.5rem",
-                          }}
-                        >
-                          {rolesBonsNonAttribués.map((role) => {
-                            const isSelected = bluffs.some(
-                              (r) => r.nom === role.nom
-                            );
-                            const isDisabled =
-                              !isSelected && bluffs.length >= 3;
-                            return (
-                              <div
-                                key={role.nom}
-                                onClick={() => {
-                                  if (isSelected) {
-                                    setBluffs(
-                                      bluffs.filter((r) => r.nom !== role.nom)
-                                    );
-                                  } else if (!isDisabled) {
-                                    setBluffs([...bluffs, role]);
-                                  }
-                                  setErreurBluffs("");
-                                }}
-                                style={{
-                                  border: isSelected
-                                    ? "2px solid #0e74b4"
-                                    : "1px solid #ccc",
-                                  borderRadius: 8,
-                                  padding: "0.5rem",
-                                  cursor: isDisabled
-                                    ? "not-allowed"
-                                    : "pointer",
-                                  opacity: isDisabled ? 0.5 : 1,
-                                  background: isSelected
-                                    ? "#e6f0fa"
-                                    : "#fafafa",
-                                  width: 180,
-                                  textAlign: "center",
-                                }}
-                              >
+                <h4>Bluffs du démon</h4>
+
+                {afficherRepartition && !bluffsValides && (
+                  <>
+                    <div
+                      style={{
+                        marginTop: "2rem",
+                        display: "flex",
+                        alignItems: "center",
+                        background: "#f8f8f8",
+                        borderRadius: "16px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                        padding: "1rem",
+                        cursor: "pointer",
+                        border: "2px solid #e0e0e0",
+                        width: "fit-content",
+                        transition: "background 0.2s, transform 0.2s",
+                        opacity: bluffsValides ? 0.5 : 1,
+                      }}
+                      onClick={() => {
+                        setEditBluffsModal(true);
+                        setEditBluffsTemp(bluffs.length > 0 ? bluffs : []);
+                        setErreurBluffs("");
+                      }}
+                    >
+                      <div style={{ display: "flex", gap: "1.5rem" }}>
+                        {bluffs.length === 3
+                          ? rolesBonsNonAttribués
+                              .filter((role) =>
+                                bluffs.some((b) => b.nom === role.nom)
+                              )
+                              .map((role) => (
                                 <img
+                                  key={role.nom}
                                   src={`icons/icon_${normalizeNom(
                                     role.nom
                                   )}.png`}
                                   alt={role.nom}
                                   style={{
-                                    width: 48,
-                                    height: 48,
+                                    height: "48px",
+                                    width: "48px",
                                     objectFit: "contain",
                                   }}
                                 />
-                                <div
-                                  style={{
-                                    fontFamily: "Cardo, serif",
-                                    fontWeight: "bold",
-                                    marginTop: 8,
-                                  }}
-                                >
-                                  {role.nom}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                        {erreurBluffs && (
-                          <div
-                            style={{
-                              color: "#950f13",
-                              margin: "1rem 0",
-                              fontFamily: "Cardo, serif",
-                            }}
-                          >
-                            {erreurBluffs}
-                          </div>
-                        )}
-                        <button
-                          onClick={() => {
-                            if (bluffs.length !== 3) {
-                              setErreurBluffs(
-                                "Il faut sélectionner exactement 3 rôles de bluff."
-                              );
-                            } else {
-                              setBluffsValides(true);
-                              setChoisirBluffsVisible(false);
-                            }
-                          }}
-                          style={{
-                            ...buttonStyle,
-                            marginTop: "1rem",
-                            cursor:
-                              bluffs.length === 3 ? "pointer" : "not-allowed",
-                            opacity: bluffs.length === 3 ? 1 : 0.5,
-                          }}
-                          disabled={bluffs.length !== 3}
-                        >
-                          Valider bluffs
-                        </button>
+                              ))
+                          : [1, 2, 3].map((i) => (
+                              <span
+                                key={i}
+                                style={{
+                                  fontSize: "2.8rem",
+                                  color: "#bbb",
+                                  fontWeight: "bold",
+                                  lineHeight: 1,
+                                  margin: "0 0.2rem",
+                                }}
+                              >
+                                ?
+                              </span>
+                            ))}
                       </div>
-                    )}
-                </details>
-                <details className="collapsible" open>
-                  <summary
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "calc(var(--h2-size) * 0.9)",
-                      fontFamily: "'Cardo', serif",
-                      padding: "1rem",
-                    }}
-                  >
-                    Joueurs
-                  </summary>
-                  {Object.entries(joueursAttribues).map(
-                    ([index, joueur], idx) => (
+                    </div>
+                  </>
+                )}
+                {afficherRepartition &&
+                  choisirBluffsVisible &&
+                  !bluffsValides && (
+                    <div
+                      style={{
+                        margin: "1rem 0",
+                        background: "#fff",
+                        borderRadius: 8,
+                        padding: "1rem",
+                      }}
+                    >
+                      <h2 style={{ fontFamily: "Cardo, serif" }}>
+                        Sélectionne 3 rôles de bluff :
+                      </h2>
                       <div
-                        key={index}
                         style={{
                           display: "flex",
-                          alignItems: "center",
+                          flexWrap: "wrap",
                           gap: "0.5rem",
-                          ...(idx === 0 ? { marginTop: "1rem" } : {}),
-                          marginBottom: "1rem",
-                          background: joueur.mort ? "#e0e0e0" : "#f8f8f8",
-                          borderRadius: "16px",
-                          boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                          padding: "1rem",
-                          transition: "background 0.2s, transform 0.2s",
-                          cursor: "pointer",
-                          position: "relative",
-                          border: "2px solid #e0e0e0",
                         }}
-                        onClick={() =>
-                          setNomEditModal({ index, nom: joueur.nom })
-                        }
-                        onTouchStart={(e) =>
-                          (e.currentTarget.style.background = joueur.mort
-                            ? "#d0d0d0"
-                            : "#e6f0fa")
-                        }
-                        onTouchEnd={(e) =>
-                          (e.currentTarget.style.background = joueur.mort
-                            ? "#e0e0e0"
-                            : "#f8f8f8")
-                        }
-                        onMouseDown={(e) =>
-                          (e.currentTarget.style.background = joueur.mort
-                            ? "#d0d0d0"
-                            : "#e6f0fa")
-                        }
-                        onMouseUp={(e) =>
-                          (e.currentTarget.style.background = joueur.mort
-                            ? "#e0e0e0"
-                            : "#f8f8f8")
-                        }
                       >
-                        <img
-                          src={`icons/icon_${normalizeNom(
-                            joueur.role.nom
-                          )}.png`}
-                          alt={joueur.role.nom}
-                          className="icon-lg"
-                          style={{ marginRight: "0.5rem" }}
-                        />
+                        {rolesBonsNonAttribués.map((role) => {
+                          const isSelected = bluffs.some(
+                            (r) => r.nom === role.nom
+                          );
+                          const isDisabled = !isSelected && bluffs.length >= 3;
+                          return (
+                            <div
+                              key={role.nom}
+                              onClick={() => {
+                                if (isSelected) {
+                                  setBluffs(
+                                    bluffs.filter((r) => r.nom !== role.nom)
+                                  );
+                                } else if (!isDisabled) {
+                                  setBluffs([...bluffs, role]);
+                                }
+                                setErreurBluffs("");
+                              }}
+                              style={{
+                                border: isSelected
+                                  ? "2px solid #0e74b4"
+                                  : "1px solid #ccc",
+                                borderRadius: 8,
+                                padding: "0.5rem",
+                                cursor: isDisabled ? "not-allowed" : "pointer",
+                                opacity: isDisabled ? 0.5 : 1,
+                                background: isSelected ? "#e6f0fa" : "#fafafa",
+                                width: 180,
+                                textAlign: "center",
+                              }}
+                            >
+                              <img
+                                src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                                alt={role.nom}
+                                style={{
+                                  width: 48,
+                                  height: 48,
+                                  objectFit: "contain",
+                                }}
+                              />
+                              <div
+                                style={{
+                                  fontFamily: "Cardo, serif",
+                                  fontWeight: "bold",
+                                  marginTop: 8,
+                                }}
+                              >
+                                {role.nom}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {erreurBluffs && (
+                        <div
+                          style={{
+                            color: "#950f13",
+                            margin: "1rem 0",
+                            fontFamily: "Cardo, serif",
+                          }}
+                        >
+                          {erreurBluffs}
+                        </div>
+                      )}
+                      <button
+                        onClick={() => {
+                          if (bluffs.length !== 3) {
+                            setErreurBluffs(
+                              "Il faut sélectionner exactement 3 rôles de bluff."
+                            );
+                          } else {
+                            setBluffsValides(true);
+                            setChoisirBluffsVisible(false);
+                          }
+                        }}
+                        style={{
+                          ...buttonStyle,
+                          marginTop: "1rem",
+                          cursor:
+                            bluffs.length === 3 ? "pointer" : "not-allowed",
+                          opacity: bluffs.length === 3 ? 1 : 0.5,
+                        }}
+                        disabled={bluffs.length !== 3}
+                      >
+                        Valider bluffs
+                      </button>
+                    </div>
+                  )}
 
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                <h4>Joueurs</h4>
+
+                {Object.entries(joueursAttribues).map(
+                  ([index, joueur], idx) => (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        ...(idx === 0 ? { marginTop: "1rem" } : {}),
+                        marginBottom: "1rem",
+                        background: joueur.mort ? "#e0e0e0" : "#f8f8f8",
+                        borderRadius: "16px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                        padding: "1rem",
+                        transition: "background 0.2s, transform 0.2s",
+                        cursor: "pointer",
+                        position: "relative",
+                        border: "2px solid #e0e0e0",
+                      }}
+                      onClick={() =>
+                        setNomEditModal({ index, nom: joueur.nom })
+                      }
+                      onTouchStart={(e) =>
+                        (e.currentTarget.style.background = joueur.mort
+                          ? "#d0d0d0"
+                          : "#e6f0fa")
+                      }
+                      onTouchEnd={(e) =>
+                        (e.currentTarget.style.background = joueur.mort
+                          ? "#e0e0e0"
+                          : "#f8f8f8")
+                      }
+                      onMouseDown={(e) =>
+                        (e.currentTarget.style.background = joueur.mort
+                          ? "#d0d0d0"
+                          : "#e6f0fa")
+                      }
+                      onMouseUp={(e) =>
+                        (e.currentTarget.style.background = joueur.mort
+                          ? "#e0e0e0"
+                          : "#f8f8f8")
+                      }
+                    >
+                      <img
+                        src={`icons/icon_${normalizeNom(joueur.role.nom)}.png`}
+                        alt={joueur.role.nom}
+                        className="icon-lg"
+                        style={{ marginRight: "0.5rem" }}
+                      />
+
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <span
+                          style={{
+                            flex: 1,
+                            fontFamily: "Cardo, serif",
+                            fontWeight: "bold",
+                            fontSize: "1.2rem",
+                            color:
+                              joueur.alignement === "Bon"
+                                ? "#0e74b4"
+                                : joueur.alignement === "Maléfique"
+                                ? "#950f13"
+                                : "#222",
+                            padding: "0.5rem 0",
+                            borderRadius: "8px",
+                            textAlign: "left",
+                            userSelect: "none",
+                            //    textDecoration: joueur.mort ? "line-through" : "none",
+                          }}
+                        >
+                          {joueur.nom}
+                        </span>
+                        {joueur.mort && (
                           <span
                             style={{
-                              flex: 1,
-                              fontFamily: "Cardo, serif",
-                              fontWeight: "bold",
-                              fontSize: "1.2rem",
-                              color:
-                                joueur.alignement === "Bon"
-                                  ? "#0e74b4"
-                                  : joueur.alignement === "Maléfique"
-                                  ? "#950f13"
-                                  : "#222",
-                              padding: "0.5rem 0",
-                              borderRadius: "8px",
-                              textAlign: "left",
-                              userSelect: "none",
-                              //    textDecoration: joueur.mort ? "line-through" : "none",
+                              marginLeft: "0.5rem",
+                              fontSize: "1.3rem",
+                              verticalAlign: "middle",
                             }}
                           >
-                            {joueur.nom}
+                            <img
+                              src="icons/mort.png"
+                              alt="Mort icon"
+                              style={{
+                                width: 32,
+                                height: 32,
+                                verticalAlign: "middle",
+                              }}
+                            />
                           </span>
-                          {joueur.mort && (
-                            <span
+                        )}
+                        {/* Vote icon after mort icon if mort is true */}
+                        {joueur.mort && joueur.token && (
+                          <span
+                            style={{
+                              marginLeft: "0.2rem",
+                              fontSize: "1.3rem",
+                              verticalAlign: "middle",
+                            }}
+                          >
+                            <img
+                              src="icons/vote.png"
+                              alt="Vote icon"
                               style={{
-                                marginLeft: "0.5rem",
-                                fontSize: "1.3rem",
+                                width: 32,
+                                height: 32,
                                 verticalAlign: "middle",
                               }}
-                            >
-                              <img
-                                src="icons/mort.png"
-                                alt="Mort icon"
-                                style={{
-                                  width: 32,
-                                  height: 32,
-                                  verticalAlign: "middle",
-                                }}
-                              />
-                            </span>
-                          )}
-                          {/* Vote icon after mort icon if mort is true */}
-                          {joueur.mort && joueur.token && (
-                            <span
-                              style={{
-                                marginLeft: "0.2rem",
-                                fontSize: "1.3rem",
-                                verticalAlign: "middle",
-                              }}
-                            >
-                              <img
-                                src="icons/vote.png"
-                                alt="Vote icon"
-                                style={{
-                                  width: 32,
-                                  height: 32,
-                                  verticalAlign: "middle",
-                                }}
-                              />
-                            </span>
-                          )}
+                            />
+                          </span>
+                        )}
 
-                          {(Array.isArray(joueur.anciensRoles)
-                            ? joueur.anciensRoles
-                            : []
-                          ).map((r, idx) => (
-                            <span
-                              key={`${r.nom}-${idx}`}
-                              title={`Ancien rôle : ${r.nom}`}
+                        {(Array.isArray(joueur.anciensRoles)
+                          ? joueur.anciensRoles
+                          : []
+                        ).map((r, idx) => (
+                          <span
+                            key={`${r.nom}-${idx}`}
+                            title={`Ancien rôle : ${r.nom}`}
+                            style={{
+                              marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
+                              verticalAlign: "middle",
+                            }}
+                          >
+                            <img
+                              src={`icons/icon_${normalizeNom(r.nom)}.png`}
+                              alt={r.nom}
+                              className="icon-md"
                               style={{
-                                marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
+                                width: 32,
+                                height: 32,
                                 verticalAlign: "middle",
+                                objectFit: "contain",
+                                filter:
+                                  "grayscale(1) brightness(0.9) contrast(0.9)",
+                                opacity: 0.85,
                               }}
-                            >
-                              <img
-                                src={`icons/icon_${normalizeNom(r.nom)}.png`}
-                                alt={r.nom}
-                                className="icon-md"
-                                style={{
-                                  width: 32,
-                                  height: 32,
-                                  verticalAlign: "middle",
-                                  objectFit: "contain",
-                                  filter:
-                                    "grayscale(1) brightness(0.9) contrast(0.9)",
-                                  opacity: 0.85,
-                                }}
-                              />
-                            </span>
-                          ))}
+                            />
+                          </span>
+                        ))}
 
-                          {(Array.isArray(joueur.rappelRoles)
-                            ? joueur.rappelRoles
-                            : []
-                          ).map((r, idx) => (
-                            <span
-                              key={r.nom}
-                              style={{
-                                marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
-                                fontSize: "1.3rem",
-                                verticalAlign: "middle",
-                              }}
-                            >
-                              <img
-                                src={`icons/icon_${normalizeNom(r.nom)}.png`}
-                                alt={r.nom}
-                                className="icon-md"
-                              />
-                            </span>
-                          ))}
-                        </div>
+                        {(Array.isArray(joueur.rappelRoles)
+                          ? joueur.rappelRoles
+                          : []
+                        ).map((r, idx) => (
+                          <span
+                            key={r.nom}
+                            style={{
+                              marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
+                              fontSize: "1.3rem",
+                              verticalAlign: "middle",
+                            }}
+                          >
+                            <img
+                              src={`icons/icon_${normalizeNom(r.nom)}.png`}
+                              alt={r.nom}
+                              className="icon-md"
+                            />
+                          </span>
+                        ))}
                       </div>
-                    )
-                  )}
-                </details>
+                    </div>
+                  )
+                )}
+
                 {/* Bluffs du démon section */}
                 {bluffsValides && bluffs.length === 3 ? (
                   <div
@@ -2375,170 +2357,288 @@ export default function App() {
                     </div>
                   </div>
                 ) : null}
-                {/* Modal for editing bluffs */}
-                {typeof setEditBluffsModal !== "undefined" &&
-                  editBluffsModal && (
+                {/* Modal pour éditer les bluffs — style identique à la modale "Script personnalisé" */}
+                {editBluffsModal && (
+                  <div
+                    style={{
+                      position: "fixed",
+                      inset: 0,
+                      background: "rgba(0,0,0,0.6)",
+                      zIndex: 500,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {/* BOÎTE PLEIN ÉCRAN */}
                     <div
                       style={{
+                        background: "#fff",
+                        color: "#222",
                         position: "fixed",
                         top: 0,
-                        left: 0,
                         right: 0,
                         bottom: 0,
-                        backgroundColor: "rgba(0,0,0,0.5)",
-                        zIndex: 30,
+                        left: 0,
+                        width: "auto",
+                        height: "auto",
+                        borderRadius: 0,
                         display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        flexDirection: "column",
+                        overflow: "hidden", // le corps scrolle, pas l’en-tête
+                        minHeight: "-webkit-fill-available",
+                        paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                        paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                        paddingBottom:
+                          "calc(1rem + env(safe-area-inset-bottom))",
+                        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                        WebkitOverflowScrolling: "touch",
+                        overscrollBehavior: "contain",
+                        fontFamily: "Cardo, serif",
+                        zIndex: 501,
                       }}
+                      role="dialog"
+                      aria-modal="true"
                     >
-                      <div
+                      {/* CROIX FERMER */}
+                      <button
+                        onClick={() => setEditBluffsModal(false)}
                         style={{
-                          background: "white",
-                          color: "black",
-                          borderRadius: "10px",
-                          padding: "2rem",
-                          minWidth: "300px",
-                          boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                          position: "relative",
-                          maxWidth: "90vw",
-                          width: "100%",
+                          position: "absolute",
+                          top: "0.75rem",
+                          right: "0.75rem",
+                          border: "none",
+                          background: "none",
+                          fontSize: "1.5rem",
+                          cursor: "pointer",
+                          lineHeight: 1,
+                        }}
+                        aria-label="Fermer"
+                      >
+                        ×
+                      </button>
+
+                      <h3
+                        style={{
+                          marginTop: 0,
+                          marginBottom: "1rem",
+                          paddingRight: "2rem",
+                          fontFamily: "Pirata One, cursive",
                         }}
                       >
-                        <button
-                          onClick={() => setEditBluffsModal(false)}
-                          style={{
-                            position: "absolute",
-                            top: "1rem",
-                            right: "1rem",
-                            fontSize: "1.5rem",
-                            color: "#333",
-                            background: "none",
-                            border: "none",
-                            cursor: "pointer",
-                          }}
-                        >
-                          ✖
-                        </button>
+                        Choisir les bluffs du démon
+                      </h3>
+
+                      {/* CORPS SCROLLABLE */}
+                      <div
+                        style={{
+                          flex: 1,
+                          overflow: "auto",
+                          paddingBottom: "env(safe-area-inset-bottom)",
+                        }}
+                      >
+                        {/* Grille responsive de sections par type */}
                         <div
                           style={{
-                            fontFamily: "Cardo, serif",
-                            fontWeight: "bold",
-                            fontSize: "1.3rem",
-                            marginBottom: "1rem",
+                            display: "grid",
+                            gridTemplateColumns:
+                              "repeat(auto-fit, minmax(220px, 1fr))",
+                            gap: "1rem",
                           }}
                         >
-                          Attribuer les bluffs du démon
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: "0.5rem",
-                            justifyContent: "center",
-                            marginBottom: "1.5rem",
-                          }}
-                        >
-                          {rolesBonsNonAttribués.map((role) => {
-                            const isSelected = editBluffsTemp.some(
-                              (b) => b.nom === role.nom
-                            );
-                            const isDisabled =
-                              !isSelected && editBluffsTemp.length >= 3;
-                            return (
-                              <button
-                                key={role.nom}
-                                style={{
-                                  border: isSelected
-                                    ? "2px solid #0e74b4"
-                                    : "1px solid #bbb",
-                                  borderRadius: "8px",
-                                  background: isSelected
-                                    ? "#e6f0fa"
-                                    : "#f5f5f5",
-                                  color: "#222",
-                                  padding: "0.5rem",
-                                  cursor: isDisabled
-                                    ? "not-allowed"
-                                    : "pointer",
-                                  opacity: isDisabled ? 0.5 : 1,
-                                  width: "100px",
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  alignItems: "center",
-                                }}
-                                onClick={() => {
-                                  if (isSelected) {
-                                    setEditBluffsTemp(
-                                      editBluffsTemp.filter(
-                                        (b) => b.nom !== role.nom
-                                      )
-                                    );
-                                  } else if (!isDisabled) {
-                                    setEditBluffsTemp([
-                                      ...editBluffsTemp,
-                                      role,
-                                    ]);
-                                  }
-                                }}
+                          {["Habitant", "Étranger"].map((type) =>
+                            rolesBonsNonAttribués.some(
+                              (r) => r.type === type
+                            ) ? (
+                              <details
+                                key={type}
+                                className="collapsible"
+                                open
+                                style={{ marginBottom: ".5rem" }}
                               >
-                                <img
-                                  src={`icons/icon_${normalizeNom(
-                                    role.nom
-                                  )}.png`}
-                                  alt={role.nom}
+                                <summary
                                   style={{
-                                    height: "32px",
-                                    width: "32px",
-                                    objectFit: "contain",
-                                    marginBottom: "0.3rem",
-                                  }}
-                                />
-                                <span
-                                  style={{
-                                    fontSize: "0.95rem",
+                                    color: colorForType(type),
+                                    fontWeight: "bold",
+                                    fontSize: "calc(var(--h2-size) * 1)",
                                     fontFamily: "Cardo, serif",
                                   }}
                                 >
-                                  {role.nom}
-                                </span>
-                              </button>
-                            );
-                          })}
+                                  {typeToPlural[type]}{" "}
+                                  <span style={{ opacity: 1 }}>
+                                    (
+                                    {
+                                      editBluffsTemp.filter(
+                                        (x) => x.type === type
+                                      ).length
+                                    }
+                                    )
+                                  </span>
+                                </summary>
+
+                                {/* Grille 2 colonnes de boutons (icône + nom coloré) */}
+                                <div
+                                  style={{
+                                    display: "grid",
+                                    gridTemplateColumns:
+                                      "repeat(2, minmax(0, 1fr))",
+                                    gap: ".5rem",
+                                    marginTop: ".5rem",
+                                  }}
+                                >
+                                  {rolesBonsNonAttribués
+                                    .filter((r) => r.type === type)
+                                    .map((role) => {
+                                      const checked = editBluffsTemp.some(
+                                        (x) => x.nom === role.nom
+                                      );
+                                      const disabled =
+                                        !checked && editBluffsTemp.length >= 3;
+                                      const color = colorForType(type);
+                                      return (
+                                        <button
+                                          key={role.nom}
+                                          type="button"
+                                          aria-pressed={checked}
+                                          disabled={disabled}
+                                          onClick={() =>
+                                            setEditBluffsTemp((prev) =>
+                                              checked
+                                                ? prev.filter(
+                                                    (x) => x.nom !== role.nom
+                                                  )
+                                                : prev.length < 3
+                                                ? [...prev, role]
+                                                : prev
+                                            )
+                                          }
+                                          style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: ".5rem",
+                                            padding: ".45rem .6rem",
+                                            borderRadius: 8,
+                                            border: checked
+                                              ? `2px solid ${color}`
+                                              : "1px solid #ccc",
+                                            background: checked
+                                              ? "rgba(0,0,0,0.03)"
+                                              : "#fff",
+                                            cursor: disabled
+                                              ? "not-allowed"
+                                              : "pointer",
+                                            textAlign: "left",
+                                            width: "100%",
+                                            opacity: disabled ? 0.5 : 1,
+                                          }}
+                                        >
+                                          <img
+                                            src={getRoleIcon(role)}
+                                            alt=""
+                                            style={{
+                                              width: 24,
+                                              height: 24,
+                                              borderRadius: 4,
+                                              border: "1px solid #ddd",
+                                              flex: "0 0 auto",
+                                            }}
+                                            onError={(ev) =>
+                                              (ev.currentTarget.style.display =
+                                                "none")
+                                            }
+                                          />
+                                          <span
+                                            style={{
+                                              color,
+                                              fontWeight: "bold",
+                                            }}
+                                          >
+                                            {role.nom}
+                                          </span>
+                                        </button>
+                                      );
+                                    })}
+                                </div>
+                              </details>
+                            ) : null
+                          )}
                         </div>
+                      </div>
+
+                      {/* PIED (visible en bas) */}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          marginTop: "1rem",
+                        }}
+                      >
                         <button
-                          onClick={() => {
-                            if (editBluffsTemp.length === 3) {
-                              // Always set bluffs in modal display order
-                              const orderedBluffs =
-                                rolesBonsNonAttribués.filter((role) =>
-                                  editBluffsTemp.some((b) => b.nom === role.nom)
-                                );
-                              setBluffs(orderedBluffs);
-                              setEditBluffsModal(false);
-                            }
-                          }}
+                          onClick={() => setEditBluffsTemp([])}
                           style={{
-                            background: "#0e74b4",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: "8px",
-                            padding: "0.7rem 2rem",
-                            fontFamily: "Cardo, serif",
-                            fontSize: "1.1rem",
-                            cursor:
-                              editBluffsTemp.length === 3
-                                ? "pointer"
-                                : "not-allowed",
-                            marginTop: "1rem",
+                            padding: ".5rem 1rem",
+                            borderRadius: 8,
+                            border: "1px solid #bbb",
+                            background: "#f5f5f5",
                           }}
-                          disabled={editBluffsTemp.length !== 3}
                         >
-                          Valider
+                          Vider
                         </button>
+                        <div style={{ display: "flex", gap: ".5rem" }}>
+                          <button
+                            onClick={() => {
+                              const pool = [...rolesBonsNonAttribués];
+                              for (let i = pool.length - 1; i > 0; i--) {
+                                const j = Math.floor(Math.random() * (i + 1));
+                                [pool[i], pool[j]] = [pool[j], pool[i]];
+                              }
+                              setEditBluffsTemp(
+                                pool.slice(0, Math.min(3, pool.length))
+                              );
+                            }}
+                            style={{
+                              padding: ".5rem 1rem",
+                              borderRadius: 8,
+                              border: "1px solid #bbb",
+                              background: "#f5f5f5",
+                            }}
+                          >
+                            Sélection aléatoire
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (editBluffsTemp.length === 3) {
+                                // Respecte l’ordre d’affichage de la liste filtrée
+                                const ordered = rolesBonsNonAttribués.filter(
+                                  (r) =>
+                                    editBluffsTemp.some((b) => b.nom === r.nom)
+                                );
+                                setBluffs(ordered);
+                                setEditBluffsModal(false);
+                              }
+                            }}
+                            disabled={editBluffsTemp.length !== 3}
+                            style={{
+                              padding: ".5rem 1rem",
+                              borderRadius: 8,
+                              border: "1px solid #0e74b4",
+                              background: "#0e74b4",
+                              color: "#fff",
+                              opacity: editBluffsTemp.length === 3 ? 1 : 0.6,
+                              cursor:
+                                editBluffsTemp.length === 3
+                                  ? "pointer"
+                                  : "not-allowed",
+                            }}
+                          >
+                            Valider ({editBluffsTemp.length}/3)
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  )}
+                  </div>
+                )}
+
                 {/* Modal for editing player name - FULLSCREEN */}
                 {nomEditModal &&
                   (() => {
