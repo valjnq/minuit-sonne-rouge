@@ -45,45 +45,46 @@ export default function App() {
   const jetonsInfoButtons = [
     {
       label: "Voici le démon",
-      color: "rgba(182, 33, 33, 1)",
+      color: "#950f13",
       page: "demon",
       content: "Voici le démon",
-      textColor: "black",
+      textColor: "white",
+      fontWeight: "bold",
     },
     {
       label: "Voici tes acolytes",
-      color: "rgba(182, 33, 33, 1)",
+      color: "#950f13",
       page: "acolytes",
       content: "Voici tes acolytes",
-      textColor: "black",
+      textColor: "white",
     },
     {
       label: "Bluffs du démon",
-      color: "rgba(182, 33, 33, 1)",
+      color: "#950f13",
       page: "not-in-game",
       content: "Ces rôles ne sont pas en jeu",
-      textColor: "black",
+      textColor: "white",
     },
     {
       label: "Tu es",
-      color: "#6294f9ff",
+      color: "#0e74b4",
       page: "you-are",
       content: "Tu es",
-      textColor: "black",
+      textColor: "white",
     },
     {
       label: "Ce joueur est",
-      color: "#6294f9ff",
+      color: "#0e74b4",
       page: "player-is",
       content: "Ce joueur est",
-      textColor: "black",
+      textColor: "white",
     },
     {
       label: "Utiliser ton pouvoir ?",
-      color: "#6294f9ff",
+      color: "#0e74b4",
       page: "use-power",
       content: "Utiliser ton pouvoir?",
-      textColor: "black",
+      textColor: "white",
     },
   ];
 
@@ -603,7 +604,7 @@ export default function App() {
                   fontWeight: 700,
                 }}
               >
-                Grimoire de poche
+                Grimoire virtuel
               </span>
             </div>
           </div>
@@ -1799,7 +1800,14 @@ export default function App() {
               )}
 
               {indexActif !== null && roleActif && (
-                <div style={{ textAlign: "center" }}>
+                <div style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingLeft: "1.5rem",
+                  paddingRight: "1.5rem"
+                }}>
                   <img
                     src={`icons/icon_${normalizeNom(roleActif.nom)}.png`}
                     alt={roleActif.nom}
@@ -2559,11 +2567,16 @@ export default function App() {
                           left: 0,
                           right: 0,
                           bottom: 0,
-                          backgroundColor: "rgba(0,0,0,0.5)",
-                          zIndex: 20,
+                          width: "100vw",
+                          height: "100vh",
+                          background: "rgba(255,255,255,0.98)",
+                          zIndex: 9999,
                           display: "flex",
+                          flexDirection: "column",
                           alignItems: "center",
                           justifyContent: "center",
+                          padding: "2rem",
+                          boxSizing: "border-box",
                         }}
                       >
                         <div
@@ -2575,7 +2588,7 @@ export default function App() {
                             minWidth: "300px",
                             boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
                             position: "relative",
-                            maxWidth: "90vw",
+                            maxWidth: "700px",
                             width: "100%",
                           }}
                         >
@@ -2814,8 +2827,6 @@ export default function App() {
                               marginBottom: "1rem",
                             }}
                           >
-                            {/* Save button removed, changes are now live */}
-                            {/* Rappel button and dropdown */}
                             <div style={{ position: "relative" }}>
                               <button
                                 style={{
@@ -2996,7 +3007,6 @@ export default function App() {
                                 </div>
                               )}
                             </div>
-                            {/* Remplacer button and dropdown */}
                             <div style={{ position: "relative" }}>
                               <button
                                 style={{
@@ -3532,8 +3542,16 @@ export default function App() {
             >
               <summary>Communication</summary>
               {/* Rôles button for communication */}
-              <div style={{ width: "100%", marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.7rem" }}>
-                {jetonsInfoButtons.map((btn, idx) => (
+              <div
+                style={{
+                  width: "100%",
+                  marginBottom: "1rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.7rem",
+                }}
+              >
+                {jetonsInfoButtons.map((btn, idx) =>
                   idx === 2 ? (
                     <React.Fragment key={btn.label + "-roles"}>
                       <button
@@ -3541,7 +3559,11 @@ export default function App() {
                         style={{
                           ...buttonStyle,
                           background: btn.color,
-                          color: btn.textColor,
+                          color: "#fff",
+                          //fontWeight: "bold",
+                          fontSize: "1.1rem",
+                          fontFamily: "Cardo, serif",
+                          boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                           margin: 0,
                           width: "100%",
                           alignSelf: "stretch",
@@ -3556,8 +3578,9 @@ export default function App() {
                           ...buttonStyle,
                           background: "#222",
                           color: "#fff",
-                          fontWeight: "bold",
+                          // fontWeight: "bold",
                           fontSize: "1.1rem",
+                          fontFamily: "Cardo, serif",
                           minWidth: "180px",
                           boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                         }}
@@ -3572,7 +3595,11 @@ export default function App() {
                       style={{
                         ...buttonStyle,
                         background: btn.color,
-                        color: btn.textColor,
+                        color: "#fff",
+                        //fontWeight: "bold",
+                        fontSize: "1.1rem",
+                        fontFamily: "Cardo, serif",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                         margin: 0,
                         width: "100%",
                         alignSelf: "stretch",
@@ -3582,10 +3609,18 @@ export default function App() {
                       {btn.label}
                     </button>
                   )
-                ))}
+                )}
                 {/* Ajout des messages personnalisés juste après le dernier bouton Communication */}
                 {customJetons.length > 0 && (
-                  <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "0.2rem" }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.5rem",
+                      marginBottom: "0.2rem",
+                    }}
+                  >
                     {customJetons.map((txt, idx) => (
                       <button
                         key={"custom-" + idx}
@@ -3595,7 +3630,7 @@ export default function App() {
                           color: "#222",
                           width: "100%",
                           alignSelf: "stretch",
-                          fontWeight: "bold",
+                          //fontWeight: "bold",
                           fontSize: "1.1rem",
                           border: "1px solid #bbb",
                         }}
@@ -3630,33 +3665,61 @@ export default function App() {
                       background: "#fff",
                       color: "#222",
                       borderRadius: 0,
-                      padding: "2rem 2rem 1.2rem 2rem",
                       boxShadow: "none",
                       position: "relative",
                       display: "flex",
                       flexDirection: "column",
-                      overflowY: "auto",
                     }}
                   >
-                    <button
-                      onClick={() => setRolesModalOpen(false)}
+                    {/* Sticky header */}
+                    <div
                       style={{
-                        position: "absolute",
-                        top: "1rem",
-                        right: "1rem",
-                        fontSize: "1.5rem",
-                        color: "#333",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
+                        position: "sticky",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        background: "#fff",
+                        zIndex: 2,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "2rem 2rem 0 2rem",
+                        borderBottom: "1px solid #eee",
                       }}
                     >
-                      ×
-                    </button>
-                    <h2 style={{ marginBottom: "1rem", fontWeight: "bold", fontFamily: "Pirata One, cursive", fontSize: "1.35rem" }}>
-                      Afficher un rôle
-                    </h2>
-                    <div style={{ width: "100%" }}>
+                      <h2
+                        style={{
+                          marginBottom: 0,
+                          fontWeight: "bold",
+                          fontFamily: "Pirata One, cursive",
+                          fontSize: "1.35rem",
+                        }}
+                      >
+                        Afficher un rôle
+                      </h2>
+                      <button
+                        onClick={() => setRolesModalOpen(false)}
+                        style={{
+                          fontSize: "1.5rem",
+                          color: "#333",
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          marginLeft: "1rem",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                    {/* Scrollable content below sticky header */}
+                    <div
+                      style={{
+                        width: "100%",
+                        flex: 1,
+                        overflowY: "auto",
+                        padding: "1.2rem 2rem 1.2rem 2rem",
+                      }}
+                    >
                       {(() => {
                         const types = {};
                         rolesFiltres.forEach((role) => {
@@ -3677,13 +3740,12 @@ export default function App() {
                                 style={{
                                   fontWeight: "bold",
                                   fontSize: "1.1rem",
-                                                                    fontFamily: "IM Fell English SC, serif",
-
+                                  fontFamily: "IM Fell English SC, serif",
                                   marginBottom: "0.5rem",
                                   color: "black",
                                 }}
                               >
-                                 {type}
+                                {type}
                               </div>
                               <div
                                 style={{
@@ -3709,7 +3771,8 @@ export default function App() {
                                       alignItems: "center",
                                       gap: "0.7rem",
                                       boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                                      transition: "background 0.2s, color 0.2s, border 0.2s",
+                                      transition:
+                                        "background 0.2s, color 0.2s, border 0.2s",
                                       minHeight: "40px",
                                     }}
                                     onClick={() => {
@@ -3717,7 +3780,15 @@ export default function App() {
                                       setRolesModalOpen(false);
                                     }}
                                   >
-                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "32px", width: "32px" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        height: "32px",
+                                        width: "32px",
+                                      }}
+                                    >
                                       <img
                                         src={getRoleIcon(role)}
                                         alt={role.nom}
@@ -3734,19 +3805,21 @@ export default function App() {
                                         }}
                                       />
                                     </div>
-                                    <span style={{ flex: 1, textAlign: "left", display: "block" }}>{role.nom}</span>
+                                    <span
+                                      style={{
+                                        flex: 1,
+                                        textAlign: "left",
+                                        display: "block",
+                                      }}
+                                    >
+                                      {role.nom}
+                                    </span>
                                   </button>
                                 ))}
                               </div>
                             </div>
                           ));
                       })()}
-                    </div>
-                    {/* Barre d'action en bas */}
-                    <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", marginTop: "1.2rem" }}>
-                      <button style={{ background: "#eee", color: "#222", border: "1px solid #bbb", borderRadius: "6px", padding: "0.5rem 1.2rem", fontWeight: "bold", cursor: "pointer" }} onClick={() => setRolesModalOpen(false)}>
-                        Fermer
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -3784,8 +3857,30 @@ export default function App() {
                   >
                     ×
                   </button>
-                  <div style={{ width: "100%", maxWidth: "420px", margin: "0 auto", textAlign: "center", padding: "3.5rem 1.5rem 2.5rem 1.5rem", color: selectedRole.alignement === "Bon" ? "#0e74b4" : selectedRole.alignement === "Maléfique" ? "#950f13" : "#222" }}>
-                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", marginBottom: "2rem" }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      maxWidth: "420px",
+                      margin: "0 auto",
+                      textAlign: "center",
+                      padding: "3.5rem 1.5rem 2.5rem 1.5rem",
+                      color:
+                        selectedRole.alignement === "Bon"
+                          ? "#0e74b4"
+                          : selectedRole.alignement === "Maléfique"
+                          ? "#950f13"
+                          : "#222",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: "100%",
+                        marginBottom: "2rem",
+                      }}
+                    >
                       <img
                         src={getRoleIcon(selectedRole)}
                         alt={selectedRole.nom}
@@ -3802,10 +3897,22 @@ export default function App() {
                         }}
                       />
                     </div>
-                    <h2 style={{ marginBottom: "1.2rem", fontSize: "3rem", fontFamily: "IM Fell English SC, serif", fontWeight: 700 }}>
+                    <h2
+                      style={{
+                        marginBottom: "1.2rem",
+                        fontSize: "3rem",
+                        fontFamily: "IM Fell English SC, serif",
+                        fontWeight: 700,
+                      }}
+                    >
                       {selectedRole.nom}
                     </h2>
-                    <div style={{ fontSize: "1.15rem", fontFamily: "Cardo, serif" }}>
+                    <div
+                      style={{
+                        fontSize: "1.15rem",
+                        fontFamily: "Cardo, serif",
+                      }}
+                    >
                       {selectedRole.description}
                     </div>
                   </div>
