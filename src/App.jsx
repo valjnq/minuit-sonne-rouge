@@ -3,6 +3,18 @@ import roles from "./roles-fr.json";
 import QRCode from "react-qr-code";
 import "./mobile.css";
 
+// Fonction utilitaire pour mettre en gras le texte entre crochets
+function renderBoldBrackets(text) {
+  if (!text) return null;
+  const parts = text.split(/(\[[^\]]+\])/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("[") && part.endsWith("]")) {
+      return <strong key={i}>{part}</strong>;
+    }
+    return part;
+  });
+}
+
 function normalizeNom(nom) {
   return nom
     .normalize("NFD")
@@ -566,42 +578,35 @@ export default function App() {
 
           {/* Titre */}
           <div
-            style={{ width: "100%", display: "flex", justifyContent: "center" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              marginBottom: "0rem",
+            }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.7em",
-                whiteSpace: "nowrap",
-                lineHeight: 1.1,
-                // Le groupe entier grandit/rétrécit selon l'espace dispo
-                fontSize: "clamp(20px, 5vw, 44px)",
-                maxWidth: "min(100%, 1100px)",
-              }}
-            >
+            <img
+              src={withBase("icons/grimoire.png")}
+              alt="Grimoire"
+              style={{ width: "72px", height: "72px", objectFit: "contain" }}
+            />
+            <div style={{ display: "flex", flexDirection: "column" }}>
               <span
                 style={{
-                  fontFamily: "'Pirata One', cursive",
+                  fontFamily: "Pirata One, cursive",
+                  fontSize: "2rem",
+                  fontWeight: "bold",
                   color: "#950f13",
-                  fontWeight: 700,
-                  letterSpacing: "0.02em",
                 }}
               >
-                Minuit sonne rouge
+                Minuit Sonne Rouge
               </span>
-
-              <img
-                src="icons/grimoire.png"
-                alt="Grimoire"
-                style={{ width: "1.6em", height: "1.6em", flex: "0 0 auto" }}
-              />
-
               <span
                 style={{
-                  fontFamily: "'Pirata One', cursive",
+                  fontFamily: "Pirata One, cursive",
+                  fontSize: "1.6rem",
+                  fontWeight: "bold",
                   color: "black",
-                  fontWeight: 700,
                 }}
               >
                 Grimoire virtuel
@@ -1321,9 +1326,7 @@ export default function App() {
                                   marginTop: "0.2rem",
                                 }}
                               >
-                                {role.description ||
-                                  role.pouvoir ||
-                                  "Pouvoir du rôle..."}
+                                {renderBoldBrackets(role.description || role.pouvoir || "Pouvoir du rôle...")}
                               </div>
                             </div>
                           </button>
@@ -1368,8 +1371,8 @@ export default function App() {
                       color: "white",
                       background:
                         ordreNuitActuelle === "premiere"
-                          ? "#6a6a6aff" // actif
-                          : "rgba(200,200,200,0.3)", // inactif (gris)
+                          ? "#0e74b4" // actif
+                          : "rgba(143, 143, 143, 0.89)", // inactif (gris)
                       transition: "background 0.2s",
                     }}
                   >
@@ -1388,8 +1391,8 @@ export default function App() {
                       color: "white",
                       background:
                         ordreNuitActuelle === "autres"
-                          ? "#6a6a6aff" // actif
-                          : "rgba(200,200,200,0.3)", // inactif (gris)
+                          ? "#0e74b4" // actif
+                          : "rgba(143, 143, 143, 0.89)", // inactif (gris)
                       transition: "background 0.2s",
                     }}
                   >
@@ -1700,7 +1703,7 @@ export default function App() {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                backgroundColor: "grey",
+                backgroundColor: "#888", // gris
                 color: "white",
                 zIndex: 10,
                 display: "flex",
@@ -1802,7 +1805,7 @@ export default function App() {
                           fontSize: "1.5rem",
                           backgroundColor: joueursAttribues[i]
                             ? "#aaa"
-                            : "#f5f0e6",
+                            : "#e4e4e4ff",
                           border: "1px solid #ccc",
                           cursor: joueursAttribues[i] ? "default" : "pointer",
                         }}
@@ -1841,7 +1844,7 @@ export default function App() {
                       margin: "1rem auto",
                     }}
                   >
-                    {roleActif.pouvoir}
+                    {renderBoldBrackets(roleActif.description || roleActif.pouvoir || "Pouvoir du rôle...")}
                   </div>
                   <input
                     className="important-field"
@@ -2785,7 +2788,7 @@ export default function App() {
                                   wordBreak: "break-word",
                                 }}
                               >
-                                {role.pouvoir}
+                                {renderBoldBrackets(role.description || role.pouvoir || "Pouvoir du rôle...")}
                               </div>
                             </div>
                           )}
@@ -4083,7 +4086,7 @@ export default function App() {
                         fontFamily: "Cardo, serif",
                       }}
                     >
-                      {selectedRole.description}
+                      {renderBoldBrackets(selectedRole.description)}
                     </div>
                   </div>
                 </div>
