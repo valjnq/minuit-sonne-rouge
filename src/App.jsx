@@ -1731,7 +1731,10 @@ export default function App() {
                       );
                       for (let i = 0; i < nbJoueurs; i++) {
                         if (!newAttribues[i] && availableRoles.length > 0) {
-                          const roleAuto = availableRoles[0];
+                          const indexAleatoire = Math.floor(
+                            Math.random() * availableRoles.length
+                          );
+                          const roleAuto = availableRoles[indexAleatoire];
                           let alignementAuto = "Maléfique";
                           if (
                             roleAuto.type === "Habitant" ||
@@ -1740,14 +1743,15 @@ export default function App() {
                             alignementAuto = "Bon";
                           }
                           newAttribues[i] = {
-                            nom: `player ${i + 1}`,
+                            nom: `Joueur ${i + 1}`,
                             role: roleAuto,
                             alignement: alignementAuto,
                             alignementFixe: false,
                           };
-                          availableRoles.shift();
+                          availableRoles.splice(indexAleatoire, 1);
                         }
                       }
+
                       setJoueursAttribues(newAttribues);
                     }}
                     style={{
@@ -2601,17 +2605,6 @@ export default function App() {
                               gap: ".5rem",
                             }}
                           >
-                            {role && (
-                              <img
-                                src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                                alt={role.nom}
-                                style={{
-                                  width: 28,
-                                  height: 28,
-                                  objectFit: "contain",
-                                }}
-                              />
-                            )}
                             <div
                               style={{
                                 fontFamily: "Pirata One, cursive",
@@ -2619,8 +2612,7 @@ export default function App() {
                                 lineHeight: 1.1,
                               }}
                             >
-                              Modifier le joueur #
-                              {Number(nomEditModal.index) + 1}
+                              Modifier le joueur
                             </div>
                           </div>
 
@@ -2720,7 +2712,10 @@ export default function App() {
                                 });
                               }}
                               placeholder="Nom du joueur"
-                              autoFocus
+                              readOnly
+                              onFocus={(e) =>
+                                e.target.removeAttribute("readOnly")
+                              }
                               style={{
                                 width: "100%",
                                 fontSize: "1.2rem",
