@@ -4457,7 +4457,7 @@ export default function App() {
                     style={{
                       fontSize: "0.8rem",
                       textAlign: "center",
-                      marginTop: "2rem",
+                      marginTop: "0rem",
                     }}
                   >
                     <strong>v{pkg.version}</strong>
