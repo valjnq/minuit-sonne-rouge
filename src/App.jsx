@@ -162,6 +162,7 @@ export default function App() {
   const [bluffsValides, setBluffsValides] = useState(false);
   const [afficherNotes, setAfficherNotes] = useState(false);
   const [notes, setNotes] = useState("");
+  const [afficherMentions, setAfficherMentions] = useState(false);
   const tousAttribues =
     nbJoueurs > 0 && Object.keys(joueursAttribues).length === nbJoueurs;
   function clearNotes() {
@@ -1326,7 +1327,11 @@ export default function App() {
                                   marginTop: "0.2rem",
                                 }}
                               >
-                                {renderBoldBrackets(role.description || role.pouvoir || "Pouvoir du rôle...")}
+                                {renderBoldBrackets(
+                                  role.description ||
+                                    role.pouvoir ||
+                                    "Pouvoir du rôle..."
+                                )}
                               </div>
                             </div>
                           </button>
@@ -1844,7 +1849,11 @@ export default function App() {
                       margin: "1rem auto",
                     }}
                   >
-                    {renderBoldBrackets(roleActif.description || roleActif.pouvoir || "Pouvoir du rôle...")}
+                    {renderBoldBrackets(
+                      roleActif.description ||
+                        roleActif.pouvoir ||
+                        "Pouvoir du rôle..."
+                    )}
                   </div>
                   <input
                     className="important-field"
@@ -2788,7 +2797,11 @@ export default function App() {
                                   wordBreak: "break-word",
                                 }}
                               >
-                                {renderBoldBrackets(role.description || role.pouvoir || "Pouvoir du rôle...")}
+                                {renderBoldBrackets(
+                                  role.description ||
+                                    role.pouvoir ||
+                                    "Pouvoir du rôle..."
+                                )}
                               </div>
                             </div>
                           )}
@@ -3986,6 +3999,7 @@ export default function App() {
                                       }}
                                     >
                                       {role.nom}
+
                                     </span>
                                   </button>
                                 ))}
@@ -4086,7 +4100,7 @@ export default function App() {
                         fontFamily: "Cardo, serif",
                       }}
                     >
-                      {renderBoldBrackets(selectedRole.description)}
+                      {renderBoldBrackets(selectedRole.pouvoir)}
                     </div>
                   </div>
                 </div>
@@ -4389,6 +4403,55 @@ export default function App() {
               {/* ← ferme le conteneur des notes */}
             </details>{" "}
             {/* ← ferme le collapsible */}
+            <details
+              className="collapsible"
+              open={afficherMentions}
+              onToggle={(e) => setAfficherMentions(e.currentTarget.open)}
+            >
+              <summary>Mentions légales</summary>
+              <div
+                style={{
+                  marginTop: "1rem",
+                  color: "black",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0rem",
+                  maxWidth: "800px",
+                }}
+              >
+                <p style={{ fontFamily: "Cardo, serif" }}>
+                  <strong style={{ color: "#950f13" }}>Minuit sonne rouge</strong> est une version francisée
+                  du jeu <strong>Blood on the Clocktower</strong>, réalisée par un fan.
+                </p>
+
+                <p style={{ fontFamily: "Cardo, serif" }}>
+                  <strong>Blood on the Clocktower</strong> est une marque déposée de
+                  Steven Medway et The Pandemonium Institute.
+                </p>
+                <p style={{ fontFamily: "Cardo, serif" }}>
+                  Cette application est un grimoire virtuel non officiel et
+                  gratuit. Elle n’est pas affilié à Steven Medway ou The Pandemonium
+                  Institute.
+                </p>
+                <ul style={{ marginLeft: "0rem", fontFamily: "Cardo, serif" }}>
+                  <li>Traduction des textes&nbsp;: Valentin Janequin.</li>
+                  <li>
+                    Source d’images et textes &nbsp;:&nbsp;
+                    <a
+                      href="https://wiki.bloodontheclocktower.com/Main_Page"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Wiki offciel
+                    </a>
+                  </li>
+                </ul>
+
+                <p style={{ fontFamily: "Cardo, serif", opacity: 1 }}>
+                  <strong>Version 1.0.0</strong>
+                </p>
+              </div>
+            </details>
           </div>
         </div>
       </main>
