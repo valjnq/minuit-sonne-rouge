@@ -1,0 +1,222 @@
+<!-- public/QRCodePage.html -->
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <base href="/minuit-sonne-rouge/" />
+    <link rel="icon" href="favicon.ico" />
+    <meta charset="UTF-8" />
+    <title>QR Code - Minuit Sonne Rouge</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #111;
+        color: white;
+        font-family: sans-serif;
+        min-height: 100vh;
+        width: 100vw;
+        overflow-x: hidden;
+        overflow-y: auto;
+        box-sizing: border-box;
+        padding-bottom: 2rem;
+        display: block;
+      }
+      #qrcode {
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="qrcode"></canvas>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const custom = params.get("custom");
+      if (custom) {
+        // Display custom script roles
+        fetch("roles-fr.json")
+          .then((res) => res.json())
+          .then((allRoles) => {
+            // Remove QR code canvas if present
+            const qr = document.getElementById("qrcode");
+            if (qr) qr.remove();
+
+            // Add title
+            const h2 = document.createElement("h2");
+            h2.textContent = "Script personnalisé";
+            h2.style.fontSize = "2rem";
+            h2.style.marginBottom = "2rem";
+            h2.style.textAlign = "center";
+            document.body.appendChild(h2);
+
+            // Prepare role data
+            const noms = custom.split(",").map(decodeURIComponent);
+            const roles = noms
+              .map((nom) => allRoles.find((r) => r.nom === nom))
+              .filter(Boolean);
+            const typeLabels = {
+              Habitant: "Villageois",
+              Étranger: "Étrangers",
+              Acolyte: "Acolytes",
+              Démon: "Démons",
+            };
+            const types = ["Villageois", "Étrangers", "Acolytes", "Démons"];
+            const typeMap = {
+              Villageois: ["Habitant", "Villageois"],
+              Étrangers: ["Étranger", "Étrangers"],
+              Acolytes: ["Acolyte", "Acolytes"],
+              Démons: ["Démon", "Démons"],
+            };
+
+            // Container for all lists
+            const allLists = document.createElement("div");
+            allLists.id = "role-lists";
+            allLists.style.maxWidth = "900px";
+            allLists.style.margin = "0 auto";
+            document.body.appendChild(allLists);
+
+            function renderLists() {
+              allLists.innerHTML = "";
+              types.forEach((type) => {
+                const rolesOfType = roles.filter((r) =>
+                  typeMap[type].includes(r.type)
+                );
+                if (rolesOfType.length === 0) return;
+
+                // Collapsible section container
+                const section = document.createElement("div");
+                section.style.marginBottom = "2.5rem";
+                section.style.borderTop = "2px solid #222";
+                section.style.paddingTop = "0.5rem";
+
+                // Collapsible button
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.textContent = `▼  ${type}`;
+                btn.setAttribute("aria-expanded", "true");
+                btn.style.fontSize = "1.2rem";
+                btn.style.fontWeight = "bold";
+                btn.style.fontFamily = "serif";
+                btn.style.color =
+                  type === "Démons" || type === "Acolytes"
+                    ? "#950f13"
+                    : "#0e74b4";
+                btn.style.background = "#ece6d6";
+                btn.style.border = "2px solid #222";
+                btn.style.borderRadius = "18px";
+                btn.style.padding = "0.3em 1.5em";
+                btn.style.margin = "0 0 1.5rem 0";
+                btn.style.boxShadow = "0 2px 8px #0002";
+                btn.style.cursor = "pointer";
+                btn.style.display = "inline-block";
+
+                // List container
+                const list = document.createElement("div");
+                list.style.width = "100%";
+                list.style.maxWidth = "900px";
+                list.style.marginLeft = "auto";
+                list.style.marginRight = "auto";
+
+                rolesOfType.forEach((role, idx) => {
+                  const row = document.createElement("div");
+                  row.style.display = "flex";
+                  row.style.alignItems = "center";
+                  row.style.gap = "2.5rem";
+                  row.style.background = "#fff";
+                  row.style.color = "#222";
+                  row.style.borderRadius = "12px";
+                  row.style.margin = "0";
+                  row.style.padding = "1.2rem 2rem";
+                  row.style.boxShadow = "0 2px 8px #0001";
+                  if (idx > 0) {
+                    row.style.borderTop = "1px solid #ece6d6";
+                  }
+
+                  // Icon
+                  const icon = document.createElement("img");
+                  icon.src = `icons/icon_${normalizeNom(role.nom)}.png`;
+                  icon.alt = role.nom;
+                  icon.style.height = "56px";
+                  icon.style.width = "56px";
+                  icon.style.objectFit = "contain";
+                  icon.style.flex = "0 0 56px";
+                  row.appendChild(icon);
+
+                  // Name
+                  const name = document.createElement("div");
+                  name.textContent = role.nom;
+                  name.style.fontWeight = "bold";
+                  name.style.fontSize = "1.5rem";
+                  name.style.color =
+                    role.alignement === "Bon" ? "#0e74b4" : "#950f13";
+                  name.style.flex = "0 0 180px";
+                  name.style.textAlign = "left";
+                  row.appendChild(name);
+
+                  // Power/Description
+                  const desc = document.createElement("div");
+                  // Met en gras le texte entre crochets
+                  const pouvoir = role.pouvoir || "";
+                  desc.innerHTML = pouvoir.replace(/(\[[^\]]+\])/g, '<strong>$1</strong>');
+                  desc.style.fontSize = "1.25rem";
+                  desc.style.lineHeight = "1.5";
+                  desc.style.textAlign = "left";
+                  desc.style.flex = "1 1 auto";
+                  row.appendChild(desc);
+
+                  list.appendChild(row);
+                });
+
+                // Collapsible logic
+                btn.addEventListener("click", function () {
+                  if (list.style.display === "none") {
+                    list.style.display = "";
+                    btn.textContent = `▼  ${type}`;
+                    btn.setAttribute("aria-expanded", "true");
+                  } else {
+                    list.style.display = "none";
+                    btn.textContent = `►  ${type}`;
+                    btn.setAttribute("aria-expanded", "false");
+                  }
+                });
+
+                section.appendChild(btn);
+                section.appendChild(list);
+                allLists.appendChild(section);
+              });
+            }
+
+            // Initial render
+            renderLists();
+          });
+        function normalizeNom(nom) {
+          return nom
+            .normalize("NFD")
+            .replace(/[̀-ͯ]/g, "")
+            .replace(/[^a-zA-Z0-9]/g, "")
+            .toLowerCase();
+        }
+      } else {
+        const edition = params.get("edition");
+        const links = {
+          "Sombre présage": "assets/Minuitsonnerouge_Sombrepresage.pdf",
+          "Parfum d’hystérie": "assets/Minuitsonnerouge_Parfumdhysterie.pdf",
+          "Crépuscule funeste": "assets/Minuitsonnerouge_Crepusculefuneste.pdf",
+        };
+        const url = links[edition];
+        if (url) {
+          QRCode.toCanvas(
+            document.getElementById("qrcode"),
+            new URL(url, document.baseURI).href
+          );
+        } else {
+          document.body.innerHTML = "<p>Édition inconnue.</p>";
+        }
+      }
+    </script>
+  </body>
+</html>
