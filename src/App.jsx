@@ -4455,7 +4455,7 @@ export default function App() {
                 <p style={{ fontFamily: "Cardo, serif", opacity: 1 }}>
                   <div
                     style={{
-                      fontSize: "0.8rem",
+                      fontSize: "1rem",
                       textAlign: "center",
                       marginTop: "0rem",
                     }}
