@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import roles from "./roles-fr.json";
 import QRCode from "react-qr-code";
 import "./mobile.css";
+import pkg from "../package.json";
 
 // Fonction utilitaire pour mettre en gras le texte entre crochets
 function renderBoldBrackets(text) {
@@ -4452,7 +4453,15 @@ export default function App() {
                 </ul>
 
                 <p style={{ fontFamily: "Cardo, serif", opacity: 1 }}>
-                  <strong>Version 1.0.1</strong>
+                  <div
+                    style={{
+                      fontSize: "0.8rem",
+                      textAlign: "center",
+                      marginTop: "2rem",
+                    }}
+                  >
+                    <strong>v{pkg.version}</strong>
+                  </div>
                 </p>
               </div>
             </details>
