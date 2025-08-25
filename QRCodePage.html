@@ -159,7 +159,9 @@
 
                   // Power/Description
                   const desc = document.createElement("div");
-                  desc.textContent = role.pouvoir || "";
+                  // Met en gras le texte entre crochets
+                  const pouvoir = role.pouvoir || "";
+                  desc.innerHTML = pouvoir.replace(/(\[[^\]]+\])/g, '<strong>$1</strong>');
                   desc.style.fontSize = "1.25rem";
                   desc.style.lineHeight = "1.5";
                   desc.style.textAlign = "left";
