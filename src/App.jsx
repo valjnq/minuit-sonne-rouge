@@ -598,6 +598,7 @@ export default function App() {
                   fontSize: "2rem",
                   fontWeight: "bold",
                   color: "#950f13",
+                  lineHeight: "1.1", // ← ajouté
                 }}
               >
                 Minuit Sonne Rouge
@@ -608,6 +609,7 @@ export default function App() {
                   fontSize: "1.6rem",
                   fontWeight: "bold",
                   color: "black",
+                  lineHeight: "1.1", // ← ajouté
                 }}
               >
                 Grimoire virtuel
@@ -3999,7 +4001,6 @@ export default function App() {
                                       }}
                                     >
                                       {role.nom}
-
                                     </span>
                                   </button>
                                 ))}
@@ -4420,21 +4421,24 @@ export default function App() {
                 }}
               >
                 <p style={{ fontFamily: "Cardo, serif" }}>
-                  <strong style={{ color: "#950f13" }}>Minuit sonne rouge</strong> est une version francisée
-                  du jeu <strong>Blood on the Clocktower</strong>, réalisée par un fan.
+                  <strong style={{ color: "#950f13" }}>
+                    Minuit sonne rouge
+                  </strong>{" "}
+                  est une version francisée du jeu{" "}
+                  <strong>Blood on the Clocktower</strong>, réalisée par un fan.
                 </p>
 
                 <p style={{ fontFamily: "Cardo, serif" }}>
-                  <strong>Blood on the Clocktower</strong> est une marque déposée de
-                  Steven Medway et The Pandemonium Institute.
+                  <strong>Blood on the Clocktower</strong> est une marque
+                  déposée de Steven Medway et The Pandemonium Institute.
                 </p>
                 <p style={{ fontFamily: "Cardo, serif" }}>
                   Cette application est un grimoire virtuel non officiel et
-                  gratuit. Elle n’est pas affilié à Steven Medway ou The Pandemonium
-                  Institute.
+                  gratuit. Elle n’est pas affilié à Steven Medway ou The
+                  Pandemonium Institute.
                 </p>
                 <ul style={{ marginLeft: "0rem", fontFamily: "Cardo, serif" }}>
-                  <li>Traduction des textes&nbsp;: Valentin Janequin.</li>
+                  <li>Traduction des textes&nbsp;: Valentin Janequin</li>
                   <li>
                     Source d’images et textes &nbsp;:&nbsp;
                     <a
@@ -4448,7 +4452,7 @@ export default function App() {
                 </ul>
 
                 <p style={{ fontFamily: "Cardo, serif", opacity: 1 }}>
-                  <strong>Version 1.0.0</strong>
+                  <strong>Version 1.0.1</strong>
                 </p>
               </div>
             </details>
