@@ -4198,7 +4198,6 @@ export default function App() {
                       top: "1.2rem",
                       right: "1.2rem",
                       fontSize: "2.2rem",
-                      color: "black",
                       background: "none",
                       border: "none",
                       cursor: "pointer",
