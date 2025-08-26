@@ -185,7 +185,6 @@ export default function App() {
   // State for rappel dropdown and selected rappel role in name edit modal
   const [showRappelModal, setShowRappelModal] = useState(false);
   // Store multiple rappel roles as an array
-  const [rappelRolesSelected, setRappelRolesSelected] = useState([]);
   const [rolesModalOpen, setRolesModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
   const [rolesRestants, setRolesRestants] = useState([]);
@@ -455,8 +454,10 @@ export default function App() {
         role: roleActif,
         alignement: alignementAuto,
         alignementFixe: false,
+        rappelRoles: [], // ← chaque joueur a sa liste de rappels
       },
     }));
+
     // On first validation, store the selected roles pour remplacement
     if (rolesDisponiblesPourRemplacer.length === 0 && selected.length > 0) {
       setRolesDisponiblesPourRemplacer(selected);
@@ -1819,12 +1820,14 @@ export default function App() {
                         const availableRoles = rolesRestants.filter(
                           (r) => !assignedRoleNames.includes(r.nom)
                         );
+
                         for (let i = 0; i < nbJoueurs; i++) {
                           if (!newAttribues[i] && availableRoles.length > 0) {
                             const indexAleatoire = Math.floor(
                               Math.random() * availableRoles.length
                             );
                             const roleAuto = availableRoles[indexAleatoire];
+
                             let alignementAuto = "Maléfique";
                             if (
                               roleAuto.type === "Habitant" ||
@@ -1832,15 +1835,19 @@ export default function App() {
                             ) {
                               alignementAuto = "Bon";
                             }
+
                             newAttribues[i] = {
                               nom: `Joueur ${i + 1}`,
                               role: roleAuto,
                               alignement: alignementAuto,
                               alignementFixe: false,
+                              rappelRoles: [], // ← ICI, dans la boucle
                             };
+
                             availableRoles.splice(indexAleatoire, 1);
                           }
                         }
+
                         setJoueursAttribues(newAttribues);
                       }}
                       style={{
@@ -2292,7 +2299,13 @@ export default function App() {
                         className="icon-lg"
                         style={{ marginRight: "0.5rem", alignSelf: "start" }}
                       />
-                      <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          flex: 1,
+                        }}
+                      >
                         <span
                           style={{
                             fontFamily: "Cardo, serif",
@@ -2324,22 +2337,43 @@ export default function App() {
                         >
                           {/* Icônes mort et vote */}
                           {joueur.mort && (
-                            <img src="icons/mort.png" alt="Mort" style={{ width: 28, height: 28 }} />
+                            <img
+                              src="icons/mort.png"
+                              alt="Mort"
+                              style={{ width: 28, height: 28 }}
+                            />
                           )}
                           {joueur.mort && joueur.token && (
-                            <img src="icons/vote.png" alt="Vote" style={{ width: 28, height: 28 }} />
+                            <img
+                              src="icons/vote.png"
+                              alt="Vote"
+                              style={{ width: 28, height: 28 }}
+                            />
                           )}
                           {/* Icônes anciens rôles */}
-                          {(Array.isArray(joueur.anciensRoles) ? joueur.anciensRoles : []).map((r, idx) => (
+                          {(Array.isArray(joueur.anciensRoles)
+                            ? joueur.anciensRoles
+                            : []
+                          ).map((r, idx) => (
                             <img
                               key={`ancien-${r.nom}-${idx}`}
                               src={`icons/icon_${normalizeNom(r.nom)}.png`}
                               alt={r.nom}
-                              style={{ width: 32, height: 32, objectFit: "contain", filter: "grayscale(1) brightness(0.9) contrast(0.9)", opacity: 0.85 }}
+                              style={{
+                                width: 32,
+                                height: 32,
+                                objectFit: "contain",
+                                filter:
+                                  "grayscale(1) brightness(0.9) contrast(0.9)",
+                                opacity: 0.85,
+                              }}
                             />
                           ))}
                           {/* Icônes rappels */}
-                          {(Array.isArray(joueur.rappelRoles) ? joueur.rappelRoles : []).map((r, idx) => (
+                          {(Array.isArray(joueur.rappelRoles)
+                            ? joueur.rappelRoles
+                            : []
+                          ).map((r, idx) => (
                             <img
                               key={`rappel-${r.nom}-${idx}`}
                               src={`icons/icon_${normalizeNom(r.nom)}.png`}
@@ -3245,11 +3279,13 @@ export default function App() {
                                             currentIndex != null
                                               ? joueursAttribues[currentIndex]
                                               : null;
-                                          const dejaSelectionne = (
-                                            courant?.rappelRoles ||
-                                            rappelRolesSelected ||
-                                            []
-                                          ).some((x) => x.nom === role.nom);
+                                          const dejaSelectionne = Array.isArray(
+                                            courant?.rappelRoles
+                                          )
+                                            ? courant.rappelRoles.some(
+                                                (x) => x.nom === role.nom
+                                              )
+                                            : false;
 
                                           const isGood =
                                             role.alignement === "Bon";
@@ -3273,60 +3309,35 @@ export default function App() {
                                               type="button"
                                               aria-pressed={dejaSelectionne}
                                               onClick={() => {
-                                                // toggle dans l’état local
-                                                setRappelRolesSelected(
-                                                  (prev) => {
-                                                    const base = Array.isArray(
-                                                      prev
-                                                    )
-                                                      ? prev
-                                                      : courant?.rappelRoles ||
-                                                        [];
-                                                    return dejaSelectionne
-                                                      ? base.filter(
-                                                          (x) =>
-                                                            x.nom !== role.nom
-                                                        )
-                                                      : [...base, role];
-                                                  }
-                                                );
+                                                const currentIndex =
+                                                  nomEditModal?.index;
+                                                if (currentIndex == null)
+                                                  return;
 
-                                                // et applique immédiatement sur le joueur si on est bien dans la modale de nom
-                                                if (currentIndex != null) {
-                                                  setJoueursAttribues(
-                                                    (prev) => {
-                                                      const updated = {
-                                                        ...prev,
-                                                      };
-                                                      const list =
-                                                        Array.isArray(
-                                                          updated[currentIndex]
-                                                            ?.rappelRoles
-                                                        )
-                                                          ? [
-                                                              ...updated[
-                                                                currentIndex
-                                                              ].rappelRoles,
-                                                            ]
-                                                          : [];
-                                                      const next =
-                                                        dejaSelectionne
-                                                          ? list.filter(
-                                                              (x) =>
-                                                                x.nom !==
-                                                                role.nom
-                                                            )
-                                                          : [...list, role];
-                                                      updated[currentIndex] = {
-                                                        ...updated[
-                                                          currentIndex
-                                                        ],
-                                                        rappelRoles: next,
-                                                      };
-                                                      return updated;
-                                                    }
-                                                  );
-                                                }
+                                                setJoueursAttribues((prev) => {
+                                                  const updated = { ...prev };
+                                                  const cur =
+                                                    updated[currentIndex] || {};
+                                                  const list = Array.isArray(
+                                                    cur.rappelRoles
+                                                  )
+                                                    ? [...cur.rappelRoles]
+                                                    : [];
+                                                  const next = list.some(
+                                                    (x) => x.nom === role.nom
+                                                  )
+                                                    ? list.filter(
+                                                        (x) =>
+                                                          x.nom !== role.nom
+                                                      )
+                                                    : [...list, role];
+
+                                                  updated[currentIndex] = {
+                                                    ...cur,
+                                                    rappelRoles: next,
+                                                  };
+                                                  return updated;
+                                                });
                                               }}
                                               style={{
                                                 display: "flex",
