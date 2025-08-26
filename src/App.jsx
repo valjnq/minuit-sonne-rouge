@@ -4435,7 +4435,7 @@ export default function App() {
                 </p>
                 <p style={{ fontFamily: "Cardo, serif" }}>
                   Cette application est un grimoire virtuel non officiel et
-                  gratuit et n’est pas affilié à Steven Medway ou The
+                  gratuit et n’est pas affiliée à Steven Medway ou The
                   Pandemonium Institute.
                 </p>
                 <ul style={{ marginLeft: "0rem", fontFamily: "Cardo, serif" }}>
