@@ -611,6 +611,28 @@ export default function App() {
   }
   /* Caret span used in H1 toggles to match details summaries */
   .caret { display:inline-block; width:1.2em; text-align:center; transform:translateY(1px); user-select:none; }
+  /* Uniformiser la taille des icônes (rappels, anciens rôles, mort, vote, etc.) */
+
+  .icon-img {
+    width: 1.6em;
+    height: 1.6em;
+    object-fit: contain;
+    vertical-align: middle;
+    flex: 0 0 auto;
+  }
+
+  .icon-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3em;
+    min-height: 2em;
+  }
+
+@media (max-width: 420px) {
+  .icon-img { width: 1.4em; height: 1.4em; }
+}
+
         `}</style>
 
           {/* Titre */}
@@ -2226,9 +2248,9 @@ export default function App() {
                     <div
                       key={index}
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
+                        display: "grid",
+                        gridTemplateColumns: "auto 1fr",
+                        alignItems: "start",
                         ...(idx === 0 ? { marginTop: "1rem" } : {}),
                         marginBottom: "1rem",
                         background: joueur.mort ? "#e0e0e0" : "#f8f8f8",
@@ -2268,13 +2290,11 @@ export default function App() {
                         src={`icons/icon_${normalizeNom(joueur.role.nom)}.png`}
                         alt={joueur.role.nom}
                         className="icon-lg"
-                        style={{ marginRight: "0.5rem" }}
+                        style={{ marginRight: "0.5rem", alignSelf: "start" }}
                       />
-
-                      <div style={{ display: "flex", alignItems: "center" }}>
+                      <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
                         <span
                           style={{
-                            flex: 1,
                             fontFamily: "Cardo, serif",
                             fontWeight: "bold",
                             fontSize: "1.2rem",
@@ -2288,99 +2308,46 @@ export default function App() {
                             borderRadius: "8px",
                             textAlign: "left",
                             userSelect: "none",
-                            //    textDecoration: joueur.mort ? "line-through" : "none",
                           }}
                         >
                           {joueur.nom}
                         </span>
-                        {joueur.mort && (
-                          <span
-                            style={{
-                              marginLeft: "0.5rem",
-                              fontSize: "1.3rem",
-                              verticalAlign: "middle",
-                            }}
-                          >
+                        <div
+                          className="reminder-icons"
+                          style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            justifyContent: "flex-start",
+                            gap: "4px",
+                            marginTop: "4px",
+                          }}
+                        >
+                          {/* Icônes mort et vote */}
+                          {joueur.mort && (
+                            <img src="icons/mort.png" alt="Mort" style={{ width: 28, height: 28 }} />
+                          )}
+                          {joueur.mort && joueur.token && (
+                            <img src="icons/vote.png" alt="Vote" style={{ width: 28, height: 28 }} />
+                          )}
+                          {/* Icônes anciens rôles */}
+                          {(Array.isArray(joueur.anciensRoles) ? joueur.anciensRoles : []).map((r, idx) => (
                             <img
-                              src="icons/mort.png"
-                              alt="Mort icon"
-                              style={{
-                                width: 32,
-                                height: 32,
-                                verticalAlign: "middle",
-                              }}
-                            />
-                          </span>
-                        )}
-                        {/* Vote icon after mort icon if mort is true */}
-                        {joueur.mort && joueur.token && (
-                          <span
-                            style={{
-                              marginLeft: "0.2rem",
-                              fontSize: "1.3rem",
-                              verticalAlign: "middle",
-                            }}
-                          >
-                            <img
-                              src="icons/vote.png"
-                              alt="Vote icon"
-                              style={{
-                                width: 32,
-                                height: 32,
-                                verticalAlign: "middle",
-                              }}
-                            />
-                          </span>
-                        )}
-
-                        {(Array.isArray(joueur.anciensRoles)
-                          ? joueur.anciensRoles
-                          : []
-                        ).map((r, idx) => (
-                          <span
-                            key={`${r.nom}-${idx}`}
-                            title={`Ancien rôle : ${r.nom}`}
-                            style={{
-                              marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
-                              verticalAlign: "middle",
-                            }}
-                          >
-                            <img
+                              key={`ancien-${r.nom}-${idx}`}
                               src={`icons/icon_${normalizeNom(r.nom)}.png`}
                               alt={r.nom}
-                              className="icon-md"
-                              style={{
-                                width: 32,
-                                height: 32,
-                                verticalAlign: "middle",
-                                objectFit: "contain",
-                                filter:
-                                  "grayscale(1) brightness(0.9) contrast(0.9)",
-                                opacity: 0.85,
-                              }}
+                              style={{ width: 32, height: 32, objectFit: "contain", filter: "grayscale(1) brightness(0.9) contrast(0.9)", opacity: 0.85 }}
                             />
-                          </span>
-                        ))}
-
-                        {(Array.isArray(joueur.rappelRoles)
-                          ? joueur.rappelRoles
-                          : []
-                        ).map((r, idx) => (
-                          <span
-                            key={r.nom}
-                            style={{
-                              marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
-                              fontSize: "1.3rem",
-                              verticalAlign: "middle",
-                            }}
-                          >
+                          ))}
+                          {/* Icônes rappels */}
+                          {(Array.isArray(joueur.rappelRoles) ? joueur.rappelRoles : []).map((r, idx) => (
                             <img
+                              key={`rappel-${r.nom}-${idx}`}
                               src={`icons/icon_${normalizeNom(r.nom)}.png`}
                               alt={r.nom}
-                              className="icon-md"
+                              style={{ width: 32, height: 32 }}
                             />
-                          </span>
-                        ))}
+                          ))}
+                        </div>
                       </div>
                     </div>
                   )
@@ -3043,6 +3010,47 @@ export default function App() {
                                   Maléfique
                                 </button>
                               </div>
+                              {/* Icônes statut : mort & vote (affichées dans la modale) */}
+                              {joueur?.mort && (
+                                <span
+                                  style={{
+                                    marginLeft: "0.5rem",
+                                    fontSize: "1.3rem",
+                                    verticalAlign: "middle",
+                                  }}
+                                  title="Mort"
+                                >
+                                  <img
+                                    src="icons/mort.png"
+                                    alt="Mort"
+                                    style={{
+                                      width: 36,
+                                      height: 36,
+                                      verticalAlign: "middle",
+                                    }}
+                                  />
+                                </span>
+                              )}
+                              {joueur?.mort && joueur?.token && (
+                                <span
+                                  style={{
+                                    marginLeft: "0.2rem",
+                                    fontSize: "1.3rem",
+                                    verticalAlign: "middle",
+                                  }}
+                                  title="Vote fantôme"
+                                >
+                                  <img
+                                    src="icons/vote.png"
+                                    alt="Vote fantôme"
+                                    style={{
+                                      width: 36,
+                                      height: 36,
+                                      verticalAlign: "middle",
+                                    }}
+                                  />
+                                </span>
+                              )}
 
                               {/* Icônes des anciens rôles (grisées) */}
                               {(Array.isArray(joueur?.anciensRoles)
@@ -3616,9 +3624,9 @@ export default function App() {
                               })
                             }
                             style={{
-                                ...buttonStyle,
-                                width: "100%",
-                              }}
+                              ...buttonStyle,
+                              width: "100%",
+                            }}
                             title={joueur?.mort ? "Ressusciter" : "Mort"}
                           >
                             {joueur?.mort ? "Ressusciter" : "Mort"}
