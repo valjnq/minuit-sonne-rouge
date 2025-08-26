@@ -868,60 +868,65 @@ export default function App() {
               </div>
               {/* Ligne des boutons sous le select */}
               <div
-  style={{
-    flexBasis: "100%", // reste sur une nouvelle ligne sous le select
-    display: "grid",
-    gridTemplateColumns: "1fr", // 1 colonne = 1 bouton par ligne
-    gap: "0.75rem",
-    marginTop: "0.5rem",
-    width: "100%",
-  }}
->
-  <button
-    onClick={() => setQrCodeVisible(true)}
-    style={{
-      ...buttonStyle,
-      width: "100%",
-      cursor:
-        customScriptPool.length === 0 && edition === "Script personnalisé"
-          ? "not-allowed"
-          : "pointer",
-      opacity:
-        customScriptPool.length === 0 && edition === "Script personnalisé"
-          ? 0.5
-          : 1,
-      // gridColumn: "1 / -1", // optionnel si tu veux forcer full-width même si tu remets 2 colonnes plus tard
-    }}
-    disabled={
-      customScriptPool.length === 0 && edition === "Script personnalisé"
-    }
-  >
-    Partager le script
-  </button>
+                style={{
+                  flexBasis: "100%", // reste sur une nouvelle ligne sous le select
+                  display: "grid",
+                  gridTemplateColumns: "1fr", // 1 colonne = 1 bouton par ligne
+                  gap: "0.75rem",
+                  marginTop: "0.5rem",
+                  width: "100%",
+                }}
+              >
+                <button
+                  onClick={() => setQrCodeVisible(true)}
+                  style={{
+                    ...buttonStyle,
+                    width: "100%",
+                    cursor:
+                      customScriptPool.length === 0 &&
+                      edition === "Script personnalisé"
+                        ? "not-allowed"
+                        : "pointer",
+                    opacity:
+                      customScriptPool.length === 0 &&
+                      edition === "Script personnalisé"
+                        ? 0.5
+                        : 1,
+                    // gridColumn: "1 / -1", // optionnel si tu veux forcer full-width même si tu remets 2 colonnes plus tard
+                  }}
+                  disabled={
+                    customScriptPool.length === 0 &&
+                    edition === "Script personnalisé"
+                  }
+                >
+                  Partager le script
+                </button>
 
-  {edition === "Script personnalisé" && (
-    <button
-      type="button"
-      onClick={() => {
-        setCustomScriptVisible(true);
-        if (customScriptPool.length > 0 && customScriptTemp.length === 0) {
-          setCustomScriptTemp(customScriptPool);
-        }
-      }}
-      disabled={rolesValides}
-      style={{
-        ...buttonStyle,
-        width: "100%",
-        cursor: rolesValides ? "not-allowed" : "pointer",
-        opacity: rolesValides ? 0.5 : 1,
-        // gridColumn: "1 / -1", // optionnel (voir note ci-dessus)
-      }}
-    >
-      Éditer le script
-    </button>
-  )}
-</div>
-
+                {edition === "Script personnalisé" && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCustomScriptVisible(true);
+                      if (
+                        customScriptPool.length > 0 &&
+                        customScriptTemp.length === 0
+                      ) {
+                        setCustomScriptTemp(customScriptPool);
+                      }
+                    }}
+                    disabled={rolesValides}
+                    style={{
+                      ...buttonStyle,
+                      width: "100%",
+                      cursor: rolesValides ? "not-allowed" : "pointer",
+                      opacity: rolesValides ? 0.5 : 1,
+                      // gridColumn: "1 / -1", // optionnel (voir note ci-dessus)
+                    }}
+                  >
+                    Éditer le script
+                  </button>
+                )}
+              </div>
             </div>
           </details>
           {customScriptVisible && (
@@ -1096,8 +1101,8 @@ export default function App() {
                                       src={getRoleIcon(role)}
                                       alt=""
                                       style={{
-                                        width: 36,
-                                        height: 36,
+                                        width: 48,
+                                        height: 48,
                                         objectFit: "contain",
                                       }}
                                       onError={(ev) =>
@@ -2568,8 +2573,8 @@ export default function App() {
                                             src={getRoleIcon(role)}
                                             alt=""
                                             style={{
-                                              width: 36,
-                                              height: 36,
+                                              width: 48,
+                                              height: 48,
                                               objectFit: "contain",
                                             }}
                                             onError={(ev) =>
@@ -2583,6 +2588,7 @@ export default function App() {
                                               fontWeight: "bold",
                                               fontFamily:
                                                 "'IM Fell English SC', serif",
+                                              fontSize: "1rem",
                                             }}
                                           >
                                             {role.nom}
@@ -3396,7 +3402,7 @@ export default function App() {
                                       zIndex: 100000,
                                       display: "flex",
                                       flexDirection: "column",
-                                      paddingTop: "env(safe-area-inset-top)",
+                                      paddingTop: 0,
                                       paddingBottom:
                                         "env(safe-area-inset-bottom)",
                                       paddingLeft: "env(safe-area-inset-left)",
@@ -3413,7 +3419,9 @@ export default function App() {
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "space-between",
-                                        padding: "0.75rem 1rem",
+                                        padding: "0 1rem 0.75rem 1rem", // bas = 0.75rem
+                                        paddingTop:
+                                          "calc(env(safe-area-inset-top) + 0.75rem)",
                                         borderBottom: "1px solid #eee",
                                         background: "#fff",
                                       }}
@@ -3936,17 +3944,7 @@ export default function App() {
                     </button>
                   ) : null
                 )}
-                {/* Séparateur noir */}
-                <hr
-                  aria-hidden="true"
-                  style={{
-                    border: "none",
-                    borderTop: "1px solid #000",
-                    margin: 0, // IMPORTANT: 0 pour ne pas ajouter d'espace
-                    width: "100%",
-                    alignSelf: "stretch", // s'étire dans un conteneur flex en colonne
-                  }}
-                />
+
                 {/* Ajout des messages personnalisés juste après le dernier bouton Communication */}
                 {customJetons.length > 0 && (
                   <div
@@ -3964,7 +3962,6 @@ export default function App() {
                         style={{
                           ...buttonStyle,
                           background: "#f5F5F5",
-                          // beige
                           color: "#222",
                           width: "100%",
                           alignSelf: "stretch",
@@ -3978,6 +3975,18 @@ export default function App() {
                     ))}
                   </div>
                 )}
+
+                {/* Séparateur noir — désormais APRÈS les messages custom */}
+                <hr
+                  aria-hidden="true"
+                  style={{
+                    border: "none",
+                    borderTop: "1px solid #000",
+                    margin: 0, // laisse le gap du parent gérer l’espacement
+                    width: "100%",
+                    alignSelf: "stretch",
+                  }}
+                />
               </div>
               {/* Modal for roles selection */}
               {rolesModalOpen && (
@@ -4118,8 +4127,8 @@ export default function App() {
                                       src={getRoleIcon(role)}
                                       alt={role.nom}
                                       style={{
-                                        width: 36,
-                                        height: 36,
+                                        width: 48,
+                                        height: 48,
                                         objectFit: "contain",
                                       }}
                                       onError={(ev) =>
@@ -4133,6 +4142,7 @@ export default function App() {
                                         fontWeight: "bold",
                                         fontFamily:
                                           "'IM Fell English SC', serif",
+                                        fontSize: "1rem",
                                       }}
                                     >
                                       {role.nom}
