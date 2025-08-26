@@ -3574,6 +3574,38 @@ export default function App() {
                                 );
                               })()}
                           </div>
+                          {/* Bouton pour supprimer le dernier ancien rôle */}
+                          {Array.isArray(joueur?.anciensRoles) &&
+                            joueur.anciensRoles.length > 0 && (
+                              <div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const idx = nomEditModal?.index;
+                                    if (idx == null) return;
+                                    setJoueursAttribues((prev) => {
+                                      const next = { ...prev };
+                                      const cur = next[idx] || {};
+                                      const list = Array.isArray(
+                                        cur.anciensRoles
+                                      )
+                                        ? [...cur.anciensRoles]
+                                        : [];
+                                      if (list.length > 0) list.pop(); // retire le dernier ajouté
+                                      next[idx] = {
+                                        ...cur,
+                                        anciensRoles: list,
+                                      };
+                                      return next;
+                                    });
+                                  }}
+                                  style={{ ...buttonStyle, width: "100%" }}
+                                  title="Retirer le dernier ancien rôle"
+                                >
+                                  Supprimer l’ancien rôle
+                                </button>
+                              </div>
+                            )}
 
                           {/* Mort (toggle) — donne par défaut un jeton au décès */}
                           <button
