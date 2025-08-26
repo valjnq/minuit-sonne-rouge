@@ -43,6 +43,8 @@ const buttonStyle = {
 };
 
 export default function App() {
+  // Liste figée des rôles bons non attribués au moment de l'attribution des rôles
+  const [bluffsPoolInitial, setBluffsPoolInitial] = useState(null);
   // Style pour aligner les icônes des boutons rôles en haut
   const roleButtonStyle = {
     display: "flex",
@@ -304,6 +306,17 @@ export default function App() {
   // Quand on passe de "pas tous attribués" -> "tous attribués"
   useEffect(() => {
     if (!tousAttribues) return;
+    // Figer la liste des rôles bons non attribués pour les bluffs du démon
+    if (bluffsPoolInitial === null) {
+      const nomsRolesAttribues = Object.values(joueursAttribues).map((j) => j.role.nom);
+      const pool = (edition === "Script personnalisé"
+        ? customScriptPool
+        : roles.filter((r) => r.edition === edition)
+      ).filter(
+        (r) => r.alignement === "Bon" && !nomsRolesAttribues.includes(r.nom)
+      );
+      setBluffsPoolInitial(pool);
+    }
     setOpenSetup(false);
     setOpenRolesDetails(false);
     setAfficherRepartition(true); // ouvre Grimoire à l’apparition
@@ -478,13 +491,17 @@ export default function App() {
   );
 
   // Show all 'Bon' roles from the edition or script that are NOT attributed to players (not in joueursAttribues)
-  const rolesBonsNonAttribués = (
-    edition === "Script personnalisé"
-      ? customScriptPool
-      : roles.filter((r) => r.edition === edition)
-  ).filter(
-    (r) => r.alignement === "Bon" && !nomsRolesAttribues.includes(r.nom)
-  );
+  // Liste figée des bluffs du démon
+  const rolesBonsNonAttribués = bluffsPoolInitial !== null
+    ? bluffsPoolInitial
+    : (
+        (edition === "Script personnalisé"
+          ? customScriptPool
+          : roles.filter((r) => r.edition === edition)
+        ).filter(
+          (r) => r.alignement === "Bon" && !nomsRolesAttribues.includes(r.nom)
+        )
+      );
   // tirage aléatoire pour le script personnalisé
   function tirageAleatoireScript() {
     const shufflePick = (arr, n) => {
