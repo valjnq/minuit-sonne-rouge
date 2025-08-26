@@ -63,7 +63,7 @@ export default function App() {
       content: "Voici le démon",
       textColor: "#950f13",
       background: "#fafafa",
-      border: "1px solid #ccc",
+      border: "1px solid #bbb",
       fontFamily: "Cardo, serif",
     },
     {
@@ -73,7 +73,7 @@ export default function App() {
       content: "Voici tes acolytes",
       textColor: "#950f13",
       background: "#fafafa",
-      border: "1px solid #ccc",
+      border: "1px solid #bbb",
       fontFamily: "Cardo, serif",
     },
     {
@@ -83,7 +83,7 @@ export default function App() {
       content: "Ces rôles ne sont pas en jeu",
       textColor: "#950f13",
       background: "#fafafa",
-      border: "1px solid #ccc",
+      border: "1px solid #bbb",
       fontFamily: "Cardo, serif",
     },
     {
@@ -93,7 +93,7 @@ export default function App() {
       content: "Afficher un rôle",
       textColor: "#222",
       background: "#fafafa",
-      border: "1px solid #ccc",
+      border: "1px solid #bbb",
       fontFamily: "Cardo, serif",
     },
     {
@@ -103,7 +103,7 @@ export default function App() {
       content: "Tu es",
       textColor: "#222",
       background: "#fafafa",
-      border: "1px solid #ccc",
+      border: "1px solid #bbb",
       fontFamily: "Cardo, serif",
     },
     {
@@ -113,7 +113,7 @@ export default function App() {
       content: "Ce joueur est",
       textColor: "#222",
       background: "#fafafa",
-      border: "1px solid #ccc",
+      border: "1px solid #bbb",
       fontFamily: "Cardo, serif",
     },
     {
@@ -123,7 +123,7 @@ export default function App() {
       content: "Utiliser ton pouvoir ?",
       textColor: "#222",
       background: "#fafafa",
-      border: "1px solid #ccc",
+      border: "1px solid #bbb",
       fontFamily: "Cardo, serif",
     },
   ];
@@ -1097,7 +1097,7 @@ export default function App() {
                                       padding: ".5rem .6rem",
                                       borderRadius: 10,
                                       border: `1px solid ${
-                                        checked ? color : "#ccc"
+                                        checked ? color : "#bbb"
                                       }`,
                                       background: checked
                                         ? role.alignement === "Bon"
@@ -1168,7 +1168,7 @@ export default function App() {
                       style={{
                         padding: ".5rem 1rem",
                         borderRadius: 8,
-                        border: "1px solid #ccc",
+                        border: "1px solid #bbb",
                         background: "#fafafa",
                         fontFamily: "Cardo, serif",
                       }}
@@ -1183,7 +1183,7 @@ export default function App() {
                       style={{
                         padding: ".5rem 1rem",
                         borderRadius: 8,
-                        border: "1px solid #ccc",
+                        border: "1px solid #bbb",
                         background: "#fafafa",
                         fontFamily: "Cardo, serif",
                       }}
@@ -1304,7 +1304,7 @@ export default function App() {
                                   ? role.alignement === "Bon"
                                     ? "#0e74b4"
                                     : "#950f13"
-                                  : "#ccc"
+                                  : "#bbb"
                               }`,
 
                               background: isSelected
@@ -1803,7 +1803,7 @@ export default function App() {
                           backgroundColor: joueursAttribues[i]
                             ? "#aaa"
                             : "#e4e4e4ff",
-                          border: "1px solid #ccc",
+                          border: "1px solid #bbb",
                           cursor: joueursAttribues[i] ? "default" : "pointer",
                         }}
                       >
@@ -2065,8 +2065,8 @@ export default function App() {
                               }}
                               style={{
                                 border: isSelected
-                                  ? "2px solid #0e74b4"
-                                  : "1px solid #ccc",
+                                  ? "1px solid #0e74b4"
+                                  : "1px solid #bbb",
                                 borderRadius: 8,
                                 padding: "0.5rem",
                                 cursor: isDisabled ? "not-allowed" : "pointer",
@@ -2523,8 +2523,8 @@ export default function App() {
                                             padding: ".45rem .6rem",
                                             borderRadius: 8,
                                             border: checked
-                                              ? `2px solid ${color}`
-                                              : "1px solid #ccc",
+                                              ? `1px solid ${color}`
+                                              : "1px solid #bbb",
                                             background: checked
                                               ? "rgba(0,0,0,0.03)"
                                               : "#fff",
@@ -3145,8 +3145,8 @@ export default function App() {
                                               padding: ".55rem .65rem",
                                               borderRadius: 10,
                                               border: isOn
-                                                ? "2px solid #0e74b4"
-                                                : "1px solid #ccc",
+                                                ? "1px solid #0e74b4"
+                                                : "1px solid #bbb",
                                               background: isOn
                                                 ? "rgba(14,116,180,0.25)"
                                                 : "rgba(255,255,255,0.1)",
@@ -3586,7 +3586,7 @@ export default function App() {
                       background: "#fff",
                       color: "#222",
                       borderRadius: 8,
-                      border: "1px solid #ccc",
+                      border: "1px solid #bbb",
                     }}
                     onClick={() =>
                       window.open(
@@ -3613,7 +3613,7 @@ export default function App() {
                     background: "#fff",
                     color: "#222",
                     borderRadius: 8,
-                    border: "1px solid #ccc",
+                    border: "1px solid #bbb",
                   }}
                   onClick={() =>
                     window.open(
@@ -3837,7 +3837,7 @@ export default function App() {
                           width: "100%",
                           alignSelf: "stretch",
                           fontSize: "1.1rem",
-                          border: "1px solid #ccc",
+                          border: "1px solid #bbb",
                         }}
                         onClick={() => setJetonInfoPage(`custom-${idx}`)}
                       >
@@ -4190,7 +4190,7 @@ export default function App() {
                         padding: "0.5rem",
                         marginBottom: "1rem",
                         borderRadius: "5px",
-                        border: "1px solid #ccc",
+                        border: "1px solid #bbb",
                         fontFamily: "Cardo, serif",
                       }}
                       placeholder="Texte du message"
@@ -4400,7 +4400,7 @@ export default function App() {
                     fontFamily: "Cardo, serif",
                     fontSize: "1.2rem",
                     borderRadius: 0,
-                    border: "1px solid #ccc",
+                    border: "1px solid #bbb",
                     padding: "0.5rem",
                     resize: "vertical",
                     background: "#ffe9a7ff",
