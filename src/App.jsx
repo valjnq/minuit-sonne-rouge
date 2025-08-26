@@ -35,7 +35,7 @@ const buttonStyle = {
   fontSize: "1rem",
   borderRadius: 8,
   border: "1px solid #bbb",
-  background: "#f5f5f5",
+  background: "#fafafa",
   color: "#222",
   cursor: "pointer",
   transition: "background 0.2s, color 0.2s, border 0.2s",
@@ -58,46 +58,73 @@ export default function App() {
   const jetonsInfoButtons = [
     {
       label: "Voici le démon",
-      color: "#950f13",
+      color: "#222",
       page: "demon",
       content: "Voici le démon",
-      textColor: "white",
-      fontWeight: "bold",
+      textColor: "#950f13",
+      background: "#fafafa",
+      border: "1px solid #ccc",
+      fontFamily: "Cardo, serif",
     },
     {
       label: "Voici tes acolytes",
-      color: "#950f13",
+      color: "#222",
       page: "acolytes",
       content: "Voici tes acolytes",
-      textColor: "white",
+      textColor: "#950f13",
+      background: "#fafafa",
+      border: "1px solid #ccc",
+      fontFamily: "Cardo, serif",
     },
     {
       label: "Bluffs du démon",
-      color: "#950f13",
+      color: "#222",
       page: "not-in-game",
       content: "Ces rôles ne sont pas en jeu",
-      textColor: "white",
+      textColor: "#950f13",
+      background: "#fafafa",
+      border: "1px solid #ccc",
+      fontFamily: "Cardo, serif",
+    },
+    {
+      label: "Afficher un rôle",
+      color: "#222",
+      page: "roles",
+      content: "Afficher un rôle",
+      textColor: "#222",
+      background: "#fafafa",
+      border: "1px solid #ccc",
+      fontFamily: "Cardo, serif",
     },
     {
       label: "Tu es",
-      color: "#0e74b4",
+      color: "#222",
       page: "you-are",
       content: "Tu es",
-      textColor: "white",
+      textColor: "#222",
+      background: "#fafafa",
+      border: "1px solid #ccc",
+      fontFamily: "Cardo, serif",
     },
     {
       label: "Ce joueur est",
-      color: "#0e74b4",
+      color: "#222",
       page: "player-is",
       content: "Ce joueur est",
-      textColor: "white",
+      textColor: "#222",
+      background: "#fafafa",
+      border: "1px solid #ccc",
+      fontFamily: "Cardo, serif",
     },
     {
       label: "Utiliser ton pouvoir ?",
-      color: "#0e74b4",
+      color: "#222",
       page: "use-power",
-      content: "Utiliser ton pouvoir?",
-      textColor: "white",
+      content: "Utiliser ton pouvoir ?",
+      textColor: "#222",
+      background: "#fafafa",
+      border: "1px solid #ccc",
+      fontFamily: "Cardo, serif",
     },
   ];
 
@@ -1069,12 +1096,14 @@ export default function App() {
                                       gap: ".5rem",
                                       padding: ".5rem .6rem",
                                       borderRadius: 10,
-                                      border: checked
-                                        ? `2px solid ${color}`
-                                        : "1px solid #ccc",
+                                      border: `1px solid ${
+                                        checked ? color : "#ccc"
+                                      }`,
                                       background: checked
-                                        ? "rgba(0,0,0,0.03)"
-                                        : "#fff",
+                                        ? role.alignement === "Bon"
+                                          ? "#e6f0fa"
+                                          : "#fae6e6"
+                                        : "#fafafa",
                                       cursor: "pointer",
                                       textAlign: "left",
                                       width: "100%",
@@ -1086,8 +1115,6 @@ export default function App() {
                                       style={{
                                         width: 24,
                                         height: 24,
-                                        borderRadius: 4,
-                                        border: "1px solid #ddd",
                                         flex: "0 0 auto",
                                       }}
                                       onError={(ev) =>
@@ -1095,7 +1122,14 @@ export default function App() {
                                           "none")
                                       }
                                     />
-                                    <span style={{ color, fontWeight: "bold" }}>
+                                    <span
+                                      style={{
+                                        color,
+                                        fontWeight: "bold",
+                                        fontFamily:
+                                          "'IM Fell English SC', serif",
+                                      }}
+                                    >
                                       {role.nom}
                                     </span>
                                   </button>
@@ -1122,7 +1156,8 @@ export default function App() {
                       padding: ".5rem 1rem",
                       borderRadius: 8,
                       border: "1px solid #bbb",
-                      background: "#f5f5f5",
+                      background: "#fafafa",
+                      fontFamily: "Cardo, serif",
                     }}
                   >
                     Vider
@@ -1133,8 +1168,9 @@ export default function App() {
                       style={{
                         padding: ".5rem 1rem",
                         borderRadius: 8,
-                        border: "1px solid #bbb",
-                        background: "#f5f5f5",
+                        border: "1px solid #ccc",
+                        background: "#fafafa",
+                        fontFamily: "Cardo, serif",
                       }}
                     >
                       Sélection aléatoire
@@ -1147,9 +1183,9 @@ export default function App() {
                       style={{
                         padding: ".5rem 1rem",
                         borderRadius: 8,
-                        border: "1px solid #0e74b4",
-                        background: "#0e74b4",
-                        color: "#fff",
+                        border: "1px solid #ccc",
+                        background: "#fafafa",
+                        fontFamily: "Cardo, serif",
                       }}
                     >
                       Valider ({customScriptTemp.length})
@@ -1263,11 +1299,14 @@ export default function App() {
                             }}
                             className="card-compact"
                             style={{
-                              border: isSelected
-                                ? role.alignement === "Bon"
-                                  ? "2px solid #0e74b4"
-                                  : "2px solid #950f13"
-                                : "1px solid #ccc",
+                              border: `1px solid ${
+                                isSelected
+                                  ? role.alignement === "Bon"
+                                    ? "#0e74b4"
+                                    : "#950f13"
+                                  : "#ccc"
+                              }`,
+
                               background: isSelected
                                 ? role.alignement === "Bon"
                                   ? "#e6f0fa"
@@ -1371,17 +1410,25 @@ export default function App() {
                     type="button"
                     onClick={() => setOrdreNuitActuelle("premiere")}
                     style={{
-                      padding: "0.75rem",
-                      fontFamily: "Cardo, serif",
-                      fontSize: "1.1rem",
-                      cursor: "pointer",
-                      border: "none",
-                      color: "white",
+                      ...buttonStyle,
+                      color:
+                        ordreNuitActuelle === "premiere"
+                          ? "#0e74b4"
+                          : buttonStyle.color,
                       background:
                         ordreNuitActuelle === "premiere"
-                          ? "#0e74b4" // actif
-                          : "rgba(143, 143, 143, 0.89)", // inactif (gris)
-                      transition: "background 0.2s",
+                          ? "#e6f0fa"
+                          : buttonStyle.background,
+                      border:
+                        ordreNuitActuelle === "premiere"
+                          ? "2px solid #0e74b4"
+                          : buttonStyle.border,
+                      boxShadow:
+                        ordreNuitActuelle === "premiere"
+                          ? "0 1px 4px rgba(0,0,0,0.08)"
+                          : "none",
+                      fontSize: "1.1rem",
+                      //fontWeight: "bold",
                     }}
                   >
                     Première nuit
@@ -1391,17 +1438,25 @@ export default function App() {
                     type="button"
                     onClick={() => setOrdreNuitActuelle("autres")}
                     style={{
-                      padding: "0.75rem",
-                      fontFamily: "Cardo, serif",
-                      fontSize: "1.1rem",
-                      cursor: "pointer",
-                      border: "none",
-                      color: "white",
+                      ...buttonStyle,
+                      color:
+                        ordreNuitActuelle === "autres"
+                          ? "#0e74b4"
+                          : buttonStyle.color,
                       background:
                         ordreNuitActuelle === "autres"
-                          ? "#0e74b4" // actif
-                          : "rgba(143, 143, 143, 0.89)", // inactif (gris)
-                      transition: "background 0.2s",
+                          ? "#e6f0fa"
+                          : buttonStyle.background,
+                      border:
+                        ordreNuitActuelle === "autres"
+                          ? "2px solid #0e74b4"
+                          : buttonStyle.border,
+                      boxShadow:
+                        ordreNuitActuelle === "autres"
+                          ? "0 1px 4px rgba(0,0,0,0.08)"
+                          : "none",
+                      fontSize: "1.1rem",
+                      //fontWeight: "bold",
                     }}
                   >
                     Autres nuits
@@ -1419,15 +1474,11 @@ export default function App() {
                     }}
                   >
                     <img
-                        src={`icons/crepuscule.png`}
-                        alt="crépuscule"
-                        className="wake-order-img"
+                      src={`icons/crepuscule.png`}
+                      alt="crépuscule"
+                      className="wake-order-img"
                     />
-                    <span
-                        className="wake-order-text"
-                    >
-                      Crépuscule
-                    </span>
+                    <span className="wake-order-text">Crépuscule</span>
                   </div>
                   {/* Philosophe (ordrePremiereNuit: 1) */}
                   {ordreNuitActuelle === "premiere" &&
@@ -1443,18 +1494,20 @@ export default function App() {
                           r.ordrePremiereNuit === 1
                       )
                       .map((role) => (
-                        <div
-                            key={role.nom}
-                            className="wake-order-item"
-                        >
+                        <div key={role.nom} className="wake-order-item">
                           <img
-                              src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                              alt={role.nom}
-                              className="wake-order-img"
+                            src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                            alt={role.nom}
+                            className="wake-order-img"
                           />
                           <span
-                              className="wake-order-text"
-                              style={{ color: role.alignement === "Bon" ? "#0e74b4" : "#950f13" }}
+                            className="wake-order-text"
+                            style={{
+                              color:
+                                role.alignement === "Bon"
+                                  ? "#0e74b4"
+                                  : "#950f13",
+                            }}
                           >
                             {role.nom}
                           </span>
@@ -1462,18 +1515,15 @@ export default function App() {
                       ))}
                   {/* Réveil des acolytes (ordrePremiereNuit: 2) */}
                   {ordreNuitActuelle === "premiere" && (
-                    <div
-                        key="acolyte"
-                        className="wake-order-item"
-                    >
+                    <div key="acolyte" className="wake-order-item">
                       <img
-                          src={`icons/acolyte.png`}
-                          alt="Réveil des acolytes"
-                          className="wake-order-img"
+                        src={`icons/acolyte.png`}
+                        alt="Réveil des acolytes"
+                        className="wake-order-img"
                       />
                       <span
-                          className="wake-order-text"
-                          style={{ color: "#950f13" }}
+                        className="wake-order-text"
+                        style={{ color: "#950f13" }}
                       >
                         Réveil des acolytes
                       </span>
@@ -1493,18 +1543,20 @@ export default function App() {
                           r.ordrePremiereNuit === 3
                       )
                       .map((role) => (
-                        <div
-                            key={role.nom}
-                            className="wake-order-item"
-                        >
+                        <div key={role.nom} className="wake-order-item">
                           <img
-                              src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                              alt={role.nom}
-                              className="wake-order-img"
+                            src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                            alt={role.nom}
+                            className="wake-order-img"
                           />
                           <span
-                              className="wake-order-text"
-                              style={{ color: role.alignement === "Bon" ? "#0e74b4" : "#950f13" }}
+                            className="wake-order-text"
+                            style={{
+                              color:
+                                role.alignement === "Bon"
+                                  ? "#0e74b4"
+                                  : "#950f13",
+                            }}
                           >
                             {role.nom}
                           </span>
@@ -1513,18 +1565,15 @@ export default function App() {
                   {/* Réveil du démon et bluffs (ordrePremiereNuit: 4) - only show if no role has ordrePremiereNuit: 4, otherwise handled in roles loop */}
                   {ordreNuitActuelle === "premiere" &&
                     !selected.some((r) => r.ordrePremiereNuit === 4) && (
-                      <div
-                          key="demon-bluffs"
-                          className="wake-order-item"
-                      >
+                      <div key="demon-bluffs" className="wake-order-item">
                         <img
-                            src={`icons/demon.png`}
-                            alt="Réveil du démon et bluffs"
-                            className="wake-order-img"
+                          src={`icons/demon.png`}
+                          alt="Réveil du démon et bluffs"
+                          className="wake-order-img"
                         />
                         <span
-                            className="wake-order-text"
-                            style={{ color: "#950f13" }}
+                          className="wake-order-text"
+                          style={{ color: "#950f13" }}
                         >
                           Réveil du démon et bluffs
                         </span>
@@ -1591,18 +1640,20 @@ export default function App() {
                           </span>
                         </div>
                       ) : (
-                        <div
-                            key={role.nom}
-                            className="wake-order-item"
-                        >
+                        <div key={role.nom} className="wake-order-item">
                           <img
-                              src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                              alt={role.nom}
-                              className="wake-order-img"
+                            src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                            alt={role.nom}
+                            className="wake-order-img"
                           />
                           <span
-                              className="wake-order-text"
-                              style={{ color: role.alignement === "Bon" ? "#0e74b4" : "#950f13" }}
+                            className="wake-order-text"
+                            style={{
+                              color:
+                                role.alignement === "Bon"
+                                  ? "#0e74b4"
+                                  : "#950f13",
+                            }}
                           >
                             {role.nom}
                           </span>
@@ -1610,23 +1661,16 @@ export default function App() {
                       )
                     )}
                   {/* Always show Aube last */}
-                  <div
-                      key="aube"
-                      className="wake-order-item"
-                  >
+                  <div key="aube" className="wake-order-item">
                     <img
-                        src={`icons/aube.png`}
-                        alt="Aube"
-                        className="wake-order-img"
+                      src={`icons/aube.png`}
+                      alt="Aube"
+                      className="wake-order-img"
                     />
-                    <span
-                        className="wake-order-text"
-                    >
-                      Aube
-                    </span>
+                    <span className="wake-order-text">Aube</span>
                   </div>
-                    {/* Ajout du style global pour l'ordre de réveil */}
-                    <style>{`
+                  {/* Ajout du style global pour l'ordre de réveil */}
+                  <style>{`
                       .wake-order-item {
                         display: flex;
                         align-items: center;
@@ -3686,53 +3730,17 @@ export default function App() {
                 }}
               >
                 {jetonsInfoButtons.map((btn, idx) =>
-                  idx === 2 ? (
-                    <React.Fragment key={btn.label + "-roles"}>
-                      <button
-                        key={btn.label}
-                        style={{
-                          ...buttonStyle,
-                          background: btn.color,
-                          color: "#fff",
-                          //fontWeight: "bold",
-                          fontSize: "1.1rem",
-                          fontFamily: "Cardo, serif",
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                          margin: 0,
-                          width: "100%",
-                          alignSelf: "stretch",
-                        }}
-                        onClick={() => setJetonInfoPage(btn.page)}
-                      >
-                        {btn.label}
-                      </button>
-                      <button
-                        key="roles-btn"
-                        style={{
-                          ...buttonStyle,
-                          background: "#222",
-                          color: "#fff",
-                          // fontWeight: "bold",
-                          fontSize: "1.1rem",
-                          fontFamily: "Cardo, serif",
-                          minWidth: "180px",
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                        }}
-                        onClick={() => setRolesModalOpen(true)}
-                      >
-                        Rôles
-                      </button>
-                    </React.Fragment>
-                  ) : (
+                  btn.label === "Voici le démon" ? (
                     <button
                       key={btn.label}
                       style={{
                         ...buttonStyle,
-                        background: btn.color,
-                        color: "#fff",
-                        //fontWeight: "bold",
-                        fontSize: "1.1rem",
-                        fontFamily: "Cardo, serif",
+                        background: btn.background,
+                        border: btn.border,
+                        fontFamily: btn.fontFamily,
+                        color: btn.textColor,
+                        fontWeight: "normal",
+                        fontSize: "1rem",
                         boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                         margin: 0,
                         width: "100%",
@@ -3742,7 +3750,71 @@ export default function App() {
                     >
                       {btn.label}
                     </button>
-                  )
+                  ) : btn.label === "Voici tes acolytes" ||
+                    btn.label === "Bluffs du démon" ? (
+                    <button
+                      key={btn.label}
+                      style={{
+                        ...buttonStyle,
+                        background: btn.background,
+                        border: btn.border,
+                        fontFamily: btn.fontFamily,
+                        color: btn.textColor,
+                        fontWeight: btn.fontWeight || "normal",
+                        fontSize: "1rem",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                        margin: 0,
+                        width: "100%",
+                        alignSelf: "stretch",
+                      }}
+                      onClick={() => setJetonInfoPage(btn.page)}
+                    >
+                      {btn.label}
+                    </button>
+                  ) : btn.label === "Afficher un rôle" ? (
+                    <button
+                      key={btn.label}
+                      style={{
+                        ...buttonStyle,
+                        background: btn.background,
+                        color: btn.textColor,
+                        border: btn.border,
+                        fontSize: "1rem",
+                        fontFamily: "Cardo, serif",
+                        minWidth: "180px",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                        margin: 0,
+                        width: "100%",
+                        alignSelf: "stretch",
+                      }}
+                      onClick={() => setRolesModalOpen(true)}
+                    >
+                      {btn.label}
+                    </button>
+                  ) : btn.label === "Tu es" ||
+                    btn.label === "Ce joueur est" ||
+                    btn.label === "Utiliser ton pouvoir ?" ? (
+                    <button
+                      key={btn.label}
+                      style={{
+                        ...buttonStyle,
+                        background: btn.background,
+                        border: btn.border,
+                        color: btn.textColor,
+                        fontWeight: btn.fontWeight || "normal",
+                        fontSize: "1rem",
+                        
+                      
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                        margin: 0,
+                        width: "100%",
+                        alignSelf: "stretch",
+                      }}
+                      onClick={() => setJetonInfoPage(btn.page)}
+                    >
+                      {btn.label}
+                    </button>
+                  ) : null
                 )}
                 {/* Ajout des messages personnalisés juste après le dernier bouton Communication */}
                 {customJetons.length > 0 && (
@@ -3760,13 +3832,12 @@ export default function App() {
                         key={"custom-" + idx}
                         style={{
                           ...buttonStyle,
-                          background: "#f5e3c3", // beige
+                          background: "#fafafa", // beige
                           color: "#222",
                           width: "100%",
                           alignSelf: "stretch",
-                          //fontWeight: "bold",
                           fontSize: "1.1rem",
-                          border: "1px solid #bbb",
+                          border: "1px solid #ccc",
                         }}
                         onClick={() => setJetonInfoPage(`custom-${idx}`)}
                       >
