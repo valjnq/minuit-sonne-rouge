@@ -991,6 +991,7 @@ export default function App() {
                     fontSize: "1.5rem",
                     cursor: "pointer",
                     lineHeight: 1,
+                    color: "#222",
                   }}
                   aria-label="Fermer"
                 >
@@ -1734,7 +1735,7 @@ export default function App() {
                     background: "none",
                     fontSize: "1.5rem",
                     cursor: "pointer",
-                    color: "#222",
+                    color: "#222", // Force noir sur toutes plateformes
                     lineHeight: 1,
                   }}
                   aria-label="Fermer"
@@ -2456,6 +2457,7 @@ export default function App() {
                           fontSize: "1.5rem",
                           cursor: "pointer",
                           lineHeight: 1,
+                          color: "#222",
                         }}
                         aria-label="Fermer"
                       >
@@ -2780,6 +2782,7 @@ export default function App() {
                               fontSize: "1.8rem",
                               cursor: "pointer",
                               lineHeight: 1,
+                              color: "#222",
                             }}
                             aria-label="Fermer"
                           >
@@ -3171,6 +3174,7 @@ export default function App() {
                                       background: "none",
                                       fontSize: "1.5rem",
                                       cursor: "pointer",
+                                      color: "#222",
                                       lineHeight: 1,
                                     }}
                                     aria-label="Fermer"
@@ -4055,6 +4059,7 @@ export default function App() {
                         fontSize: "1.5rem",
                         cursor: "pointer",
                         lineHeight: 1,
+                        color: "#222",
                       }}
                       aria-label="Fermer"
                     >
@@ -4199,6 +4204,7 @@ export default function App() {
                       border: "none",
                       cursor: "pointer",
                       zIndex: 2,
+                      color: "#222",
                     }}
                   >
                     ×
@@ -4322,6 +4328,7 @@ export default function App() {
                         background: "none",
                         fontSize: "1.5rem",
                         cursor: "pointer",
+                        color: "#222",
                         lineHeight: 1,
                       }}
                       aria-label="Fermer"
