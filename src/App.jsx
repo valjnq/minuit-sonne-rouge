@@ -73,7 +73,7 @@ export default function App() {
       color: "#222",
       page: "demon",
       content: "Voici le démon",
-      textColor: "#950f13",
+      textColor: "#222",
       background: "#f5F5F5",
 
       border: "1px solid #bbb",
@@ -84,7 +84,7 @@ export default function App() {
       color: "#222",
       page: "acolytes",
       content: "Voici tes acolytes",
-      textColor: "#950f13",
+      textColor: "#222",
       background: "#f5F5F5",
 
       border: "1px solid #bbb",
@@ -95,7 +95,7 @@ export default function App() {
       color: "#222",
       page: "not-in-game",
       content: "Ces rôles ne sont pas en jeu",
-      textColor: "#950f13",
+      textColor: "#222",
       background: "#f5F5F5",
 
       border: "1px solid #bbb",
@@ -742,16 +742,15 @@ export default function App() {
               >
                 Nombre de joueurs :
                 <select
-  value={nbJoueurs}
-  onChange={(e) => setNbJoueurs(Number(e.target.value))}
-  disabled={rolesValides}
-  style={{
-    ...selectBaseStyle,
-    marginLeft: "0.5rem",
-    width: "auto",          // même look, largeur contenu (pas plein écran)
-  }}
->
-
+                  value={nbJoueurs}
+                  onChange={(e) => setNbJoueurs(Number(e.target.value))}
+                  disabled={rolesValides}
+                  style={{
+                    ...selectBaseStyle,
+                    marginLeft: "0.5rem",
+                    width: "auto", // même look, largeur contenu (pas plein écran)
+                  }}
+                >
                   {Array.from({ length: 11 }, (_, i) => i + 5).map((n) => (
                     <option key={n} value={n}>
                       {n}
@@ -816,116 +815,115 @@ export default function App() {
                   );
                 })}
 
-               {/* Sélection du script — ligne complète sous les cartes */}
-<div
-  style={{
-    gridColumn: "1 / -1",      // occupe toute la largeur de la grille
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    marginTop: "0.5rem",
-  }}
->
-  <label
-    htmlFor="editionSelect"
-    style={{
-      fontSize: "1rem",
-      fontFamily: "Cardo, serif",
-      whiteSpace: "nowrap",
-    }}
-  >
-    Sélectionner le script :
-  </label>
-
-  <select
-    id="editionSelect"
-    value={edition}
-    onChange={(e) => setEdition(e.target.value)}
-    disabled={rolesValides}
-    style={{
-      fontSize: "1rem",
-      fontFamily: "Cardo, serif",
-      padding: "0.25rem 0.5rem",
-      borderRadius: 8,
-      border: "1px solid #ccc",
-      background: "#fff",
-      appearance: "auto",
-      minWidth: "10rem",
-      maxWidth: "220px",
-      width: "100%",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      whiteSpace: "nowrap",
-    }}
-  >
-    {[...new Set(roles.map((r) => r.edition))].map((ed) => (
-      <option key={ed} value={ed}>{ed}</option>
-    ))}
-    <option value="Script personnalisé">Personnalisé</option>
-  </select>
-</div>
-
-
-                
-                </div>
-                {/* Ligne des boutons sous le select */}
+                {/* Sélection du script — ligne complète sous les cartes */}
                 <div
                   style={{
-                    flexBasis: "100%", // force la ligne sous le select
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr", // 2 colonnes = 2 boutons côte à côte
-                    gap: "0.75rem",
+                    gridColumn: "1 / -1", // occupe toute la largeur de la grille
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
                     marginTop: "0.5rem",
-                    width: "100%",
                   }}
                 >
+                  <label
+                    htmlFor="editionSelect"
+                    style={{
+                      fontSize: "1rem",
+                      fontFamily: "Cardo, serif",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    Sélectionner le script :
+                  </label>
+
+                  <select
+                    id="editionSelect"
+                    value={edition}
+                    onChange={(e) => setEdition(e.target.value)}
+                    disabled={rolesValides}
+                    style={{
+                      fontSize: "1rem",
+                      fontFamily: "Cardo, serif",
+                      padding: "0.25rem 0.5rem",
+                      borderRadius: 8,
+                      border: "1px solid #ccc",
+                      background: "#fff",
+                      appearance: "auto",
+                      minWidth: "10rem",
+                      maxWidth: "220px",
+                      width: "100%",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {[...new Set(roles.map((r) => r.edition))].map((ed) => (
+                      <option key={ed} value={ed}>
+                        {ed}
+                      </option>
+                    ))}
+                    <option value="Script personnalisé">Personnalisé</option>
+                  </select>
+                </div>
+              </div>
+              {/* Ligne des boutons sous le select */}
+              <div
+                style={{
+                  flexBasis: "100%", // force la ligne sous le select
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr", // 2 colonnes = 2 boutons côte à côte
+                  gap: "0.75rem",
+                  marginTop: "0.5rem",
+                  width: "100%",
+                }}
+              >
+                <button
+                  onClick={() => setQrCodeVisible(true)}
+                  style={{
+                    ...buttonStyle,
+                    width: "100%", // occupe toute sa colonne
+                    cursor:
+                      customScriptPool.length === 0 &&
+                      edition === "Script personnalisé"
+                        ? "not-allowed"
+                        : "pointer",
+                    opacity:
+                      customScriptPool.length === 0 &&
+                      edition === "Script personnalisé"
+                        ? 0.5
+                        : 1,
+                  }}
+                  disabled={
+                    customScriptPool.length === 0 &&
+                    edition === "Script personnalisé"
+                  }
+                >
+                  Partager le script
+                </button>
+
+                {edition === "Script personnalisé" && (
                   <button
-                    onClick={() => setQrCodeVisible(true)}
+                    type="button"
+                    onClick={() => {
+                      setCustomScriptVisible(true);
+                      if (
+                        customScriptPool.length > 0 &&
+                        customScriptTemp.length === 0
+                      ) {
+                        setCustomScriptTemp(customScriptPool);
+                      }
+                    }}
+                    disabled={rolesValides}
                     style={{
                       ...buttonStyle,
                       width: "100%", // occupe toute sa colonne
-                      cursor:
-                        customScriptPool.length === 0 &&
-                        edition === "Script personnalisé"
-                          ? "not-allowed"
-                          : "pointer",
-                      opacity:
-                        customScriptPool.length === 0 &&
-                        edition === "Script personnalisé"
-                          ? 0.5
-                          : 1,
+                      cursor: rolesValides ? "not-allowed" : "pointer",
+                      opacity: rolesValides ? 0.5 : 1,
                     }}
-                    disabled={
-                      customScriptPool.length === 0 &&
-                      edition === "Script personnalisé"
-                    }
                   >
-                    Partager le script
+                    Éditer le script
                   </button>
-
-                  {edition === "Script personnalisé" && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCustomScriptVisible(true);
-                        if (
-                          customScriptPool.length > 0 &&
-                          customScriptTemp.length === 0
-                        ) {
-                          setCustomScriptTemp(customScriptPool);
-                        }
-                      }}
-                      disabled={rolesValides}
-                      style={{
-                        ...buttonStyle,
-                        width: "100%", // occupe toute sa colonne
-                        cursor: rolesValides ? "not-allowed" : "pointer",
-                        opacity: rolesValides ? 0.5 : 1,
-                      }}
-                    >
-                      Éditer le script
-                    </button>
-                  )}
+                )}
               </div>
             </div>
           </details>
@@ -3868,7 +3866,8 @@ export default function App() {
               <div
                 style={{
                   width: "100%",
-                  marginBottom: "1rem",
+                  marginTop: "0.7rem",
+                  marginBottom: "0.7rem",
                   display: "flex",
                   flexDirection: "column",
                   gap: "0.7rem",
@@ -3916,9 +3915,9 @@ export default function App() {
                     >
                       {btn.label}
                     </button>
-                  ) : btn.label === "Tu es" ||
+                  ) : btn.label === "Utiliser ton pouvoir ?" ||
                     btn.label === "Ce joueur est" ||
-                    btn.label === "Utiliser ton pouvoir ?" ? (
+                    btn.label === "Tu es" ? (
                     <button
                       key={btn.label}
                       style={{
@@ -3940,6 +3939,17 @@ export default function App() {
                     </button>
                   ) : null
                 )}
+                {/* Séparateur noir */}
+                <hr
+                  aria-hidden="true"
+                  style={{
+                    border: "none",
+                    borderTop: "1px solid #000",
+                    margin: 0, // IMPORTANT: 0 pour ne pas ajouter d'espace
+                    width: "100%",
+                    alignSelf: "stretch", // s'étire dans un conteneur flex en colonne
+                  }}
+                />
                 {/* Ajout des messages personnalisés juste après le dernier bouton Communication */}
                 {customJetons.length > 0 && (
                   <div
@@ -4234,113 +4244,174 @@ export default function App() {
                   </div>
                 </div>
               )}
-              <hr
-                style={{
-                  border: "none",
-                  borderTop: "1px #222 solid",
-                  margin: "12px 0",
-                }}
-              />
               <button
                 style={{ ...buttonStyle, width: "100%" }}
                 onClick={() => setAddCustomJetonVisible(true)}
               >
                 Ajouter un message
               </button>
-              {/* Modal for custom jeton info */}
               {addCustomJetonVisible && (
                 <div
                   style={{
                     position: "fixed",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: "rgba(0,0,0,0.7)",
-                    zIndex: 300,
+                    inset: 0,
+                    background: "rgba(0,0,0,0.6)",
+                    zIndex: 500,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
+                  {/* BOÎTE PLEIN ÉCRAN */}
                   <div
                     style={{
                       background: "#fff",
                       color: "#222",
-                      borderRadius: "10px",
-                      padding: "2rem",
-                      minWidth: "320px",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                      position: "relative",
+                      position: "fixed",
+                      top: 0,
+                      right: 0,
+                      bottom: 0,
+                      left: 0,
+                      width: "auto",
+                      height: "auto",
+                      borderRadius: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      overflow: "hidden", // le corps scrolle, pas l’en-tête
+                      minHeight: "-webkit-fill-available",
+                      paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                      paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                      paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
+                      paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                      WebkitOverflowScrolling: "touch",
+                      overscrollBehavior: "contain",
+                      fontFamily: "Cardo, serif",
+                      zIndex: 501,
                     }}
+                    role="dialog"
+                    aria-modal="true"
                   >
+                    {/* CROIX FERMER */}
                     <button
                       onClick={() => setAddCustomJetonVisible(false)}
                       style={{
                         position: "absolute",
-                        top: "1rem",
-                        right: "1rem",
-                        fontSize: "1.5rem",
-                        color: "#333",
-                        background: "none",
+                        top: "0.75rem",
+                        right: "0.75rem",
                         border: "none",
+                        background: "none",
+                        fontSize: "1.5rem",
                         cursor: "pointer",
+                        lineHeight: 1,
+                      }}
+                      aria-label="Fermer"
+                    >
+                      ×
+                    </button>
+
+                    {/* HEADER */}
+                    <h3
+                      style={{
+                        marginTop: 0,
+                        marginBottom: "1rem",
+                        paddingRight: "2rem",
+                        fontFamily: "'IM Fell English SC', serif",
+                        fontSize: "calc(var(--h2-size) * 1.1)",
+                        letterSpacing: "0.02em",
                       }}
                     >
-                      ✖
-                    </button>
+                      Ajouter un message
+                    </h3>
+
+                    {/* CORPS SCROLLABLE */}
                     <div
                       style={{
-                        fontWeight: "bold",
-                        fontSize: "1.2rem",
-                        marginBottom: "1rem",
+                        flex: 1, // occupe tout l’espace entre header et pied
+                        overflow: "auto",
+                        paddingBottom: "env(safe-area-inset-bottom)",
+                        display: "flex",
+                        alignItems: "center", // ← centre verticalement
+                        justifyContent: "center", // ← centre horizontalement
+                        minHeight: 0, // fix iOS Safari pour le scroll dans un flex
                       }}
                     >
-                      Ajouter un message personnalisé
+                      <div
+                        style={{ width: "100%", maxWidth: 680, margin: "1rem" }}
+                      >
+                        <label
+                          htmlFor="customJetonInput"
+                          style={{
+                            display: "block",
+                            fontFamily: "IM Fell English SC, serif",
+                            fontSize: "1.4rem",
+                            marginBottom: ".5rem",
+                            fontWeight: "bold",
+                            textAlign: "left",
+                          }}
+                        >
+                          Texte du message
+                        </label>
+
+                        <textarea
+                          id="customJetonInput"
+                          value={customJetonText}
+                          onChange={(e) => setCustomJetonText(e.target.value)}
+                          style={{
+                            width: "100%",
+                            boxSizing: "border-box",
+                            fontSize: "1.1rem",
+                            lineHeight: 1.4,
+                            padding: "0.9rem 1rem",
+                            borderRadius: "12px",
+                            border: "1px solid #bbb",
+                            fontFamily: "Cardo, serif",
+                            background: "#fff",
+                            minHeight: "14rem", // ← plus grand en hauteur (ajuste si besoin)
+                            resize: "vertical", // l’utilisateur peut agrandir
+                          }}
+                        />
+                      </div>
                     </div>
-                    <input
-                      type="text"
-                      value={customJetonText}
-                      onChange={(e) => setCustomJetonText(e.target.value)}
+
+                    {/* PIED / FOOTER */}
+                    <div
                       style={{
-                        width: "100%",
-                        fontSize: "1.1rem",
-                        padding: "0.5rem",
-                        marginBottom: "1rem",
-                        borderRadius: "5px",
-                        border: "1px solid #bbb",
-                        fontFamily: "Cardo, serif",
-                      }}
-                      placeholder="Texte du message"
-                    />
-                    <button
-                      style={{
-                        background: "#7db3e6",
-                        color: "black",
-                        border: "none",
-                        borderRadius: "6px",
-                        fontWeight: "bold",
-                        fontSize: "1.1rem",
-                        padding: "0.5rem 1.2rem",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        if (customJetonText.trim()) {
-                          setCustomJetons([
-                            ...customJetons,
-                            customJetonText.trim(),
-                          ]);
-                          setCustomJetonText("");
-                          setAddCustomJetonVisible(false);
-                        }
+                        display: "flex",
+                        gap: ".5rem",
+                        marginTop: "1rem",
                       }}
                     >
-                      Ajouter
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (customJetonText.trim()) {
+                            setCustomJetons([
+                              ...customJetons,
+                              customJetonText.trim(),
+                            ]);
+                            setCustomJetonText("");
+                            setAddCustomJetonVisible(false);
+                          }
+                        }}
+                        style={{
+                          ...buttonStyle,
+                          flex: "1 1 auto",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "0.35em",
+                          padding: "0.5rem 1rem",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        Valider
+                      </button>
+                    </div>
                   </div>
                 </div>
-              )}{" "}
-              <div style={{ marginBottom: "12px" }}></div>
+              )}
+
+              <div style={{ marginBottom: "0.7rem" }}></div>
               <button
                 style={{
                   ...buttonStyle,
@@ -4363,42 +4434,49 @@ export default function App() {
             </details>
           </div>
           {/* Jeton info modal/page */}
+
           {jetonInfoPage !== null && (
             <div
               style={{
                 position: "fixed",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "#888",
-                zIndex: 400,
+                inset: 0,
+                background: "rgba(0,0,0,0.6)", // overlay sombre
+                zIndex: 500,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
+              {/* BOÎTE BLANCHE PLEIN ÉCRAN */}
               <div
                 style={{
-                  background: "none",
-                  color: "#fff",
-                  borderRadius: "16px",
-                  padding: "0",
-                  minWidth: "0",
-                  minHeight: "0",
+                  background: "#fff", // ← fond blanc
+                  color: "#000", // ← texte noir
+                  position: "fixed",
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  left: 0,
+                  width: "auto",
+                  height: "auto",
+                  borderRadius: 0,
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  overflow: "hidden", // scroll dans le corps si besoin
+                  paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                  paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                  paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
+                  paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                  WebkitOverflowScrolling: "touch",
+                  overscrollBehavior: "contain",
                   fontFamily: "Cardo, serif",
-                  fontSize: "2rem",
-                  boxShadow: "none",
-                  position: "relative",
-                  width: "100vw",
-                  height: "100vh",
+                  zIndex: 501,
                 }}
+                role="dialog"
+                aria-modal="true"
+                onClick={(e) => e.stopPropagation()}
               >
-                {/* Bin icon for custom messages, top left */}
+                {/* Corbeille (messages personnalisés) */}
                 {jetonInfoPage && jetonInfoPage.startsWith("custom-") && (
                   <button
                     onClick={() => {
@@ -4408,10 +4486,10 @@ export default function App() {
                     }}
                     style={{
                       position: "absolute",
-                      top: "1.5rem",
-                      left: "2rem",
-                      fontSize: "2rem",
-                      color: "#fff",
+                      top: "0.75rem",
+                      left: "0.75rem",
+                      fontSize: "1.5rem",
+                      color: "#222", // ← icône sombre
                       background: "none",
                       border: "none",
                       cursor: "pointer",
@@ -4422,77 +4500,166 @@ export default function App() {
                     🗑️
                   </button>
                 )}
-                {/* Close icon, top right */}
+
+                {/* Croix fermer */}
                 <button
                   onClick={() => setJetonInfoPage(null)}
                   style={{
                     position: "absolute",
-                    top: "1.5rem",
-                    right: "2rem",
-                    fontSize: "2rem",
-                    color: "#fff",
-                    background: "none",
+                    top: "0.75rem",
+                    right: "0.75rem",
                     border: "none",
+                    background: "none",
+                    fontSize: "1.5rem",
                     cursor: "pointer",
+                    lineHeight: 1,
+                    color: "#222", // ← icône sombre
                     zIndex: 401,
                   }}
+                  aria-label="Fermer"
                 >
-                  ✖
+                  ×
                 </button>
-                <div style={{ textAlign: "center", marginTop: "18vh" }}>
+                {/* CONTENU CENTRÉ VERTICAL + HORIZONTAL */}
+                <div
+                  style={{
+                    flex: 1,
+                    overflow: "auto",
+                    display: "flex",
+                    alignItems: "center", // ← centre vertical
+                    justifyContent: "center", // ← centre horizontal
+                    minHeight: 0, // fix iOS Safari dans un flex
+                    padding: "1rem",
+                  }}
+                >
                   <div
                     style={{
-                      fontFamily: "Cardo, serif",
-                      fontSize: "2.2rem",
-                      marginBottom: "2.5rem",
-                      color: "#fff",
+                      width: "100%",
+                      maxWidth: 720,
+                      textAlign: "center",
                     }}
                   >
-                    {jetonInfoPage === "not-in-game"
-                      ? "Ces rôles ne sont pas en jeu"
-                      : jetonInfoPage.startsWith("custom-")
-                      ? customJetons[parseInt(jetonInfoPage.split("-")[1])]
-                      : jetonsInfoButtons.find(
-                          (btn) => btn.page === jetonInfoPage
-                        )?.content}
-                  </div>
-                  {/* If the message is 'Ces rôles ne sont pas en jeu', show the roles icons and names below, otherwise just the message */}
-                  {jetonInfoPage === "not-in-game" &&
-                    (bluffs && bluffs.length > 0 ? (
+                    <div
+                      style={{
+                        fontFamily: "IM Fell English SC, serif",
+                        fontSize: "3rem",
+                        marginBottom: "2.5rem",
+                        color: "#000",
+                      }}
+                    >
+                      {jetonInfoPage === "not-in-game"
+                        ? "Ces rôles ne sont pas en jeu"
+                        : jetonInfoPage.startsWith("custom-")
+                        ? customJetons[parseInt(jetonInfoPage.split("-")[1])]
+                        : jetonsInfoButtons.find(
+                            (btn) => btn.page === jetonInfoPage
+                          )?.content}
+                    </div>
+
+                    {/* Liste des rôles non en jeu (le cas échéant) */}
+                    {jetonInfoPage === "not-in-game" &&
+                    bluffs &&
+                    bluffs.length > 0 ? (
                       <div
                         style={{
                           display: "flex",
-                          gap: "3rem",
-                          justifyContent: "center",
-                          marginTop: "1.5rem",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: "1.5rem",
+                          marginTop: "1rem",
                         }}
                       >
-                        {bluffs.map((role) => (
-                          <div key={role.nom} style={{ textAlign: "center" }}>
-                            <img
-                              src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                              alt={role.nom}
-                              style={{
-                                width: 64,
-                                height: 64,
-                                objectFit: "contain",
-                                marginBottom: "0.5rem",
-                              }}
-                            />
+                        {/* Ligne du haut : 2 rôles */}
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "3rem",
+                            justifyContent: "center",
+                            flexWrap: "nowrap",
+                          }}
+                        >
+                          {bluffs.slice(0, 2).map((role) => (
                             <div
+                              key={role.nom}
                               style={{
-                                fontFamily: "Cardo, serif",
-                                fontWeight: "bold",
-                                fontSize: "1.1rem",
-                                color: "#fff",
+                                display: "inline-flex", // shrink-wrap selon le contenu
+                                flexDirection: "column",
+                                alignItems: "center", // centre l'icône sur l'axe du texte
+                                textAlign: "center",
                               }}
                             >
-                              {role.nom}
+                              <img
+                                src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                                alt={role.nom}
+                                style={{
+                                  width: 72,
+                                  height: 64,
+                                  display: "block", // évite l'espace inline
+                                  margin: "0 auto", // sécurité : centre dans le conteneur
+                                  objectFit: "contain",
+                                  marginBottom: "0.5rem",
+                                }}
+                              />
+                              <div
+                                style={{
+                                  fontFamily: "'IM Fell English SC', serif",
+                                  fontSize: "1.4rem",
+                                  color: "#0e74b4",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {role.nom}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Ligne du bas : 3e rôle centré (si présent) */}
+                        {bluffs[2] && (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "inline-flex", // shrink-wrap
+                                flexDirection: "column",
+                                alignItems: "center",
+                                textAlign: "center",
+                              }}
+                            >
+                              <img
+                                src={`icons/icon_${normalizeNom(
+                                  bluffs[2].nom
+                                )}.png`}
+                                alt={bluffs[2].nom}
+                                style={{
+                                  width: 72,
+                                  height: 72,
+                                  display: "block",
+                                  margin: "0 auto",
+                                  objectFit: "contain",
+                                  marginBottom: "0.5rem",
+                                }}
+                              />
+                              <div
+                                style={{
+                                  fontFamily: "'IM Fell English SC', serif",
+                                  fontSize: "1.4rem",
+                                  color: "#0e74b4",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {bluffs[2].nom}
+                              </div>
                             </div>
                           </div>
-                        ))}
+                        )}
                       </div>
-                    ) : null)}
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </div>
