@@ -4426,7 +4426,7 @@ export default function App() {
                     Minuit sonne rouge
                   </strong>{" "}
                   est une version francisée du jeu{" "}
-                  <strong>Blood on the Clocktower</strong>, réalisée par un fan.
+                  <strong>Blood on the Clocktower</strong> réalisée par un fan.
                 </p>
 
                 <p style={{ fontFamily: "Cardo, serif" }}>
