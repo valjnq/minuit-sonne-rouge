@@ -4301,7 +4301,7 @@ export default function App() {
                       borderRadius: 0,
                       display: "flex",
                       flexDirection: "column",
-                      overflow: "hidden", // le corps scrolle, pas l’en-tête
+                      overflow: "hidden", 
                       minHeight: "-webkit-fill-available",
                       paddingTop: "calc(1rem + env(safe-area-inset-top))",
                       paddingRight: "calc(1rem + env(safe-area-inset-right))",
