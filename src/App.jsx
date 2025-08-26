@@ -621,16 +621,17 @@ export default function App() {
             />
             <div style={{ display: "flex", flexDirection: "column" }}>
               <span
+                className="titre-principal"
                 style={{
-                  fontFamily: "Pirata One, cursive",
                   fontSize: "2rem",
                   fontWeight: "bold",
                   color: "#950f13",
-                  lineHeight: "1.1", // ← ajouté
+                  lineHeight: "1.1",
                 }}
               >
                 Minuit Sonne Rouge
               </span>
+
               <span
                 style={{
                   fontFamily: "IM Fell English SC, serif",
@@ -1010,7 +1011,7 @@ export default function App() {
                     marginTop: 0,
                     marginBottom: "1rem",
                     paddingRight: "2rem",
-                    fontFamily: "Pirata One, cursive",
+                    fontFamily: "IM Fell English SC, serif",
                   }}
                 >
                   Choisir les rôles du script
@@ -2427,7 +2428,7 @@ export default function App() {
                           marginTop: 0,
                           marginBottom: "1rem",
                           paddingRight: "2rem",
-                          fontFamily: "Pirata One, cursive",
+                          fontFamily: "IM Fell English SC, serif",
                         }}
                       >
                         Choisir les bluffs du démon
@@ -2711,7 +2712,7 @@ export default function App() {
                           >
                             <div
                               style={{
-                                fontFamily: "Pirata One, cursive",
+                                fontFamily: "IM Fell English SC, serif",
                                 fontSize: "1.25rem",
                                 lineHeight: 1.1,
                               }}
@@ -3071,7 +3072,8 @@ export default function App() {
                                       <h3
                                         style={{
                                           margin: 0,
-                                          fontFamily: "Pirata One, cursive",
+                                          fontFamily:
+                                            "IM Fell English SC, serif",
                                           fontSize: "1.4rem",
                                         }}
                                       >
@@ -3294,7 +3296,8 @@ export default function App() {
                                       <h3
                                         style={{
                                           margin: 0,
-                                          fontFamily: "Pirata One, cursive",
+                                          fontFamily:
+                                            "IM Fell English SC, serif",
                                           fontSize: "1.4rem",
                                         }}
                                       >
@@ -3875,7 +3878,7 @@ export default function App() {
                         style={{
                           marginBottom: 0,
                           fontWeight: "bold",
-                          fontFamily: "Pirata One, cursive",
+                          fontFamily: "IM Fell English SC, serif",
                           fontSize: "1.35rem",
                         }}
                       >
