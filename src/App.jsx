@@ -2778,7 +2778,6 @@ export default function App() {
                             style={{
                               border: "none",
                               background: "none",
-                              color: "#222", // ← croix sombre
                               fontSize: "1.8rem",
                               cursor: "pointer",
                               lineHeight: 1,
