@@ -3464,7 +3464,7 @@ export default function App() {
         fontSize: "1.3rem",
       }}
     >
-      Sélectionner le nouveau rôle
+      Choisir le nouveau rôle
     </h3>
 
     {/* Corps scrollable : grille 2 colonnes */}
