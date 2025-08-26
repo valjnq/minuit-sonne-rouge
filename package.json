@@ -1,6 +1,6 @@
 {
   "name": "minuit-sonne-rouge",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "homepage": "https://valjnq.github.io/minuit-sonne-rouge",
   "scripts": {
     "dev": "vite",
