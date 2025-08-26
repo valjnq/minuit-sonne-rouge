@@ -332,6 +332,22 @@
     "rappel": true
   },
   {
+    "nom": "Empoté",
+    "edition": "Parfum d’hystérie",
+    "pouvoir": "Lorsque tu apprends ta mort, choisis un joueur publiquement. S’il est maléfique, ton camp perd la partie.",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "rappel": false
+  },
+  {
+    "nom": "Bête de foire",
+    "edition": "Parfum d’hystérie",
+    "pouvoir": "Si tu essayes de convaincre les autres que tu es un étranger, tu risques d’être exécuté.",
+    "type": "Étranger",
+    "alignement": "Bon",
+    "rappel": false
+  },
+  {
     "nom": "Sorcière",
     "edition": "Parfum d’hystérie",
     "pouvoir": "Chaque nuit, choisis un joueur. S’il nomine quelqu’un le lendemain, il meurt. Tu perds ce pouvoir s’il ne reste que 3 joueurs en vie.",
@@ -506,7 +522,7 @@
     "nom": "Marin",
     "edition": "Crépuscule funeste",
     "pouvoir": "Tu ne peux pas mourir. Chaque nuit, choisis un joueur vivant. L’un de vous deux devient ivre jusqu’au crépuscule (tu ne sais pas lequel).",
-    "type": "Étranger",
+    "type": "Habitant",
     "alignement": "Bon",
     "ordreAutresNuits": 2,
     "ordrePremiereNuit": 5,
@@ -526,7 +542,7 @@
     "nom": "Bouffon",
     "edition": "Crépuscule funeste",
     "pouvoir": "La 1ère fois que tu devrais mourir, tu ne meurs pas.",
-    "type": "Étranger",
+    "type": "Habitant",
     "alignement": "Bon",
     "rappel": true
   },
