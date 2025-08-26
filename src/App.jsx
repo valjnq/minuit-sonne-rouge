@@ -1959,14 +1959,10 @@ export default function App() {
 
               <div
                 style={{
-                  marginTop: "1rem",
-                  backgroundColor: "white",
-                  color: "black",
-                  //padding: "1rem",
-                  borderRadius: "8px",
+                  color: "#950f13",
                 }}
               >
-                <h4>Bluffs du démon</h4>
+                <h4 style={{ color: '#950f13', textAlign: 'center' }}>Bluffs du démon</h4>
 
                 {afficherRepartition && !bluffsValides && (
                   <>
@@ -1981,7 +1977,7 @@ export default function App() {
                         padding: "1rem",
                         cursor: "pointer",
                         border: "2px solid #e0e0e0",
-                        width: "fit-content",
+                        width: "100%",
                         transition: "background 0.2s, transform 0.2s",
                         opacity: bluffsValides ? 0.5 : 1,
                       }}
@@ -1991,7 +1987,7 @@ export default function App() {
                         setErreurBluffs("");
                       }}
                     >
-                      <div style={{ display: "flex", gap: "1.5rem" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", width: "100%", padding: "0 2rem" }}>
                         {bluffs.length === 3
                           ? rolesBonsNonAttribués
                               .filter((role) =>
@@ -2139,7 +2135,7 @@ export default function App() {
                     </div>
                   )}
 
-                <h4>Joueurs</h4>
+                <h4 style={{ color: '#222', textAlign: 'center' }}>Joueurs</h4>
 
                 {Object.entries(joueursAttribues).map(
                   ([index, joueur], idx) => (
@@ -2450,8 +2446,7 @@ export default function App() {
                         <div
                           style={{
                             display: "grid",
-                            gridTemplateColumns:
-                              "repeat(auto-fit, minmax(220px, 1fr))",
+                            gridTemplateColumns: "1fr",
                             gap: "1rem",
                           }}
                         >
@@ -2470,27 +2465,17 @@ export default function App() {
                                     color: colorForType(type),
                                     fontWeight: "bold",
                                     fontSize: "calc(var(--h2-size) * 1)",
-                                    fontFamily: "Cardo, serif",
+                                    fontFamily: "'IM Fell English SC', serif",
                                   }}
                                 >
-                                  {typeToPlural[type]}{" "}
-                                  <span style={{ opacity: 1 }}>
-                                    (
-                                    {
-                                      editBluffsTemp.filter(
-                                        (x) => x.type === type
-                                      ).length
-                                    }
-                                    )
-                                  </span>
+                                  {typeToPlural[type]}
                                 </summary>
 
-                                {/* Grille 2 colonnes de boutons (icône + nom coloré) */}
+                                {/* Liste verticale (1 bouton par ligne) */}
                                 <div
                                   style={{
                                     display: "grid",
-                                    gridTemplateColumns:
-                                      "repeat(2, minmax(0, 1fr))",
+                                    gridTemplateColumns: "1fr 1fr",
                                     gap: ".5rem",
                                     marginTop: ".5rem",
                                   }}
@@ -2523,21 +2508,24 @@ export default function App() {
                                           }
                                           style={{
                                             display: "flex",
+                                            flexDirection: "column", // icône au-dessus, nom en dessous
                                             alignItems: "center",
-                                            gap: ".5rem",
-                                            padding: ".45rem .6rem",
-                                            borderRadius: 8,
+                                            justifyContent: "center",
+                                            gap: ".4rem",
+                                            padding: ".8rem",
+                                            borderRadius: 10,
                                             border: checked
                                               ? `1px solid ${color}`
                                               : "1px solid #bbb",
                                             background: checked
-                                              ? "rgba(0,0,0,0.03)"
-                                              : "#fff",
+                                              ? "#e6f0fa"
+                                              : "#fafafa",
                                             cursor: disabled
                                               ? "not-allowed"
                                               : "pointer",
-                                            textAlign: "left",
+                                            textAlign: "center",
                                             width: "100%",
+                                            minHeight: "100px",
                                             opacity: disabled ? 0.5 : 1,
                                           }}
                                         >
@@ -2545,11 +2533,9 @@ export default function App() {
                                             src={getRoleIcon(role)}
                                             alt=""
                                             style={{
-                                              width: 24,
-                                              height: 24,
-                                              borderRadius: 4,
-                                              border: "1px solid #ddd",
-                                              flex: "0 0 auto",
+                                              width: 36,
+                                              height: 36,
+                                              objectFit: "contain",
                                             }}
                                             onError={(ev) =>
                                               (ev.currentTarget.style.display =
@@ -2560,6 +2546,8 @@ export default function App() {
                                             style={{
                                               color,
                                               fontWeight: "bold",
+                                              fontFamily:
+                                                "'IM Fell English SC', serif",
                                             }}
                                           >
                                             {role.nom}
@@ -4097,7 +4085,7 @@ export default function App() {
               <hr
                 style={{
                   border: "none",
-                  borderTop: "2px solid black",
+                  borderTop: "1px #222 solid",
                   margin: "12px 0",
                 }}
               />
