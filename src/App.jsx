@@ -1065,8 +1065,8 @@ export default function App() {
                           <div
                             style={{
                               display: "grid",
-                              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                              gap: ".5rem",
+                              gridTemplateColumns: "repeat(2, 1fr)", // 2 colonnes fixes
+                              gap: ".75rem",
                               marginTop: ".5rem",
                             }}
                           >
@@ -1093,9 +1093,11 @@ export default function App() {
                                     }
                                     style={{
                                       display: "flex",
+                                      flexDirection: "column", // icône au-dessus, texte en dessous
                                       alignItems: "center",
-                                      gap: ".5rem",
-                                      padding: ".5rem .6rem",
+                                      justifyContent: "center",
+                                      gap: ".4rem",
+                                      padding: "0.8rem",
                                       borderRadius: 10,
                                       border: `1px solid ${
                                         checked ? color : "#bbb"
@@ -1106,17 +1108,18 @@ export default function App() {
                                           : "#fae6e6"
                                         : "#fafafa",
                                       cursor: "pointer",
-                                      textAlign: "left",
                                       width: "100%",
+                                      minHeight: "100px", // hauteur pour l’icône + texte
+                                      textAlign: "center",
                                     }}
                                   >
                                     <img
                                       src={getRoleIcon(role)}
                                       alt=""
                                       style={{
-                                        width: 24,
-                                        height: 24,
-                                        flex: "0 0 auto",
+                                        width: 36,
+                                        height: 36,
+                                        objectFit: "contain",
                                       }}
                                       onError={(ev) =>
                                         (ev.currentTarget.style.display =
@@ -1129,6 +1132,7 @@ export default function App() {
                                         fontWeight: "bold",
                                         fontFamily:
                                           "'IM Fell English SC', serif",
+                                        fontSize: "1rem",
                                       }}
                                     >
                                       {role.nom}
@@ -3831,186 +3835,158 @@ export default function App() {
               </div>
               {/* Modal for roles selection */}
               {rolesModalOpen && (
-                <div
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.6)",
+      zIndex: 500,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+  >
+    {/* BOÎTE PLEIN ÉCRAN */}
+    <div
+      style={{
+        background: "#fff",
+        color: "#222",
+        position: "fixed",
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        width: "auto",
+        height: "auto",
+        borderRadius: 0,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden", // le corps scrolle, pas l'en-tête
+        // Safe-areas
+        paddingTop: "calc(1rem + env(safe-area-inset-top))",
+        paddingRight: "calc(1rem + env(safe-area-inset-right))",
+        paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
+        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+        WebkitOverflowScrolling: "touch",
+        overscrollBehavior: "contain",
+        fontFamily: "Cardo, serif",
+        zIndex: 501,
+      }}
+      role="dialog"
+      aria-modal="true"
+    >
+      {/* CROIX FERMETURE */}
+      <button
+        onClick={() => setRolesModalOpen(false)}
+        style={{
+          position: "absolute",
+          top: "0.75rem",
+          right: "0.75rem",
+          border: "none",
+          background: "none",
+          fontSize: "1.5rem",
+          cursor: "pointer",
+          lineHeight: 1,
+        }}
+        aria-label="Fermer"
+      >
+        ×
+      </button>
+
+      <h3
+        style={{
+          marginTop: 0,
+          marginBottom: "1rem",
+          paddingRight: "2rem",
+          fontFamily: "IM Fell English SC, serif",
+        }}
+      >
+        Choisir un rôle
+      </h3>
+
+      {/* CORPS SCROLLABLE */}
+      <div
+        style={{
+          flex: 1,
+          overflow: "auto",
+          paddingBottom: "env(safe-area-inset-bottom)",
+        }}
+      >
+        {/* Groupes par type, comme la modale Script personnalisé */}
+        {["Habitant", "Étranger", "Acolyte", "Démon"].map((type) => (
+          <details key={type} className="collapsible" open style={{ marginBottom: ".5rem" }}>
+            <summary
+              style={{
+                color: colorForType(type),
+                fontWeight: "bold",
+                fontSize: "calc(var(--h2-size) * 1)",
+                fontFamily: "IM Fell English SC, serif",
+              }}
+            >
+              {typeToPlural[type]}
+            </summary>
+
+            {/* Grille 2 colonnes : icône au-dessus / texte en dessous */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: ".75rem",
+                marginTop: ".5rem",
+              }}
+            >
+              {(
+                // ⚠️ On affiche SEULEMENT les rôles Bons non attribués, déjà filtrés plus haut
+                rolesBonsNonAttribués.filter((r) => r.type === type)
+              ).map((role) => (
+                <button
+                  key={role.nom}
+                  type="button"
+                  onClick={() => {
+                    setSelectedRole(role);
+                    setRolesModalOpen(false);
+                  }}
                   style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100vw",
-                    height: "100vh",
-                    backgroundColor: "#fff",
-                    zIndex: 400,
                     display: "flex",
-                    alignItems: "stretch",
-                    justifyContent: "stretch",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: ".4rem",
+                    padding: "0.8rem",
+                    borderRadius: 10,
+                    border: "1px solid #bbb",
+                    background: "#fafafa",
+                    cursor: "pointer",
+                    width: "100%",
+                    minHeight: "100px",
+                    textAlign: "center",
                   }}
                 >
-                  <div
+                  <img
+                    src={getRoleIcon(role)}
+                    alt={role.nom}
+                    style={{ width: 36, height: 36, objectFit: "contain" }}
+                    onError={(ev) => (ev.currentTarget.style.display = "none")}
+                  />
+                  <span
                     style={{
-                      width: "100vw",
-                      height: "100vh",
-                      background: "#fff",
-                      color: "#222",
-                      borderRadius: 0,
-                      boxShadow: "none",
-                      position: "relative",
-                      display: "flex",
-                      flexDirection: "column",
+                      color: colorForType(type),
+                      fontWeight: "bold",
+                      fontFamily: "'IM Fell English SC', serif",
                     }}
                   >
-                    {/* Sticky header */}
-                    <div
-                      style={{
-                        position: "sticky",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        background: "#fff",
-                        zIndex: 2,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        padding: "2rem 2rem 0 2rem",
-                        borderBottom: "1px solid #eee",
-                      }}
-                    >
-                      <h2
-                        style={{
-                          marginBottom: 0,
-                          fontWeight: "bold",
-                          fontFamily: "IM Fell English SC, serif",
-                          fontSize: "1.35rem",
-                        }}
-                      >
-                        Afficher un rôle
-                      </h2>
-                      <button
-                        onClick={() => setRolesModalOpen(false)}
-                        style={{
-                          fontSize: "1.5rem",
-                          color: "#333",
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                          marginLeft: "1rem",
-                        }}
-                      >
-                        ×
-                      </button>
-                    </div>
-                    {/* Scrollable content below sticky header */}
-                    <div
-                      style={{
-                        width: "100%",
-                        flex: 1,
-                        overflowY: "auto",
-                        padding: "1.2rem 2rem 1.2rem 2rem",
-                      }}
-                    >
-                      {(() => {
-                        const types = {};
-                        rolesFiltres.forEach((role) => {
-                          if (!types[role.type]) types[role.type] = [];
-                          types[role.type].push(role);
-                        });
-                        const typeOrder = [
-                          "Habitant",
-                          "Étranger",
-                          "Acolyte",
-                          "Démon",
-                        ];
-                        return typeOrder
-                          .filter((type) => types[type])
-                          .map((type) => (
-                            <div key={type} style={{ marginBottom: "1.2rem" }}>
-                              <div
-                                style={{
-                                  fontWeight: "bold",
-                                  fontSize: "1.1rem",
-                                  fontFamily: "IM Fell English SC, serif",
-                                  marginBottom: "0.5rem",
-                                  color: "black",
-                                }}
-                              >
-                                {type}
-                              </div>
-                              <div
-                                style={{
-                                  display: "grid",
-                                  gridTemplateColumns: "1fr",
-                                  gap: "0.5rem",
-                                }}
-                              >
-                                {types[type].map((role) => (
-                                  <button
-                                    key={role.nom}
-                                    style={{
-                                      background: "#f7f7fa",
-                                      color: "#156",
-                                      border: "1px solid #cdd",
-                                      borderRadius: "8px",
-                                      fontWeight: "bold",
-                                      fontSize: "1rem",
-                                      padding: "0.4rem 0.7rem 0.4rem 0.5rem",
-                                      marginBottom: "0.2rem",
-                                      cursor: "pointer",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: "0.7rem",
-                                      boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                                      transition:
-                                        "background 0.2s, color 0.2s, border 0.2s",
-                                      minHeight: "40px",
-                                    }}
-                                    onClick={() => {
-                                      setSelectedRole(role);
-                                      setRolesModalOpen(false);
-                                    }}
-                                  >
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        height: "32px",
-                                        width: "32px",
-                                      }}
-                                    >
-                                      <img
-                                        src={getRoleIcon(role)}
-                                        alt={role.nom}
-                                        style={{
-                                          width: "28px",
-                                          height: "28px",
-                                          borderRadius: "4px",
-                                          border: "none",
-                                          objectFit: "contain",
-                                          display: "block",
-                                        }}
-                                        onError={(e) => {
-                                          e.target.style.display = "none";
-                                        }}
-                                      />
-                                    </div>
-                                    <span
-                                      style={{
-                                        flex: 1,
-                                        textAlign: "left",
-                                        display: "block",
-                                      }}
-                                    >
-                                      {role.nom}
-                                    </span>
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-                          ));
-                      })()}
-                    </div>
-                  </div>
-                </div>
-              )}
+                    {role.nom}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+
               {/* Modal for displaying selected role */}
               {selectedRole && (
                 <div
