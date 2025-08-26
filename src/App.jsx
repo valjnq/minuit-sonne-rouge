@@ -1419,16 +1419,12 @@ export default function App() {
                     }}
                   >
                     <img
-                      src={`icons/crepuscule.png`}
-                      alt="crépuscule"
-                      className="icon-md"
+                        src={`icons/crepuscule.png`}
+                        alt="crépuscule"
+                        className="wake-order-img"
                     />
                     <span
-                      style={{
-                        fontFamily: "Cardo, serif",
-                        fontSize: "1.2rem",
-                        color: "black",
-                      }}
+                        className="wake-order-text"
                     >
                       Crépuscule
                     </span>
@@ -1448,32 +1444,17 @@ export default function App() {
                       )
                       .map((role) => (
                         <div
-                          key={role.nom}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                            marginBottom: "0.5rem",
-                          }}
+                            key={role.nom}
+                            className="wake-order-item"
                         >
                           <img
-                            src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                            alt={role.nom}
-                            style={{
-                              height: "36px",
-                              width: "36px",
-                              objectFit: "contain",
-                            }}
+                              src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                              alt={role.nom}
+                              className="wake-order-img"
                           />
                           <span
-                            style={{
-                              fontFamily: "Cardo, serif",
-                              fontSize: "1.2rem",
-                              color:
-                                role.alignement === "Bon"
-                                  ? "#0e74b4"
-                                  : "#950f13",
-                            }}
+                              className="wake-order-text"
+                              style={{ color: role.alignement === "Bon" ? "#0e74b4" : "#950f13" }}
                           >
                             {role.nom}
                           </span>
@@ -1482,25 +1463,17 @@ export default function App() {
                   {/* Réveil des acolytes (ordrePremiereNuit: 2) */}
                   {ordreNuitActuelle === "premiere" && (
                     <div
-                      key="acolyte"
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                        marginBottom: "0.5rem",
-                      }}
+                        key="acolyte"
+                        className="wake-order-item"
                     >
                       <img
-                        src={`icons/acolyte.png`}
-                        alt="Réveil des acolytes"
-                        className="icon-md"
+                          src={`icons/acolyte.png`}
+                          alt="Réveil des acolytes"
+                          className="wake-order-img"
                       />
                       <span
-                        style={{
-                          fontFamily: "Cardo, serif",
-                          fontSize: "1.2rem",
-                          color: "#950f13",
-                        }}
+                          className="wake-order-text"
+                          style={{ color: "#950f13" }}
                       >
                         Réveil des acolytes
                       </span>
@@ -1521,32 +1494,17 @@ export default function App() {
                       )
                       .map((role) => (
                         <div
-                          key={role.nom}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                            marginBottom: "0.5rem",
-                          }}
+                            key={role.nom}
+                            className="wake-order-item"
                         >
                           <img
-                            src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                            alt={role.nom}
-                            style={{
-                              height: "36px",
-                              width: "36px",
-                              objectFit: "contain",
-                            }}
+                              src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                              alt={role.nom}
+                              className="wake-order-img"
                           />
                           <span
-                            style={{
-                              fontFamily: "Cardo, serif",
-                              fontSize: "1.2rem",
-                              color:
-                                role.alignement === "Bon"
-                                  ? "#0e74b4"
-                                  : "#950f13",
-                            }}
+                              className="wake-order-text"
+                              style={{ color: role.alignement === "Bon" ? "#0e74b4" : "#950f13" }}
                           >
                             {role.nom}
                           </span>
@@ -1556,25 +1514,17 @@ export default function App() {
                   {ordreNuitActuelle === "premiere" &&
                     !selected.some((r) => r.ordrePremiereNuit === 4) && (
                       <div
-                        key="demon-bluffs"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                          marginBottom: "0.5rem",
-                        }}
+                          key="demon-bluffs"
+                          className="wake-order-item"
                       >
                         <img
-                          src={`icons/demon.png`}
-                          alt="Réveil du démon et bluffs"
-                          className="icon-md"
+                            src={`icons/demon.png`}
+                            alt="Réveil du démon et bluffs"
+                            className="wake-order-img"
                         />
                         <span
-                          style={{
-                            fontFamily: "Cardo, serif",
-                            fontSize: "1.2rem",
-                            color: "#950f13",
-                          }}
+                            className="wake-order-text"
+                            style={{ color: "#950f13" }}
                         >
                           Réveil du démon et bluffs
                         </span>
@@ -1642,32 +1592,17 @@ export default function App() {
                         </div>
                       ) : (
                         <div
-                          key={role.nom}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                            marginBottom: "0.5rem",
-                          }}
+                            key={role.nom}
+                            className="wake-order-item"
                         >
                           <img
-                            src={`icons/icon_${normalizeNom(role.nom)}.png`}
-                            alt={role.nom}
-                            style={{
-                              height: "36px",
-                              width: "36px",
-                              objectFit: "contain",
-                            }}
+                              src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                              alt={role.nom}
+                              className="wake-order-img"
                           />
                           <span
-                            style={{
-                              fontFamily: "Cardo, serif",
-                              fontSize: "1.2rem",
-                              color:
-                                role.alignement === "Bon"
-                                  ? "#0e74b4"
-                                  : "#950f13",
-                            }}
+                              className="wake-order-text"
+                              style={{ color: role.alignement === "Bon" ? "#0e74b4" : "#950f13" }}
                           >
                             {role.nom}
                           </span>
@@ -1676,29 +1611,39 @@ export default function App() {
                     )}
                   {/* Always show Aube last */}
                   <div
-                    key="aube"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                      marginBottom: "0.5rem",
-                    }}
+                      key="aube"
+                      className="wake-order-item"
                   >
                     <img
-                      src={`icons/aube.png`}
-                      alt="Aube"
-                      className="icon-md"
+                        src={`icons/aube.png`}
+                        alt="Aube"
+                        className="wake-order-img"
                     />
                     <span
-                      style={{
-                        fontFamily: "Cardo, serif",
-                        fontSize: "1.2rem",
-                        color: "black",
-                      }}
+                        className="wake-order-text"
                     >
                       Aube
                     </span>
                   </div>
+                    {/* Ajout du style global pour l'ordre de réveil */}
+                    <style>{`
+                      .wake-order-item {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        margin-bottom: 0.5rem;
+                      }
+                      .wake-order-img {
+                        height: 36px;
+                        width: 36px;
+                        object-fit: contain;
+                        margin-right: 12px;
+                      }
+                      .wake-order-text {
+                        font-family: Cardo, serif;
+                        font-size: 1.2rem;
+                      }
+                    `}</style>
                 </div>
               </>
             </details>
