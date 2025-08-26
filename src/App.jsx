@@ -4425,7 +4425,7 @@ export default function App() {
                   <strong style={{ color: "#950f13" }}>
                     Minuit sonne rouge
                   </strong>{" "}
-                  est une version francisée du jeu{" "}
+                  est une adptation francisée du jeu{" "}
                   <strong>Blood on the Clocktower</strong> réalisée par un fan.
                 </p>
 
