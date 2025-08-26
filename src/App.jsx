@@ -41,6 +41,15 @@ const buttonStyle = {
   cursor: "pointer",
   transition: "background 0.2s, color 0.2s, border 0.2s",
 };
+const selectBaseStyle = {
+  fontSize: "1rem",
+  fontFamily: "Cardo, serif",
+  padding: "0.25rem 0.5rem",
+  borderRadius: 8,
+  border: "1px solid #ccc",
+  background: "#fff",
+  appearance: "auto",
+};
 
 export default function App() {
   // Liste figée des rôles bons non attribués au moment de l'attribution des rôles
@@ -733,15 +742,16 @@ export default function App() {
               >
                 Nombre de joueurs :
                 <select
-                  value={nbJoueurs}
-                  onChange={(e) => setNbJoueurs(Number(e.target.value))}
-                  disabled={rolesValides}
-                  style={{
-                    marginLeft: "0.5rem",
-                    fontSize: "1rem",
-                    fontFamily: "Cardo, serif",
-                  }}
-                >
+  value={nbJoueurs}
+  onChange={(e) => setNbJoueurs(Number(e.target.value))}
+  disabled={rolesValides}
+  style={{
+    ...selectBaseStyle,
+    marginLeft: "0.5rem",
+    width: "auto",          // même look, largeur contenu (pas plein écran)
+  }}
+>
+
                   {Array.from({ length: 11 }, (_, i) => i + 5).map((n) => (
                     <option key={n} value={n}>
                       {n}
@@ -750,200 +760,130 @@ export default function App() {
                 </select>
               </label>
 
-              {/* --- Tableau de répartition --- */}
+              {/* Stat grid — remplace le tableau */}
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "0.5rem",
-                  flexWrap: "wrap",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                  gap: "0.5rem",
+                  width: "100%",
                 }}
               >
-                <div
-                  style={{
-                    overflowX: "auto",
-                    flexBasis: "100%",
-                    marginBottom: "0.5rem",
-                  }}
-                >
-                  <table
-                    style={{
-                      borderCollapse: "collapse",
-                      fontFamily: "Cardo, serif",
-                      width: "100%",
-                      tableLayout: "fixed",
-                      border: "1px solid black",
-                    }}
-                  >
-                    <tbody>
-                      <tr>
-                        {/* Habitant */}
-                        <td
-                          style={{
-                            padding: "0.5rem",
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            color:
-                              lignes.find((l) => l.label === "Habitants")
-                                ?.color || "#222",
-                            border: "1px solid black",
-                          }}
-                        >
-                          Habitants
-                        </td>
-                        <td
-                          style={{
-                            padding: "0.5rem 0.75rem",
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            color:
-                              lignes.find((l) => l.label === "Habitants")
-                                ?.color || "#222",
-                            border: "1px solid black",
-                          }}
-                        >
-                          {tableRepartition[nbJoueurs]?.["Habitants"] ?? 0}
-                        </td>
+                {[
+                  { label: "Habitants", key: "Habitants" },
+                  { label: "Acolytes", key: "Acolytes" },
+                  { label: "Étrangers", key: "Étrangers" },
+                  { label: "Démons", key: "Démons" },
+                ].map(({ label, key }) => {
+                  const color =
+                    lignes.find((l) => l.label === label)?.color || "#222";
+                  const value = tableRepartition[nbJoueurs]?.[key] ?? 0;
+                  return (
+                    <div
+                      key={label}
+                      style={{
+                        border: "1px solid #ddd",
+                        borderRadius: 12,
+                        padding: "0.6rem 0.75rem",
+                        background: "#fafafa",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "'IM Fell English SC', serif",
+                          fontSize: "1.1rem",
+                          color,
+                        }}
+                      >
+                        {label}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: "Cardo, serif",
+                          fontWeight: "bold",
+                          fontSize: "1.4rem",
+                          lineHeight: 1,
+                          color,
+                        }}
+                      >
+                        {value}
+                      </span>
+                    </div>
+                  );
+                })}
 
-                        {/* Séparateur vertical + Acolytes */}
-                        <td
-                          style={{
-                            borderLeft: "1px solid #000",
-                            padding: "0.5rem 0.75rem",
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            color:
-                              lignes.find((l) => l.label === "Acolytes")
-                                ?.color || "#222",
-                            border: "1px solid black",
-                          }}
-                        >
-                          Acolytes
-                        </td>
-                        <td
-                          style={{
-                            padding: "0.5rem 0.75rem",
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            color:
-                              lignes.find((l) => l.label === "Acolytes")
-                                ?.color || "#222",
-                            border: "1px solid black",
-                          }}
-                        >
-                          {tableRepartition[nbJoueurs]?.["Acolytes"] ?? 0}
-                        </td>
-                      </tr>
+               {/* Sélection du script — ligne complète sous les cartes */}
+<div
+  style={{
+    gridColumn: "1 / -1",      // occupe toute la largeur de la grille
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    marginTop: "0.5rem",
+  }}
+>
+  <label
+    htmlFor="editionSelect"
+    style={{
+      fontSize: "1rem",
+      fontFamily: "Cardo, serif",
+      whiteSpace: "nowrap",
+    }}
+  >
+    Sélectionner le script :
+  </label>
 
-                      <tr>
-                        {/* Étrangers */}
-                        <td
-                          style={{
-                            padding: "0.5rem",
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            color:
-                              lignes.find((l) => l.label === "Étrangers")
-                                ?.color || "#222",
-                            border: "1px solid black",
-                          }}
-                        >
-                          Étrangers
-                        </td>
-                        <td
-                          style={{
-                            padding: "0.5rem 0.75rem",
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            color:
-                              lignes.find((l) => l.label === "Étrangers")
-                                ?.color || "#222",
-                            border: "1px solid black",
-                          }}
-                        >
-                          {tableRepartition[nbJoueurs]?.["Étrangers"] ?? 0}
-                        </td>
+  <select
+    id="editionSelect"
+    value={edition}
+    onChange={(e) => setEdition(e.target.value)}
+    disabled={rolesValides}
+    style={{
+      fontSize: "1rem",
+      fontFamily: "Cardo, serif",
+      padding: "0.25rem 0.5rem",
+      borderRadius: 8,
+      border: "1px solid #ccc",
+      background: "#fff",
+      appearance: "auto",
+      minWidth: "10rem",
+      maxWidth: "220px",
+      width: "100%",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+    }}
+  >
+    {[...new Set(roles.map((r) => r.edition))].map((ed) => (
+      <option key={ed} value={ed}>{ed}</option>
+    ))}
+    <option value="Script personnalisé">Personnalisé</option>
+  </select>
+</div>
 
-                        {/* Séparateur vertical + Démons */}
-                        <td
-                          style={{
-                            borderLeft: "1px solid #000",
-                            padding: "0.5rem 0.75rem",
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            color:
-                              lignes.find((l) => l.label === "Démons")?.color ||
-                              "#222",
-                            border: "1px solid black",
-                          }}
-                        >
-                          Démons
-                        </td>
-                        <td
-                          style={{
-                            padding: "0.5rem 0.75rem",
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            color:
-                              lignes.find((l) => l.label === "Démons")?.color ||
-                              "#222",
-                            border: "1px solid black",
-                          }}
-                        >
-                          {tableRepartition[nbJoueurs]?.["Démons"] ?? 0}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+
+                
                 </div>
-                <label
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    marginTop: "0.5rem",
-                    fontSize: "1rem",
-                    fontFamily: "Cardo, serif",
-                    flexBasis: "100%", // ← le label + select prennent leur propre ligne
-                  }}
-                >
-                  <div style={{ marginBottom: 0 }}>
-                    Sélectionner l'édition :
-                  </div>
-                  <select
-                    value={edition}
-                    onChange={(e) => setEdition(e.target.value)}
-                    disabled={rolesValides}
-                    style={{ marginLeft: "0.5rem" }}
-                  >
-                    {[...new Set(roles.map((r) => r.edition))].map((ed) => (
-                      <option key={ed} value={ed}>
-                        {ed}
-                      </option>
-                    ))}
-                    <option value="Script personnalisé">
-                      Script personnalisé
-                    </option>
-                  </select>
-                </label>
-
                 {/* Ligne des boutons sous le select */}
                 <div
                   style={{
-                    flexBasis: "100%", // ← force retour à la ligne
-                    display: "flex",
+                    flexBasis: "100%", // force la ligne sous le select
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr", // 2 colonnes = 2 boutons côte à côte
                     gap: "0.75rem",
                     marginTop: "0.5rem",
-                    alignItems: "center",
-                    flexWrap: "wrap",
+                    width: "100%",
                   }}
                 >
-                  {" "}
                   <button
                     onClick={() => setQrCodeVisible(true)}
                     style={{
                       ...buttonStyle,
-                      width: "100%",
+                      width: "100%", // occupe toute sa colonne
                       cursor:
                         customScriptPool.length === 0 &&
                         edition === "Script personnalisé"
@@ -962,6 +902,7 @@ export default function App() {
                   >
                     Partager le script
                   </button>
+
                   {edition === "Script personnalisé" && (
                     <button
                       type="button"
@@ -977,7 +918,7 @@ export default function App() {
                       disabled={rolesValides}
                       style={{
                         ...buttonStyle,
-                        width: "100%",
+                        width: "100%", // occupe toute sa colonne
                         cursor: rolesValides ? "not-allowed" : "pointer",
                         opacity: rolesValides ? 0.5 : 1,
                       }}
@@ -985,7 +926,6 @@ export default function App() {
                       Éditer le script
                     </button>
                   )}
-                </div>
               </div>
             </div>
           </details>
@@ -3907,7 +3847,7 @@ export default function App() {
             </div>
           )}
           {/* Jetons info section (above notes) */}
-          
+
           <div
             style={{
               margin: 0, // uniformise l'espacement
