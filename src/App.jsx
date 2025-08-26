@@ -1485,7 +1485,7 @@ export default function App() {
                           : buttonStyle.background,
                       border:
                         ordreNuitActuelle === "premiere"
-                          ? "2px solid #0e74b4"
+                          ? "1px solid #0e74b4"
                           : buttonStyle.border,
                       boxShadow:
                         ordreNuitActuelle === "premiere"
@@ -1513,7 +1513,7 @@ export default function App() {
                           : buttonStyle.background,
                       border:
                         ordreNuitActuelle === "autres"
-                          ? "2px solid #0e74b4"
+                          ? "1px solid #0e74b4"
                           : buttonStyle.border,
                       boxShadow:
                         ordreNuitActuelle === "autres"
