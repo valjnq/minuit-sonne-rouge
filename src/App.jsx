@@ -573,7 +573,7 @@ export default function App() {
 }
   /* Unifie les triangles des sections repliables */
   details.collapsible > summary {
-    font-family: 'Pirata One', cursive;
+    font-family: 'IM Fell English SC', serif;
     font-weight: bold;
    font-size: var(--h2-size);
     cursor: pointer;
@@ -633,7 +633,7 @@ export default function App() {
               </span>
               <span
                 style={{
-                  fontFamily: "Pirata One, cursive",
+                  fontFamily: "IM Fell English SC, serif",
                   fontSize: "1.6rem",
                   fontWeight: "bold",
                   color: "black",
@@ -3771,26 +3771,6 @@ export default function App() {
                     >
                       {btn.label}
                     </button>
-                  ) : btn.label === "Afficher un rôle" ? (
-                    <button
-                      key={btn.label}
-                      style={{
-                        ...buttonStyle,
-                        background: btn.background,
-                        color: btn.textColor,
-                        border: btn.border,
-                        fontSize: "1rem",
-                        fontFamily: "Cardo, serif",
-                        minWidth: "180px",
-                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                        margin: 0,
-                        width: "100%",
-                        alignSelf: "stretch",
-                      }}
-                      onClick={() => setRolesModalOpen(true)}
-                    >
-                      {btn.label}
-                    </button>
                   ) : btn.label === "Tu es" ||
                     btn.label === "Ce joueur est" ||
                     btn.label === "Utiliser ton pouvoir ?" ? (
@@ -3803,8 +3783,7 @@ export default function App() {
                         color: btn.textColor,
                         fontWeight: btn.fontWeight || "normal",
                         fontSize: "1rem",
-                        
-                      
+
                         boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                         margin: 0,
                         width: "100%",
@@ -4083,7 +4062,7 @@ export default function App() {
                         justifyContent: "center",
                         alignItems: "center",
                         width: "100%",
-                        marginBottom: "2rem",
+                        marginBottom: "12px",
                       }}
                     >
                       <img
@@ -4123,6 +4102,13 @@ export default function App() {
                   </div>
                 </div>
               )}
+              <hr
+                style={{
+                  border: "none",
+                  borderTop: "2px solid black",
+                  margin: "12px 0",
+                }}
+              />
               <button
                 style={{ ...buttonStyle, width: "100%" }}
                 onClick={() => setAddCustomJetonVisible(true)}
@@ -4221,7 +4207,26 @@ export default function App() {
                     </button>
                   </div>
                 </div>
-              )}
+              )}{" "}
+              <div style={{ marginBottom: "12px" }}></div>
+              <button
+                style={{
+                  ...buttonStyle,
+                  background: "#fafafa",
+                  color: "#222",
+                  border: "1px solid #bbb",
+                  fontSize: "1rem",
+                  fontFamily: "Cardo, serif",
+                  minWidth: "180px",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                  margin: 0,
+                  width: "100%",
+                  alignSelf: "stretch",
+                }}
+                onClick={() => setRolesModalOpen(true)}
+              >
+                Afficher un rôle
+              </button>
             </details>
           </div>
 
@@ -4468,7 +4473,7 @@ export default function App() {
                   </li>
                 </ul>
 
-                <p style={{ fontFamily: "Cardo, serif", opacity: 1 }}>
+                <div style={{ fontFamily: "Cardo, serif", opacity: 1 }}>
                   <div
                     style={{
                       fontSize: "1rem",
@@ -4478,7 +4483,7 @@ export default function App() {
                   >
                     <strong>v{pkg.version}</strong>
                   </div>
-                </p>
+                </div>
               </div>
             </details>
           </div>
