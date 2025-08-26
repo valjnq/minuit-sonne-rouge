@@ -308,10 +308,13 @@ export default function App() {
     if (!tousAttribues) return;
     // Figer la liste des rôles bons non attribués pour les bluffs du démon
     if (bluffsPoolInitial === null) {
-      const nomsRolesAttribues = Object.values(joueursAttribues).map((j) => j.role.nom);
-      const pool = (edition === "Script personnalisé"
-        ? customScriptPool
-        : roles.filter((r) => r.edition === edition)
+      const nomsRolesAttribues = Object.values(joueursAttribues).map(
+        (j) => j.role.nom
+      );
+      const pool = (
+        edition === "Script personnalisé"
+          ? customScriptPool
+          : roles.filter((r) => r.edition === edition)
       ).filter(
         (r) => r.alignement === "Bon" && !nomsRolesAttribues.includes(r.nom)
       );
@@ -492,16 +495,15 @@ export default function App() {
 
   // Show all 'Bon' roles from the edition or script that are NOT attributed to players (not in joueursAttribues)
   // Liste figée des bluffs du démon
-  const rolesBonsNonAttribués = bluffsPoolInitial !== null
-    ? bluffsPoolInitial
-    : (
-        (edition === "Script personnalisé"
+  const rolesBonsNonAttribués =
+    bluffsPoolInitial !== null
+      ? bluffsPoolInitial
+      : (edition === "Script personnalisé"
           ? customScriptPool
           : roles.filter((r) => r.edition === edition)
         ).filter(
           (r) => r.alignement === "Bon" && !nomsRolesAttribues.includes(r.nom)
-        )
-      );
+        );
   // tirage aléatoire pour le script personnalisé
   function tirageAleatoireScript() {
     const shufflePick = (arr, n) => {
@@ -705,7 +707,6 @@ export default function App() {
             className="collapsible"
             open={openSetup}
             onToggle={(e) => setOpenSetup(e.currentTarget.open)}
-            style={{ marginBottom: "1.5rem" }}
           >
             <summary>Paramètres</summary>
 
@@ -1253,10 +1254,8 @@ export default function App() {
               </div>
             </div>
           )}
-
           <details
             className="collapsible"
-            style={{ marginBottom: "1.5rem" }}
             open={openRolesDetails}
             onToggle={(e) => setOpenRolesDetails(e.currentTarget.open)}
           >
@@ -1449,7 +1448,6 @@ export default function App() {
               })}
             </div>
           </details>
-
           {rolesValides && (
             <details
               className="collapsible"
@@ -1981,7 +1979,6 @@ export default function App() {
               </div>
             </div>
           )}
-
           {afficherBluffs && (
             <div
               style={{
@@ -2082,7 +2079,7 @@ export default function App() {
                   <>
                     <div
                       style={{
-                        marginTop: "2rem",
+                        //marginTop: "2rem",
                         display: "flex",
                         alignItems: "center",
                         background: "#f8f8f8",
@@ -3702,8 +3699,8 @@ export default function App() {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                backgroundColor: "grey",
-                color: "white",
+                backgroundColor: "white",
+                color: "black",
                 zIndex: 15,
                 display: "flex",
                 flexDirection: "column",
@@ -3718,7 +3715,7 @@ export default function App() {
                   top: "1rem",
                   right: "1rem",
                   fontSize: "1.5rem",
-                  color: "white",
+                  color: "black",
                   background: "none",
                   border: "none",
                   cursor: "pointer",
@@ -3737,7 +3734,29 @@ export default function App() {
               >
                 Liste des rôles pour :
                 <br />
-                {edition}
+                <span
+                  style={{ fontFamily: '"IM FELL ENGLISH SC", Cardo, serif' }}
+                >
+                  <span
+                    style={{
+                      fontFamily: '"Pirata One", cursive',
+                      color:
+                        edition === "Sombre présage"
+                          ? "#950f13"
+                          : ["Parfum d'hystérie", "Parfum d’hystérie"].includes(
+                              edition
+                            )
+                          ? "#673253"
+                          : edition === "Crépuscule funeste"
+                          ? "#af4c0f"
+                          : edition === "Script personnalisé"
+                          ? "#000"
+                          : undefined,
+                    }}
+                  >
+                    {edition}
+                  </span>
+                </span>
               </h2>
 
               <QRCode
@@ -3816,7 +3835,6 @@ export default function App() {
               )}
             </div>
           )}
-
           {afficherBluffs && (
             <div
               style={{
@@ -3889,10 +3907,10 @@ export default function App() {
             </div>
           )}
           {/* Jetons info section (above notes) */}
+          
           <div
             style={{
-              marginBottom: "2rem",
-              marginTop: "2rem",
+              margin: 0, // uniformise l'espacement
               fontFamily: "Cardo, serif",
               color: "#222",
               maxWidth: "1200px",
@@ -4404,7 +4422,6 @@ export default function App() {
               </button>
             </details>
           </div>
-
           {/* Jeton info modal/page */}
           {jetonInfoPage !== null && (
             <div
@@ -4540,11 +4557,9 @@ export default function App() {
               </div>
             </div>
           )}
-
           <div
             style={{
-              marginBottom: "2rem",
-              marginTop: "2rem",
+              margin: 0, // uniformise l'espacement
               fontFamily: "Cardo, serif",
             }}
           >
