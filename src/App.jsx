@@ -3391,185 +3391,166 @@ export default function App() {
 
                                 return (
                                   <div
-                                    onClick={(e) => e.stopPropagation()}
-                                    role="dialog"
-                                    aria-modal="true"
                                     style={{
                                       position: "fixed",
                                       inset: 0,
-                                      background: "#fff", // fond blanc
-                                      color: "#222",
-                                      zIndex: 100000,
+                                      background: "rgba(0,0,0,0.6)", // ← overlay comme "Rappels"
+                                      zIndex: 500,
                                       display: "flex",
-                                      flexDirection: "column",
-                                      paddingTop: 0,
-                                      paddingBottom:
-                                        "env(safe-area-inset-bottom)",
-                                      paddingLeft: "env(safe-area-inset-left)",
-                                      paddingRight:
-                                        "env(safe-area-inset-right)",
+                                      alignItems: "center",
+                                      justifyContent: "center",
                                     }}
                                   >
-                                    {/* HEADER sticky */}
+                                    {/* BOÎTE BLANCHE PLEIN ÉCRAN */}
                                     <div
-                                      style={{
-                                        position: "sticky",
-                                        top: 0,
-                                        zIndex: 2,
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "space-between",
-                                        padding: "0 1rem 0.75rem 1rem", // bas = 0.75rem
-                                        paddingTop:
-                                          "calc(env(safe-area-inset-top) + 0.75rem)",
-                                        borderBottom: "1px solid #eee",
-                                        background: "#fff",
-                                      }}
-                                    >
-                                      <h3
-                                        style={{
-                                          margin: 0,
-                                          fontFamily:
-                                            "IM Fell English SC, serif",
-                                          fontSize: "1.4rem",
-                                          color: "#000",
-                                        }}
-                                      >
-                                        Sélectionner le nouveau rôle
-                                      </h3>
-                                      <button
-                                        type="button"
-                                        onClick={() =>
-                                          setShowRemplacerDropdown(false)
-                                        }
-                                        aria-label="Fermer"
-                                        style={{
-                                          border: "none",
-                                          background: "none",
-                                          color: "#222",
-                                          fontSize: "1.8rem",
-                                          cursor: "pointer",
-                                          lineHeight: 1,
-                                        }}
-                                      >
-                                        ×
-                                      </button>
-                                    </div>
+  style={{
+    position: "fixed",
+    inset: 0,
+    background: "rgba(0,0,0,0.6)",
+    zIndex: 500,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  }}
+>
+  <div
+    onClick={(e) => e.stopPropagation()}
+    role="dialog"
+    aria-modal="true"
+    style={{
+      background: "#fff",
+      color: "#222",
+      position: "fixed",
+      top: 0, right: 0, bottom: 0, left: 0,
+      display: "flex",
+      flexDirection: "column",
+      overflow: "hidden",
+      paddingTop: "calc(1rem + env(safe-area-inset-top))",
+      paddingRight: "calc(1rem + env(safe-area-inset-right))",
+      paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
+      paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+      WebkitOverflowScrolling: "touch",
+      overscrollBehavior: "contain",
+      fontFamily: "Cardo, serif",
+      zIndex: 501,
+    }}
+  >
+    {/* croix comme "Rappels" */}
+    <button
+      type="button"
+      onClick={() => setShowRemplacerDropdown(false)}
+      aria-label="Fermer"
+      style={{
+        position: "absolute",
+        top: "0.75rem",
+        right: "0.75rem",
+        border: "none",
+        background: "none",
+        fontSize: "1.5rem",
+        cursor: "pointer",
+        lineHeight: 1,
+        color: "#222",
+      }}
+    >
+      ×
+    </button>
 
-                                    {/* BODY scrollable : 2 colonnes, icône au-dessus, nom en dessous */}
-                                    <div
-                                      style={{
-                                        flex: 1,
-                                        overflow: "auto",
-                                        padding: "1rem",
-                                        display: "grid",
-                                        gridTemplateColumns:
-                                          "repeat(2, minmax(0,1fr))",
-                                        gap: "0.75rem",
-                                      }}
-                                    >
-                                      {candidats.map((r) => {
-                                        const isGood = r.alignement === "Bon";
-                                        const borderColor = isGood
-                                          ? "#0e74b4"
-                                          : "#950f13";
-                                        const bgColor = isGood
-                                          ? "#e6f0fa"
-                                          : "#fae6e6";
-                                        const textColor = isGood
-                                          ? "#0e74b4"
-                                          : "#950f13";
+    <h3
+      style={{
+        marginTop: 0,
+        marginBottom: "0.75rem",
+        paddingRight: "2rem",
+        fontFamily: "IM Fell English SC, serif",
+        fontSize: "1.3rem",
+      }}
+    >
+      Sélectionner le nouveau rôle
+    </h3>
 
-                                        return (
-                                          <button
-                                            key={r.nom}
-                                            type="button"
-                                            onClick={() => {
-                                              // 1) Remplacer le rôle + historiser l'ancien
-                                              setJoueursAttribues((prev) => {
-                                                const updated = { ...prev };
-                                                const idx = nomEditModal.index;
-                                                const cur = updated[idx] || {};
-                                                const oldRole = cur.role;
-                                                const history = Array.isArray(
-                                                  cur.anciensRoles
-                                                )
-                                                  ? cur.anciensRoles
-                                                  : [];
-                                                const newHistory =
-                                                  oldRole &&
-                                                  oldRole.nom !== r.nom
-                                                    ? [...history, oldRole]
-                                                    : history;
+    {/* Corps scrollable : grille 2 colonnes */}
+    <div style={{ flex: 1, overflow: "auto", padding: "1rem" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, minmax(0,1fr))",
+          gap: "0.75rem",
+        }}
+      >
+        {candidats.map((r) => {
+          const isGood = r.alignement === "Bon";
+          const borderColor = isGood ? "#0e74b4" : "#950f13";
+          const bgColor = isGood ? "#e6f0fa" : "#fae6e6";
+          const textColor = isGood ? "#0e74b4" : "#950f13";
+          return (
+            <button
+              key={r.nom}
+              type="button"
+              onClick={() => {
+                // Remplacement + historique + MAJ selected, puis fermer
+                setJoueursAttribues((prev) => {
+                  const updated = { ...prev };
+                  const idx = nomEditModal.index;
+                  const cur = updated[idx] || {};
+                  const oldRole = cur.role;
+                  const history = Array.isArray(cur.anciensRoles)
+                    ? cur.anciensRoles
+                    : [];
+                  const newHistory =
+                    oldRole && oldRole.nom !== r.nom
+                      ? [...history, oldRole]
+                      : history;
+                  updated[idx] = { ...cur, role: r, anciensRoles: newHistory };
+                  return updated;
+                });
+                setSelected((prev) => {
+                  const withoutOld = prev.filter(
+                    (x) => x.nom !== currentRole?.nom
+                  );
+                  const withoutDup = withoutOld.filter((x) => x.nom !== r.nom);
+                  return [...withoutDup, r];
+                });
+                setShowRemplacerDropdown(false);
+              }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: ".5rem",
+                padding: "0.9rem 0.7rem",
+                borderRadius: 12,
+                border: `1px solid ${borderColor}`,
+                background: bgColor,
+                cursor: "pointer",
+                width: "100%",
+                minHeight: 140,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src={`icons/icon_${normalizeNom(r.nom)}.png`}
+                alt={r.nom}
+                style={{ width: 48, height: 48, objectFit: "contain" }}
+              />
+              <span
+                style={{
+                  fontFamily: "'IM Fell English SC', serif",
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  color: textColor,
+                  lineHeight: 1.1,
+                }}
+              >
+                {r.nom}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</div>
 
-                                                updated[idx] = {
-                                                  ...cur,
-                                                  role: r,
-                                                  anciensRoles: newHistory,
-                                                };
-                                                return updated;
-                                              });
-
-                                              // 2) Mettre à jour la liste "selected"
-                                              setSelected((prev) => {
-                                                const withoutOld = prev.filter(
-                                                  (x) =>
-                                                    x.nom !== currentRole?.nom
-                                                );
-                                                const withoutDup =
-                                                  withoutOld.filter(
-                                                    (x) => x.nom !== r.nom
-                                                  );
-                                                return [...withoutDup, r];
-                                              });
-
-                                              // 3) Fermer
-                                              setShowRemplacerDropdown(false);
-                                            }}
-                                            style={{
-                                              display: "flex",
-                                              flexDirection: "column", // icône au-dessus, nom en dessous
-                                              alignItems: "center",
-                                              justifyContent: "center",
-                                              gap: ".5rem",
-                                              padding: "0.9rem 0.7rem",
-                                              borderRadius: 12,
-                                              border: `1px solid #bbb`,
-                                              background: "#F5F5F5",
-
-                                              cursor: "pointer",
-                                              width: "100%",
-                                              minHeight: 140,
-                                              textAlign: "center",
-                                            }}
-                                          >
-                                            <img
-                                              src={`icons/icon_${normalizeNom(
-                                                r.nom
-                                              )}.png`}
-                                              alt={r.nom}
-                                              style={{
-                                                width: 48,
-                                                height: 48,
-                                                objectFit: "contain",
-                                              }}
-                                            />
-                                            <span
-                                              style={{
-                                                fontFamily:
-                                                  "'IM Fell English SC', serif",
-                                                fontSize: "1.05rem",
-                                                fontWeight: "bold",
-                                                color: textColor, // toujours couleur d’alignement
-                                                lineHeight: 1.1,
-                                              }}
-                                            >
-                                              {r.nom}
-                                            </span>
-                                          </button>
-                                        );
-                                      })}
-                                    </div>
                                   </div>
                                 );
                               })()}
