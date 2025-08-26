@@ -894,6 +894,7 @@ export default function App() {
                     onClick={() => setQrCodeVisible(true)}
                     style={{
                       ...buttonStyle,
+                      width: "100%",
                       cursor:
                         customScriptPool.length === 0 &&
                         edition === "Script personnalisé"
@@ -927,6 +928,7 @@ export default function App() {
                       disabled={rolesValides}
                       style={{
                         ...buttonStyle,
+                        width: "100%",
                         cursor: rolesValides ? "not-allowed" : "pointer",
                         opacity: rolesValides ? 0.5 : 1,
                       }}
@@ -1047,18 +1049,10 @@ export default function App() {
                               color: colorForType(type), // couleur selon l’alignement
                               fontWeight: "bold",
                               fontSize: "calc(var(--h2-size) * 1)",
-                              fontFamily: "Cardo, serif",
+                              fontFamily: "IM Fell English SC, serif",
                             }}
                           >
-                            {typeToPlural[type]}{" "}
-                            <span style={{ opacity: 1 }}>
-                              (
-                              {
-                                customScriptTemp.filter((x) => x.type === type)
-                                  .length
-                              }
-                              )
-                            </span>
+                            {typeToPlural[type]}
                           </summary>
 
                           {/* grille 2 colonnes de boutons (icône + nom coloré) */}
@@ -1155,19 +1149,7 @@ export default function App() {
                     marginTop: "1rem",
                   }}
                 >
-                  <button
-                    onClick={() => setCustomScriptTemp([])}
-                    style={{
-                      padding: ".5rem 1rem",
-                      borderRadius: 8,
-                      border: "1px solid #bbb",
-                      background: "#fafafa",
-                      fontFamily: "Cardo, serif",
-                    }}
-                  >
-                    Vider
-                  </button>
-                  <div style={{ display: "flex", gap: ".5rem" }}>
+                  <div style={{ display: "flex", gap: ".5rem", width: "100%" }}>
                     <button
                       onClick={tirageAleatoireScript}
                       style={{
@@ -1176,9 +1158,28 @@ export default function App() {
                         border: "1px solid #bbb",
                         background: "#fafafa",
                         fontFamily: "Cardo, serif",
+                        flex: 1,
                       }}
                     >
-                      Sélection aléatoire
+                      Aléatoire
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (customScriptTemp.length > 0)
+                          setCustomScriptTemp([]);
+                      }}
+                      disabled={customScriptTemp.length === 0}
+                      style={{
+                        ...buttonStyle,
+                        flex: 1,
+                        cursor:
+                          customScriptTemp.length === 0
+                            ? "not-allowed"
+                            : "pointer",
+                        opacity: customScriptTemp.length === 0 ? 0.5 : 1,
+                      }}
+                    >
+                      Vider
                     </button>
                     <button
                       onClick={() => {
@@ -1191,6 +1192,7 @@ export default function App() {
                         border: "1px solid #bbb",
                         background: "#fafafa",
                         fontFamily: "Cardo, serif",
+                        flex: 1,
                       }}
                     >
                       Valider ({customScriptTemp.length})
@@ -1212,20 +1214,24 @@ export default function App() {
               {!rolesValides && (
                 <div
                   style={{
-                    display: "flex",
-                    flexDirection: "row",
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr 1fr",
                     gap: "0.5rem",
-                    //marginBottom: "1rem",
+                    marginBottom: "1rem",
                   }}
                 >
-                  <button onClick={tirerAuHasard} style={{ ...buttonStyle }}>
-                    Sélection aléatoire
+                  <button
+                    onClick={tirerAuHasard}
+                    style={{ ...buttonStyle, width: "100%" }}
+                  >
+                    Aléatoire
                   </button>
                   <button
                     onClick={deselectionnerTousLesRoles}
                     disabled={selected.length === 0}
                     style={{
                       ...buttonStyle,
+                      width: "100%",
                       opacity: selected.length === 0 ? 0.5 : 1,
                     }}
                   >
@@ -1233,9 +1239,9 @@ export default function App() {
                   </button>
                   <button
                     onClick={handleValiderRoles}
-                    style={{ ...buttonStyle }}
+                    style={{ ...buttonStyle, width: "100%" }}
                   >
-                    Valider les rôles
+                    Valider
                   </button>
                 </div>
               )}
@@ -1252,7 +1258,7 @@ export default function App() {
                   >
                     <button
                       onClick={() => setAffectationVisible(true)}
-                      style={{ ...buttonStyle }}
+                      style={{ ...buttonStyle, width: "100%" }}
                     >
                       Attribuer les rôles
                     </button>
@@ -1279,14 +1285,15 @@ export default function App() {
                   <details key={type} style={{ marginBottom: "1rem" }} open>
                     <summary
                       style={{
-                        fontFamily: "Cardo, serif",
-                        fontSize: "0.9rem",
+                        fontFamily: "IM Fell English SC, serif",
+                        fontSize: "1.2rem",
                         fontWeight: "bold",
                         color: colorForType(type),
-                        marginBottom: "2rem",
+                        marginBottom: "1rem",
+                        marginTop: "1rem",
                       }}
                     >
-                      {label} ({selectedCount}/{expectedCount})
+                      {label}
                     </summary>
                     <div style={{ marginTop: "1rem", width: "100%" }}>
                       {rolesDuType.map((role) => {
@@ -1705,177 +1712,218 @@ export default function App() {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                backgroundColor: "#888", // gris
-                color: "white",
+                backgroundColor: "#fff",
+                color: "inherit",
                 zIndex: 10,
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
+                flexDirection: "column", // header séparé du contenu
               }}
             >
-              <button
-                onClick={quitterAffectation}
+              {/* HEADER MODAL indépendant */}
+              <div
                 style={{
-                  position: "absolute",
-                  top: "1rem",
-                  right: "1rem",
-                  fontSize: "1.5rem",
+                  position: "relative",
+                  width: "100%",
+                  padding: "1rem 0.75rem",
+                  borderBottom: "1px solid #eee",
+                  fontFamily: "IM Fell English SC, serif",
+                  fontSize: "1.2rem",
+                  //textAlign: "center",
+                  background: "none",
+                  flexShrink: 0,
                 }}
               >
-                ✖
-              </button>
-
-              {indexActif === null && (
-                <div
+                Attribuer les rôles
+                <button
+                  onClick={quitterAffectation}
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "1.5rem",
+                    position: "absolute",
+                    right: "0.75rem",
+                    top: "0.5rem",
+                    border: "none",
+                    background: "none",
+                    fontSize: "1.5rem",
+                    cursor: "pointer",
+                    color: "#222",
+                    lineHeight: 1,
                   }}
+                  aria-label="Fermer"
                 >
-                  <button
-                    onClick={() => {
-                      // Automatic attribution: assign all available roles to players named 'player 1', 'player 2', ...
-                      const newAttribues = { ...joueursAttribues };
-                      const assignedRoleNames = Object.values(newAttribues).map(
-                        (j) => j.role.nom
-                      );
-                      const availableRoles = rolesRestants.filter(
-                        (r) => !assignedRoleNames.includes(r.nom)
-                      );
-                      for (let i = 0; i < nbJoueurs; i++) {
-                        if (!newAttribues[i] && availableRoles.length > 0) {
-                          const indexAleatoire = Math.floor(
-                            Math.random() * availableRoles.length
-                          );
-                          const roleAuto = availableRoles[indexAleatoire];
-                          let alignementAuto = "Maléfique";
-                          if (
-                            roleAuto.type === "Habitant" ||
-                            roleAuto.type === "Étranger"
-                          ) {
-                            alignementAuto = "Bon";
-                          }
-                          newAttribues[i] = {
-                            nom: `Joueur ${i + 1}`,
-                            role: roleAuto,
-                            alignement: alignementAuto,
-                            alignementFixe: false,
-                          };
-                          availableRoles.splice(indexAleatoire, 1);
-                        }
-                      }
+                  ×
+                </button>
+              </div>
 
-                      setJoueursAttribues(newAttribues);
-                    }}
-                    style={{
-                      marginBottom: "1rem",
-                      padding: "0.7rem 2rem",
-                      fontFamily: "Cardo, serif",
-                      fontSize: "1.1rem",
-                      background: "#0e74b4",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "8px",
-                      cursor: "pointer",
-                      opacity: rolesRestants.length === 0 ? 0.5 : 1,
-                    }}
-                    disabled={rolesRestants.length === 0}
-                  >
-                    Attribution automatique
-                  </button>
+              {/* CONTENU de la modale */}
+              <div
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "1rem",
+                  overflowY: "auto", // si jamais il y a beaucoup d’éléments
+                }}
+              >
+                {indexActif === null && (
                   <div
                     style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(4, 80px)",
-                      gap: "0.5rem",
+                      width: "100%",
+                      maxWidth: "560px",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "1.5rem",
                     }}
                   >
-                    {Array.from({ length: nbJoueurs }, (_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleChoixNumero(i)}
-                        disabled={
-                          joueursAttribues[i] || rolesRestants.length === 0
-                        }
-                        style={{
-                          width: 80,
-                          height: 80,
-                          borderRadius: "50%",
-                          fontSize: "1.5rem",
-                          backgroundColor: joueursAttribues[i]
-                            ? "#aaa"
-                            : "#e4e4e4ff",
-                          border: "1px solid #bbb",
-                          cursor: joueursAttribues[i] ? "default" : "pointer",
-                        }}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {indexActif !== null && roleActif && (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    paddingLeft: "1.5rem",
-                    paddingRight: "1.5rem",
-                  }}
-                >
-                  <img
-                    src={`icons/icon_${normalizeNom(roleActif.nom)}.png`}
-                    alt={roleActif.nom}
-                    style={{ width: "100px", marginBottom: "1rem" }}
-                  />
-                  <div style={{ fontSize: "1.5rem", fontFamily: "Cardo" }}>
-                    {roleActif.nom}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "1rem",
-                      fontFamily: "Cardo",
-                      maxWidth: "50ch",
-                      margin: "1rem auto",
-                    }}
-                  >
-                    {renderBoldBrackets(
-                      roleActif.description ||
-                        roleActif.pouvoir ||
-                        "Pouvoir du rôle..."
-                    )}
-                  </div>
-                  <input
-                    className="important-field"
-                    type="text"
-                    placeholder="Nom du joueur"
-                    value={nomTemporaire}
-                    onChange={(e) => setNomTemporaire(e.target.value)}
-                    style={{ padding: "0.5rem", fontSize: "1rem" }}
-                  />
-                  <div>
                     <button
-                      onClick={validerJoueur}
+                      onClick={() => {
+                        const newAttribues = { ...joueursAttribues };
+                        const assignedRoleNames = Object.values(
+                          newAttribues
+                        ).map((j) => j.role.nom);
+                        const availableRoles = rolesRestants.filter(
+                          (r) => !assignedRoleNames.includes(r.nom)
+                        );
+                        for (let i = 0; i < nbJoueurs; i++) {
+                          if (!newAttribues[i] && availableRoles.length > 0) {
+                            const indexAleatoire = Math.floor(
+                              Math.random() * availableRoles.length
+                            );
+                            const roleAuto = availableRoles[indexAleatoire];
+                            let alignementAuto = "Maléfique";
+                            if (
+                              roleAuto.type === "Habitant" ||
+                              roleAuto.type === "Étranger"
+                            ) {
+                              alignementAuto = "Bon";
+                            }
+                            newAttribues[i] = {
+                              nom: `Joueur ${i + 1}`,
+                              role: roleAuto,
+                              alignement: alignementAuto,
+                              alignementFixe: false,
+                            };
+                            availableRoles.splice(indexAleatoire, 1);
+                          }
+                        }
+                        setJoueursAttribues(newAttribues);
+                      }}
                       style={{
-                        marginTop: "1rem",
-                        padding: "0.5rem 1rem",
-                        fontFamily: "Cardo",
+                        ...buttonStyle,
+                        width: "100%",
+                        opacity: rolesRestants.length === 0 ? 0.5 : 1,
+                      }}
+                      disabled={rolesRestants.length === 0}
+                    >
+                      Attribution automatique
+                    </button>
+
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(4, 80px)",
+                        gap: "0.5rem",
                       }}
                     >
-                      Valider
-                    </button>
+                      {Array.from({ length: nbJoueurs }, (_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleChoixNumero(i)}
+                          disabled={
+                            joueursAttribues[i] || rolesRestants.length === 0
+                          }
+                          style={{
+                            width: 80,
+                            height: 80,
+                            borderRadius: "50%",
+                            fontSize: "1.5rem",
+                            backgroundColor: joueursAttribues[i]
+                              ? "#aaa"
+                              : "#e4e4e4",
+                            border: "1px solid #bbb",
+                            cursor: joueursAttribues[i] ? "default" : "pointer",
+                          }}
+                        >
+                          {i + 1}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+
+                {indexActif !== null && roleActif && (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      paddingLeft: "1.5rem",
+                      paddingRight: "1.5rem",
+                    }}
+                  >
+                    <img
+                      src={`icons/icon_${normalizeNom(roleActif.nom)}.png`}
+                      alt={roleActif.nom}
+                      style={{ width: "100px", marginBottom: "1rem" }}
+                    />
+                    <div
+                      style={{
+                        fontSize: "1.7rem",
+                        fontFamily: "IM Fell English SC, serif",
+                        color:
+                          roleActif.alignement === "Bon"
+                            ? "#0e74b4"
+                            : roleActif.alignement === "Maléfique"
+                            ? "#950f13"
+                            : "#222",
+                        marginBottom: "0.5rem",
+                        textAlign: "center",
+                      }}
+                    >
+                      {roleActif.nom}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "1rem",
+                        fontFamily: "Cardo",
+                        maxWidth: "50ch",
+                        margin: "1rem auto",
+                      }}
+                    >
+                      {renderBoldBrackets(
+                        roleActif.description ||
+                          roleActif.pouvoir ||
+                          "Pouvoir du rôle..."
+                      )}
+                    </div>
+                    <input
+                      className="important-field"
+                      type="text"
+                      placeholder="Nom du joueur"
+                      value={nomTemporaire}
+                      onChange={(e) => setNomTemporaire(e.target.value)}
+                      style={{ padding: "0.5rem", fontSize: "1rem" }}
+                    />
+                    <div style={{ marginTop: "1rem" }}>
+                      <button
+                        onClick={validerJoueur}
+                        style={{
+                          ...buttonStyle,
+                          width: "100%",
+                          opacity: rolesRestants.length === 0 ? 0.5 : 1,
+                        }}
+                      >
+                        Valider
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
+
           {afficherBluffs && (
             <div
               style={{
@@ -1962,7 +2010,15 @@ export default function App() {
                   color: "#950f13",
                 }}
               >
-                <h4 style={{ color: '#950f13', textAlign: 'center' }}>Bluffs du démon</h4>
+                <h4
+                  style={{
+                    color: "#950f13",
+                    fontSize: "1.2rem",
+                    textAlign: "center",
+                  }}
+                >
+                  Bluffs du démon
+                </h4>
 
                 {afficherRepartition && !bluffsValides && (
                   <>
@@ -1987,7 +2043,14 @@ export default function App() {
                         setErreurBluffs("");
                       }}
                     >
-                      <div style={{ display: "flex", justifyContent: "space-between", width: "100%", padding: "0 2rem" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          width: "100%",
+                          padding: "0 2rem",
+                        }}
+                      >
                         {bluffs.length === 3
                           ? rolesBonsNonAttribués
                               .filter((role) =>
@@ -2135,7 +2198,15 @@ export default function App() {
                     </div>
                   )}
 
-                <h4 style={{ color: '#222', textAlign: 'center' }}>Joueurs</h4>
+                <h4
+                  style={{
+                    color: "#222",
+                    fontSize: "1.2rem",
+                    textAlign: "center",
+                  }}
+                >
+                  Joueurs
+                </h4>
 
                 {Object.entries(joueursAttribues).map(
                   ([index, joueur], idx) => (
@@ -2566,411 +2637,390 @@ export default function App() {
                       <div
                         style={{
                           display: "flex",
-                          justifyContent: "space-between",
-                          marginTop: "1rem",
+                          gap: "0.5rem",
+                          marginTop: "1.5rem",
+                          width: "100%",
                         }}
                       >
                         <button
-                          onClick={() => setEditBluffsTemp([])}
+                          onClick={() => {
+                            const pool = [...rolesBonsNonAttribués];
+                            for (let i = pool.length - 1; i > 0; i--) {
+                              const j = Math.floor(Math.random() * (i + 1));
+                              [pool[i], pool[j]] = [pool[j], pool[i]];
+                            }
+                            setEditBluffsTemp(
+                              pool.slice(0, Math.min(3, pool.length))
+                            );
+                          }}
                           style={{
-                            padding: ".5rem 1rem",
-                            borderRadius: 8,
-                            border: "1px solid #bbb",
-                            background: "#f5f5f5",
+                            ...buttonStyle,
+                            flex: "0 1 110px", // plus étroit
+                            minWidth: 0, // autorise le rétrécissement
+                            padding: "0.5rem 0.6rem",
+                            fontSize: ".95rem",
+                          }}
+                        >
+                          Aléatoire
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            if (editBluffsTemp.length > 0)
+                              setEditBluffsTemp([]);
+                          }}
+                          disabled={editBluffsTemp.length === 0}
+                          style={{
+                            ...buttonStyle,
+                            flex: "0 1 90px", // plus étroit
+                            minWidth: 0,
+                            padding: "0.5rem 0.6rem",
+                            fontSize: ".95rem",
+                            opacity: editBluffsTemp.length === 0 ? 0.5 : 1,
+                            cursor:
+                              editBluffsTemp.length === 0
+                                ? "not-allowed"
+                                : "pointer",
                           }}
                         >
                           Vider
                         </button>
-                        <div style={{ display: "flex", gap: ".5rem" }}>
-                          <button
-                            onClick={() => {
-                              const pool = [...rolesBonsNonAttribués];
-                              for (let i = pool.length - 1; i > 0; i--) {
-                                const j = Math.floor(Math.random() * (i + 1));
-                                [pool[i], pool[j]] = [pool[j], pool[i]];
-                              }
-                              setEditBluffsTemp(
-                                pool.slice(0, Math.min(3, pool.length))
+
+                        <button
+                          onClick={() => {
+                            if (editBluffsTemp.length === 3) {
+                              const ordered = rolesBonsNonAttribués.filter(
+                                (r) =>
+                                  editBluffsTemp.some((b) => b.nom === r.nom)
                               );
-                            }}
-                            style={{
-                              padding: ".5rem 1rem",
-                              borderRadius: 8,
-                              border: "1px solid #bbb",
-                              background: "#f5f5f5",
-                            }}
-                          >
-                            Sélection aléatoire
-                          </button>
-                          <button
-                            onClick={() => {
-                              if (editBluffsTemp.length === 3) {
-                                // Respecte l’ordre d’affichage de la liste filtrée
-                                const ordered = rolesBonsNonAttribués.filter(
-                                  (r) =>
-                                    editBluffsTemp.some((b) => b.nom === r.nom)
-                                );
-                                setBluffs(ordered);
-                                setEditBluffsModal(false);
-                              }
-                            }}
-                            disabled={editBluffsTemp.length !== 3}
-                            style={{
-                              padding: ".5rem 1rem",
-                              borderRadius: 8,
-                              border: "1px solid #0e74b4",
-                              background: "#0e74b4",
-                              color: "#fff",
-                              opacity: editBluffsTemp.length === 3 ? 1 : 0.6,
-                              cursor:
-                                editBluffsTemp.length === 3
-                                  ? "pointer"
-                                  : "not-allowed",
-                            }}
-                          >
-                            Valider ({editBluffsTemp.length}/3)
-                          </button>
-                        </div>
+                              setBluffs(ordered);
+                              setEditBluffsModal(false);
+                            }
+                          }}
+                          disabled={editBluffsTemp.length !== 3}
+                          style={{
+                            ...buttonStyle,
+                            flex: "1 1 auto",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "0.35em",
+                            padding: "0.5rem 1rem",
+                            whiteSpace: "nowrap", // ← empêche le retour à la ligne
+                            opacity: editBluffsTemp.length === 3 ? 1 : 0.6,
+                            cursor:
+                              editBluffsTemp.length === 3
+                                ? "pointer"
+                                : "not-allowed",
+                          }}
+                        >
+                          <span>Valider</span>
+                          <span style={{ fontWeight: 400, fontSize: "0.98em" }}>
+                            ({editBluffsTemp.length}/3)
+                          </span>
+                        </button>
                       </div>
                     </div>
                   </div>
                 )}
 
-                {/* Modal for editing player name - FULLSCREEN */}
-                {nomEditModal &&
-                  (() => {
-                    const joueur = joueursAttribues[nomEditModal.index];
-                    const role = joueur?.role;
+                 {/* Modal for editing player name - FULLSCREEN */}
+{nomEditModal &&
+  (() => {
+    const joueur = joueursAttribues[nomEditModal.index];
+    const role = joueur?.role;
 
-                    const typeOrder = [
-                      "Habitant",
-                      "Étranger",
-                      "Acolyte",
-                      "Démon",
-                    ];
-                    const rappelRoles = (
-                      edition === "Script personnalisé"
-                        ? customScriptPool
-                        : roles.filter((r) => r.edition === edition)
-                    )
-                      .filter((r) => r.rappel)
-                      .sort(
-                        (a, b) =>
-                          typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type)
-                      );
+    const typeOrder = ["Habitant", "Étranger", "Acolyte", "Démon"];
+    const rappelRoles = (
+      edition === "Script personnalisé"
+        ? customScriptPool
+        : roles.filter((r) => r.edition === edition)
+    )
+      .filter((r) => r.rappel)
+      .sort((a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type));
 
-                    return (
-                      <div
-                        style={{
-                          position: "fixed",
-                          inset: 0,
-                          background: "grey",
-                          color: "white",
-                          zIndex: 9999,
-                          display: "flex",
-                          flexDirection: "column",
+    return (
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          background: "#fff",       // ← fond blanc
+          color: "#000",            // ← texte noir
+          zIndex: 9999,
+          display: "flex",
+          flexDirection: "column",
+          // safe-areas iOS
+          paddingTop: "env(safe-area-inset-top)",
+          paddingRight: "env(safe-area-inset-right)",
+          paddingBottom: "env(safe-area-inset-bottom)",
+          paddingLeft: "env(safe-area-inset-left)",
+        }}
+        role="dialog"
+        aria-modal="true"
+      >
+        {/* HEADER sticky */}
+        <div
+          style={{
+            position: "sticky",
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "0.75rem 1rem",
+            background: "#fff",          // ← header blanc
+            borderBottom: "1px solid #eee",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: ".5rem",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "IM Fell English SC, serif",
+                fontSize: "1.25rem",
+                lineHeight: 1.1,
+                color: "#000",           // ← titre noir
+              }}
+            >
+              Modifier le joueur
+            </div>
+          </div>
 
-                          // safe-areas iOS
-                          paddingTop: "env(safe-area-inset-top)",
-                          paddingRight: "env(safe-area-inset-right)",
-                          paddingBottom: "env(safe-area-inset-bottom)",
-                          paddingLeft: "env(safe-area-inset-left)",
-                        }}
-                        role="dialog"
-                        aria-modal="true"
-                      >
-                        {/* HEADER sticky */}
-                        <div
-                          style={{
-                            position: "sticky",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            zIndex: 2,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            padding: "0.75rem 1rem",
-                            background: "rgba(0,0,0,0.2)",
-                            backdropFilter: "blur(2px)",
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: ".5rem",
-                            }}
-                          >
-                            <div
-                              style={{
-                                fontFamily: "IM Fell English SC, serif",
-                                fontSize: "1.25rem",
-                                lineHeight: 1.1,
-                              }}
-                            >
-                              Modifier le joueur
-                            </div>
-                          </div>
+          <button
+            onClick={() => setNomEditModal(null)}
+            style={{
+              border: "none",
+              background: "none",
+              color: "#222",             // ← croix sombre
+              fontSize: "1.8rem",
+              cursor: "pointer",
+              lineHeight: 1,
+            }}
+            aria-label="Fermer"
+          >
+            ×
+          </button>
+        </div>
 
-                          <button
-                            onClick={() => setNomEditModal(null)}
-                            style={{
-                              border: "none",
-                              background: "none",
-                              color: "white",
-                              fontSize: "1.8rem",
-                              cursor: "pointer",
-                              lineHeight: 1,
-                            }}
-                            aria-label="Fermer"
-                          >
-                            ×
-                          </button>
-                        </div>
+        {/* BODY scrollable */}
+        <div
+          style={{
+            flex: 1,
+            overflow: "auto",
+            padding: "1rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            color: "#000",               // ← texte noir par défaut
+          }}
+        >
+          {/* Rôle (titre + pouvoir) */}
+          {role && (
+            <div style={{ textAlign: "left" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: ".5rem",
+                  marginBottom: ".25rem",
+                }}
+              >
+                <img
+                  src={`icons/icon_${normalizeNom(role.nom)}.png`}
+                  alt={role.nom}
+                  style={{ width: 36, height: 36, objectFit: "contain" }}
+                />
+                <div
+                  style={{
+                    fontFamily: "Cardo, serif",
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                    color: "#000",
+                  }}
+                >
+                  {role.nom}
+                </div>
+              </div>
+              <div
+                style={{
+                  fontFamily: "Cardo, serif",
+                  fontSize: "1rem",
+                  color: "#000",          // ← description noire
+                  maxWidth: "70ch",
+                  wordBreak: "break-word",
+                }}
+              >
+                {renderBoldBrackets(
+                  role.description || role.pouvoir || "Pouvoir du rôle..."
+                )}
+              </div>
+            </div>
+          )}
 
-                        {/* BODY scrollable */}
-                        <div
-                          style={{
-                            flex: 1,
-                            overflow: "auto",
-                            padding: "1rem",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "1rem",
-                          }}
-                        >
-                          {/* Rôle (titre + pouvoir) */}
-                          {role && (
-                            <div style={{ textAlign: "left" }}>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: ".5rem",
-                                  marginBottom: ".25rem",
-                                }}
-                              >
-                                <img
-                                  src={`icons/icon_${normalizeNom(
-                                    role.nom
-                                  )}.png`}
-                                  alt={role.nom}
-                                  style={{
-                                    width: 36,
-                                    height: 36,
-                                    objectFit: "contain",
-                                  }}
-                                />
-                                <div
-                                  style={{
-                                    fontFamily: "Cardo, serif",
-                                    fontWeight: "bold",
-                                    fontSize: "1.2rem",
-                                  }}
-                                >
-                                  {role.nom}
-                                </div>
-                              </div>
-                              <div
-                                style={{
-                                  fontFamily: "Cardo, serif",
-                                  fontSize: "1rem",
-                                  color: "white",
-                                  opacity: 0.95,
-                                  maxWidth: "70ch",
-                                  wordBreak: "break-word",
-                                }}
-                              >
-                                {renderBoldBrackets(
-                                  role.description ||
-                                    role.pouvoir ||
-                                    "Pouvoir du rôle..."
-                                )}
-                              </div>
-                            </div>
-                          )}
+          {/* Champ nom (maj en direct) */}
+          <div>
+            <input
+              className="important-field"
+              type="text"
+              value={nomEditModal.nom}
+              onChange={(e) => {
+                const newNom = e.target.value;
+                setNomEditModal({ ...nomEditModal, nom: newNom });
+                setJoueursAttribues((prev) => {
+                  const updated = { ...prev };
+                  updated[nomEditModal.index] = {
+                    ...updated[nomEditModal.index],
+                    nom: newNom,
+                  };
+                  return updated;
+                });
+              }}
+              placeholder="Nom du joueur"
+              readOnly
+              onFocus={(e) => e.target.removeAttribute("readOnly")}
+              style={{
+                width: "100%",
+                fontSize: "1.2rem",
+                padding: "0.7rem 0.9rem",
+                borderRadius: 10,
+                border: "1px solid #bbb",   // ← bord gris
+                background: "#fff",          // ← fond blanc
+                color: "#000",               // ← texte noir
+                outline: "none",
+              }}
+            />
+          </div>
 
-                          {/* Champ nom (maj en direct) */}
-                          <div>
-                            <input
-                              className="important-field"
-                              type="text"
-                              value={nomEditModal.nom}
-                              onChange={(e) => {
-                                const newNom = e.target.value;
-                                setNomEditModal({
-                                  ...nomEditModal,
-                                  nom: newNom,
-                                });
-                                setJoueursAttribues((prev) => {
-                                  const updated = { ...prev };
-                                  updated[nomEditModal.index] = {
-                                    ...updated[nomEditModal.index],
-                                    nom: newNom,
-                                  };
-                                  return updated;
-                                });
-                              }}
-                              placeholder="Nom du joueur"
-                              readOnly
-                              onFocus={(e) =>
-                                e.target.removeAttribute("readOnly")
-                              }
-                              style={{
-                                width: "100%",
-                                fontSize: "1.2rem",
-                                padding: "0.7rem 0.9rem",
-                                borderRadius: 10,
-                                border: "1px solid rgba(255,255,255,0.6)",
-                                background: "rgba(255,255,255,0.15)",
-                                color: "white",
-                                outline: "none",
-                                backdropFilter: "blur(2px)",
-                              }}
-                            />
-                          </div>
+          {/* Switch alignement + icônes historiques & rappels */}
+          {role && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: ".5rem",
+              }}
+            >
+              {/* Switch Bon/Maléfique */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  width: "100%",
+                  borderRadius: 8,
+                  gap: "0.5rem",
+                  overflow: "hidden",
+                  margin: "0.5rem 0",
+                }}
+              >
+                {/* Bouton Bon */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setJoueursAttribues((prev) => {
+                      const updated = { ...prev };
+                      updated[nomEditModal.index] = {
+                        ...updated[nomEditModal.index],
+                        alignement: "Bon",
+                        alignementFixe: true,
+                      };
+                      return updated;
+                    });
+                  }}
+                  style={{
+                    padding: "0.75rem",
+                    fontFamily: "Cardo, serif",
+                    fontSize: "1.1rem",
+                    cursor: "pointer",
+                    border: "1px solid #cfd7de",
+                    color: joueur?.alignement === "Bon" ? "#fff" : "#222",
+                    background:
+                      joueur?.alignement === "Bon" ? "#0e74b4" : "#f0f0f0",
+                    transition: "background 0.2s",
+                  }}
+                >
+                  Bon
+                </button>
 
-                          {/* Switch alignement + icônes historiques & rappels */}
-                          {role && (
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                flexWrap: "wrap",
-                                gap: ".5rem",
-                              }}
-                            >
-                              {/* Switch Bon/Maléfique */}
-                              <div
-                                style={{
-                                  display: "grid",
-                                  gridTemplateColumns: "1fr 1fr", // 2 colonnes égales
-                                  width: "100%",
-                                  borderRadius: 8,
-                                  gap: "0.5rem",
-                                  overflow: "hidden", // arrondi net
-                                  margin: "0.5rem 0",
-                                }}
-                              >
-                                {/* Bouton Bon */}
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setJoueursAttribues((prev) => {
-                                      const updated = { ...prev };
-                                      updated[nomEditModal.index] = {
-                                        ...updated[nomEditModal.index],
-                                        alignement: "Bon",
-                                        alignementFixe: true,
-                                      };
-                                      return updated;
-                                    });
-                                  }}
-                                  style={{
-                                    padding: "0.75rem",
-                                    fontFamily: "Cardo, serif",
-                                    fontSize: "1.1rem",
-                                    cursor: "pointer",
-                                    border: "none",
-                                    color: "white",
-                                    background:
-                                      joueur?.alignement === "Bon"
-                                        ? "#0e74b4"
-                                        : "rgba(200,200,200,0.3)",
-                                    transition: "background 0.2s",
-                                  }}
-                                >
-                                  Bon
-                                </button>
+                {/* Bouton Maléfique */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setJoueursAttribues((prev) => {
+                      const updated = { ...prev };
+                      updated[nomEditModal.index] = {
+                        ...updated[nomEditModal.index],
+                        alignement: "Maléfique",
+                        alignementFixe: true,
+                      };
+                      return updated;
+                    });
+                  }}
+                  style={{
+                    padding: "0.75rem",
+                    fontFamily: "Cardo, serif",
+                    fontSize: "1.1rem",
+                    cursor: "pointer",
+                    border: "1px solid #cfd7de",
+                    color: joueur?.alignement === "Maléfique" ? "#fff" : "#222",
+                    background:
+                      joueur?.alignement === "Maléfique" ? "#950f13" : "#f0f0f0",
+                    transition: "background 0.2s",
+                  }}
+                >
+                  Maléfique
+                </button>
+              </div>
 
-                                {/* Bouton Maléfique */}
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setJoueursAttribues((prev) => {
-                                      const updated = { ...prev };
-                                      updated[nomEditModal.index] = {
-                                        ...updated[nomEditModal.index],
-                                        alignement: "Maléfique",
-                                        alignementFixe: true,
-                                      };
-                                      return updated;
-                                    });
-                                  }}
-                                  style={{
-                                    padding: "0.75rem",
-                                    fontFamily: "Cardo, serif",
-                                    fontSize: "1.1rem",
-                                    cursor: "pointer",
-                                    border: "none",
-                                    color: "white",
-                                    background:
-                                      joueur?.alignement === "Maléfique"
-                                        ? "#950f13"
-                                        : "rgba(200,200,200,0.3)",
-                                    transition: "background 0.2s",
-                                  }}
-                                >
-                                  Maléfique
-                                </button>
-                              </div>
+              {/* Icônes des anciens rôles (grisées) */}
+              {(Array.isArray(joueur?.anciensRoles) ? joueur.anciensRoles : []
+              ).map((r, idx) => (
+                <span
+                  key={`ancien-${r.nom}-${idx}`}
+                  title={`Ancien rôle : ${r.nom}`}
+                  style={{
+                    marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <img
+                    src={`icons/icon_${normalizeNom(r.nom)}.png`}
+                    alt={r.nom}
+                    style={{
+                      width: 28,
+                      height: 28,
+                      verticalAlign: "middle",
+                      objectFit: "contain",
+                      filter: "grayscale(1) brightness(0.9) contrast(0.9)",
+                      opacity: 0.85,
+                    }}
+                  />
+                </span>
+              ))}
 
-                              {/* Icônes des anciens rôles (grisées) */}
-                              {(Array.isArray(joueur?.anciensRoles)
-                                ? joueur.anciensRoles
-                                : []
-                              ).map((r, idx) => (
-                                <span
-                                  key={`ancien-${r.nom}-${idx}`}
-                                  title={`Ancien rôle : ${r.nom}`}
-                                  style={{
-                                    marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
-                                    verticalAlign: "middle",
-                                  }}
-                                >
-                                  <img
-                                    src={`icons/icon_${normalizeNom(
-                                      r.nom
-                                    )}.png`}
-                                    alt={r.nom}
-                                    style={{
-                                      width: 28,
-                                      height: 28,
-                                      verticalAlign: "middle",
-                                      objectFit: "contain",
-                                      filter:
-                                        "grayscale(1) brightness(0.9) contrast(0.9)",
-                                      opacity: 0.85,
-                                    }}
-                                  />
-                                </span>
-                              ))}
+              {/* Icônes de rappels (actuels) */}
+              {joueur?.rappelRoles &&
+                joueur.rappelRoles.length > 0 &&
+                joueur.rappelRoles.map((r) => (
+                  <span key={`rappel-${r.nom}`} style={{ marginLeft: "0.2rem" }}>
+                    <img
+                      src={`icons/icon_${normalizeNom(r.nom)}.png`}
+                      alt={r.nom}
+                      style={{ width: 28, height: 28, objectFit: "contain" }}
+                    />
+                  </span>
+                ))}
+            </div>
+          )}
+        
 
-                              {/* Icônes de rappels (actuels) */}
-                              {joueur?.rappelRoles &&
-                                joueur.rappelRoles.length > 0 &&
-                                joueur.rappelRoles.map((r) => (
-                                  <span
-                                    key={`rappel-${r.nom}`}
-                                    style={{ marginLeft: "0.2rem" }}
-                                  >
-                                    <img
-                                      src={`icons/icon_${normalizeNom(
-                                        r.nom
-                                      )}.png`}
-                                      alt={r.nom}
-                                      style={{
-                                        width: 28,
-                                        height: 28,
-                                        verticalAlign: "middle",
-                                        objectFit: "contain",
-                                      }}
-                                    />
-                                  </span>
-                                ))}
-                            </div>
-                          )}
 
                           {/* Actions principales (Rappels / Changer de rôle / Mort / Vote etc.) */}
                           {/* Rappels */}
