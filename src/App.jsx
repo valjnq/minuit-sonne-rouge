@@ -868,63 +868,60 @@ export default function App() {
               </div>
               {/* Ligne des boutons sous le select */}
               <div
-                style={{
-                  flexBasis: "100%", // force la ligne sous le select
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr", // 2 colonnes = 2 boutons côte à côte
-                  gap: "0.75rem",
-                  marginTop: "0.5rem",
-                  width: "100%",
-                }}
-              >
-                <button
-                  onClick={() => setQrCodeVisible(true)}
-                  style={{
-                    ...buttonStyle,
-                    width: "100%", // occupe toute sa colonne
-                    cursor:
-                      customScriptPool.length === 0 &&
-                      edition === "Script personnalisé"
-                        ? "not-allowed"
-                        : "pointer",
-                    opacity:
-                      customScriptPool.length === 0 &&
-                      edition === "Script personnalisé"
-                        ? 0.5
-                        : 1,
-                  }}
-                  disabled={
-                    customScriptPool.length === 0 &&
-                    edition === "Script personnalisé"
-                  }
-                >
-                  Partager le script
-                </button>
+  style={{
+    flexBasis: "100%", // reste sur une nouvelle ligne sous le select
+    display: "grid",
+    gridTemplateColumns: "1fr", // 1 colonne = 1 bouton par ligne
+    gap: "0.75rem",
+    marginTop: "0.5rem",
+    width: "100%",
+  }}
+>
+  <button
+    onClick={() => setQrCodeVisible(true)}
+    style={{
+      ...buttonStyle,
+      width: "100%",
+      cursor:
+        customScriptPool.length === 0 && edition === "Script personnalisé"
+          ? "not-allowed"
+          : "pointer",
+      opacity:
+        customScriptPool.length === 0 && edition === "Script personnalisé"
+          ? 0.5
+          : 1,
+      // gridColumn: "1 / -1", // optionnel si tu veux forcer full-width même si tu remets 2 colonnes plus tard
+    }}
+    disabled={
+      customScriptPool.length === 0 && edition === "Script personnalisé"
+    }
+  >
+    Partager le script
+  </button>
 
-                {edition === "Script personnalisé" && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCustomScriptVisible(true);
-                      if (
-                        customScriptPool.length > 0 &&
-                        customScriptTemp.length === 0
-                      ) {
-                        setCustomScriptTemp(customScriptPool);
-                      }
-                    }}
-                    disabled={rolesValides}
-                    style={{
-                      ...buttonStyle,
-                      width: "100%", // occupe toute sa colonne
-                      cursor: rolesValides ? "not-allowed" : "pointer",
-                      opacity: rolesValides ? 0.5 : 1,
-                    }}
-                  >
-                    Éditer le script
-                  </button>
-                )}
-              </div>
+  {edition === "Script personnalisé" && (
+    <button
+      type="button"
+      onClick={() => {
+        setCustomScriptVisible(true);
+        if (customScriptPool.length > 0 && customScriptTemp.length === 0) {
+          setCustomScriptTemp(customScriptPool);
+        }
+      }}
+      disabled={rolesValides}
+      style={{
+        ...buttonStyle,
+        width: "100%",
+        cursor: rolesValides ? "not-allowed" : "pointer",
+        opacity: rolesValides ? 0.5 : 1,
+        // gridColumn: "1 / -1", // optionnel (voir note ci-dessus)
+      }}
+    >
+      Éditer le script
+    </button>
+  )}
+</div>
+
             </div>
           </details>
           {customScriptVisible && (
