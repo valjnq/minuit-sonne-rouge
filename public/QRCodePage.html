@@ -2,9 +2,17 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Pirata+One&display=swap"
+      rel="stylesheet"
+    />
     <base href="/minuit-sonne-rouge/" />
     <link rel="icon" href="favicon.ico" />
     <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
     <title>QR Code - Minuit Sonne Rouge</title>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <style>
@@ -15,15 +23,15 @@
         padding: 0;
       }
       body {
-  background: #fff;
-  color: #222;
+        background: #fff;
+        color: #222;
         font-family: sans-serif;
         min-height: 100vh;
         width: 100vw;
         overflow-x: hidden;
         overflow-y: auto;
         box-sizing: border-box;
-        padding-bottom: 2rem;
+  padding: 1rem 1rem 2rem 1rem;
         display: block;
       }
       #qrcode {
@@ -49,8 +57,10 @@
             const h2 = document.createElement("h2");
             h2.textContent = "Script personnalisé";
             h2.style.fontSize = "2rem";
-            h2.style.marginBottom = "2rem";
+            h2.style.marginTop = "0rem";
+            h2.style.marginBottom = "0rem";
             h2.style.textAlign = "center";
+            h2.style.fontFamily = "'Pirata One', cursive";
             document.body.appendChild(h2);
 
             // Prepare role data
@@ -75,7 +85,7 @@
             // Container for all lists
             const allLists = document.createElement("div");
             allLists.id = "role-lists";
-            allLists.style.maxWidth = "900px";
+            allLists.style.maxWidth = "480px";
             allLists.style.margin = "0 auto";
             document.body.appendChild(allLists);
 
@@ -89,8 +99,7 @@
 
                 // Collapsible section container
                 const section = document.createElement("div");
-                section.style.marginBottom = "2.5rem";
-                section.style.borderTop = "2px solid #222";
+                //section.style.marginBottom = "1.2rem";
                 section.style.paddingTop = "0.5rem";
 
                 // Collapsible button
@@ -98,21 +107,27 @@
                 btn.type = "button";
                 btn.textContent = `▼  ${type}`;
                 btn.setAttribute("aria-expanded", "true");
-                btn.style.fontSize = "1.2rem";
+                btn.style.fontSize = "1.5rem";
                 btn.style.fontWeight = "bold";
-                btn.style.fontFamily = "serif";
+                btn.style.fontFamily = "'IM FELL ENGLISH SC', serif";
                 btn.style.color =
                   type === "Démons" || type === "Acolytes"
                     ? "#950f13"
                     : "#0e74b4";
-                btn.style.background = "#ece6d6";
-                btn.style.border = "2px solid #222";
-                btn.style.borderRadius = "18px";
-                btn.style.padding = "0.3em 1.5em";
-                btn.style.margin = "0 0 1.5rem 0";
-                btn.style.boxShadow = "0 2px 8px #0002";
+                btn.style.background = "none";
+                btn.style.border = "none";
+                btn.style.borderRadius = "0";
+                btn.style.padding = "0.3em 0";
+                btn.style.margin = "0 0 0rem 0";
+                btn.style.boxShadow = "none";
                 btn.style.cursor = "pointer";
                 btn.style.display = "inline-block";
+                // Trait noir sous le titre
+                const underline = document.createElement("div");
+                underline.style.width = "100%";
+                underline.style.height = "0";
+                underline.style.borderBottom = "1px solid #bbb";
+                underline.style.margin = "0.15rem 0 0.15rem 0";
 
                 // List container
                 const list = document.createElement("div");
@@ -122,53 +137,74 @@
                 list.style.marginRight = "auto";
 
                 rolesOfType.forEach((role, idx) => {
+                  // Container for icon and content
                   const row = document.createElement("div");
                   row.style.display = "flex";
                   row.style.alignItems = "center";
-                  row.style.gap = "2.5rem";
-                  row.style.background = "#fff";
+                  row.style.gap = "1.5rem";
+                  row.style.background = "none";
                   row.style.color = "#222";
-                  row.style.borderRadius = "12px";
+                  row.style.borderRadius = "0";
                   row.style.margin = "0";
-                  row.style.padding = "1.2rem 2rem";
-                  row.style.boxShadow = "0 2px 8px #0001";
-                  if (idx > 0) {
-                    row.style.borderTop = "1px solid #ece6d6";
-                  }
+                  row.style.padding = "0.7rem 0";
+                  row.style.boxShadow = "none";
 
-                  // Icon
+                  // Icon left
+                  const iconCol = document.createElement("div");
+                  iconCol.style.display = "flex";
+                  iconCol.style.alignItems = "center";
+                  iconCol.style.justifyContent = "center";
+                  iconCol.style.flex = "0 0 56px";
+
                   const icon = document.createElement("img");
                   icon.src = `icons/icon_${normalizeNom(role.nom)}.png`;
                   icon.alt = role.nom;
-                  icon.style.height = "56px";
-                  icon.style.width = "56px";
+                  icon.style.height = "48px";
+                  icon.style.width = "48px";
                   icon.style.objectFit = "contain";
-                  icon.style.flex = "0 0 56px";
-                  row.appendChild(icon);
+                  iconCol.appendChild(icon);
+                  row.appendChild(iconCol);
 
-                  // Name
+                  // Content right (name above desc)
+                  const contentCol = document.createElement("div");
+                  contentCol.style.display = "flex";
+                  contentCol.style.flexDirection = "column";
+                  contentCol.style.alignItems = "flex-start";
+                  contentCol.style.justifyContent = "flex-start";
+                  contentCol.style.flex = "1 1 auto";
+
+                  // Name above
                   const name = document.createElement("div");
                   name.textContent = role.nom;
                   name.style.fontWeight = "bold";
-                  name.style.fontSize = "1.5rem";
-                  name.style.color =
-                    role.alignement === "Bon" ? "#0e74b4" : "#950f13";
-                  name.style.flex = "0 0 180px";
+                  name.style.fontSize = "1.25rem";
+                  name.style.color = role.alignement === "Bon" ? "#0e74b4" : "#950f13";
                   name.style.textAlign = "left";
-                  row.appendChild(name);
+                  name.style.fontFamily = "'IM Fell English SC', serif";
+                  name.style.margin = "0 0 0.2rem 0";
+                  contentCol.appendChild(name);
 
-                  // Power/Description
+                  // Description below
                   const desc = document.createElement("div");
-                  // Met en gras le texte entre crochets
                   const pouvoir = role.pouvoir || "";
-                  desc.innerHTML = pouvoir.replace(/(\[[^\]]+\])/g, '<strong>$1</strong>');
-                  desc.style.fontSize = "1.25rem";
-                  desc.style.lineHeight = "1.5";
+                  desc.innerHTML = pouvoir.replace(/(\[[^\]]+\])/g, "<strong>$1</strong>");
+                  desc.style.fontSize = "1rem";
+                  desc.style.lineHeight = "1.2";
                   desc.style.textAlign = "left";
-                  desc.style.flex = "1 1 auto";
-                  row.appendChild(desc);
+                  desc.style.fontFamily = "Cardo, serif";
+                  contentCol.appendChild(desc);
 
+                  row.appendChild(contentCol);
                   list.appendChild(row);
+                  // Add a thin gray separator after each role except the last
+                  if (idx < rolesOfType.length - 1) {
+                    const separator = document.createElement("div");
+                    separator.style.width = "100%";
+                    separator.style.height = "0";
+                    separator.style.borderBottom = "1px solid #bbb";
+                    separator.style.margin = "0.15rem 0 0.15rem 0";
+                    list.appendChild(separator);
+                  }
                 });
 
                 // Collapsible logic
@@ -185,6 +221,7 @@
                 });
 
                 section.appendChild(btn);
+                section.appendChild(underline);
                 section.appendChild(list);
                 allLists.appendChild(section);
               });

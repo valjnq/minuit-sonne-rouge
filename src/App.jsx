@@ -218,14 +218,14 @@ export default function App() {
   }
   // Fonction pour confirmer l'effacement
   function confirmClearNotes() {
-  setNotes("");
-  setShowClearNotesModal(false);
+    setNotes("");
+    setShowClearNotesModal(false);
   }
   // Fonction pour annuler
   function cancelClearNotes() {
     setShowClearNotesModal(false);
   }
-  
+
   const [customScriptVisible, setCustomScriptVisible] = useState(false);
   const [customScriptPool, setCustomScriptPool] = useState([]);
   const [customScriptTemp, setCustomScriptTemp] = useState([]);
@@ -344,6 +344,14 @@ export default function App() {
     setOpenSetup(false);
     setOpenRolesDetails(false);
     setAfficherRepartition(true); // ouvre Grimoire à l’apparition
+    setAfficherOrdreReveil(true); // ouvre automatiquement l'ordre de réveil
+    // Scroll vers le grimoire
+    setTimeout(() => {
+      const grimoire = document.getElementById("grimoire-section");
+      if (grimoire) {
+        grimoire.scrollIntoView();
+      }
+    }, 100);
   }, [tousAttribues]);
 
   useEffect(() => {
@@ -2008,6 +2016,7 @@ export default function App() {
             <details
               className="collapsible"
               ref={grimoireRef}
+              id="grimoire-section"
               open={afficherRepartition}
               onToggle={(e) => setAfficherRepartition(e.currentTarget.open)}
             >
@@ -4059,7 +4068,7 @@ export default function App() {
                   aria-hidden="true"
                   style={{
                     border: "none",
-                    borderTop: "1px solid #000",
+                    borderTop: "1px solid #bbb",
                     margin: 0, // laisse le gap du parent gérer l’espacement
                     width: "100%",
                     alignSelf: "stretch",
@@ -4765,32 +4774,42 @@ export default function App() {
                 display: "block",
               }}
             ></div>
-            
+
             {showClearNotesModal && (
-              <div style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100vw",
-                height: "100vh",
-                background: "rgba(0,0,0,0.4)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 9999,
-              }}>
-                <div style={{
-                  background: "#fff",
-                  borderRadius: 12,
-                  padding: "2rem 1.5rem",
-                  boxShadow: "0 2px 16px rgba(0,0,0,0.15)",
-                  minWidth: 280,
-                  textAlign: "center",
-                }}>
+              <div
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  width: "100vw",
+                  height: "100vh",
+                  background: "rgba(0,0,0,0.4)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 9999,
+                }}
+              >
+                <div
+                  style={{
+                    background: "#fff",
+                    borderRadius: 12,
+                    padding: "2rem 1.5rem",
+                    boxShadow: "0 2px 16px rgba(0,0,0,0.15)",
+                    minWidth: 280,
+                    textAlign: "center",
+                  }}
+                >
                   <div style={{ fontSize: "1.2rem", marginBottom: "1.2rem" }}>
                     Effacer les notes&nbsp;?
                   </div>
-                  <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "1rem",
+                      justifyContent: "center",
+                    }}
+                  >
                     <button
                       style={{ ...buttonStyle, background: "#eee" }}
                       onClick={cancelClearNotes}
@@ -4868,7 +4887,7 @@ export default function App() {
               <summary>Mentions légales</summary>
               <div
                 style={{
-                  marginTop: "1rem",
+                  marginTop: "0rem",
                   color: "black",
                   display: "flex",
                   flexDirection: "column",
@@ -4876,7 +4895,7 @@ export default function App() {
                   maxWidth: "800px",
                 }}
               >
-                <p style={{ fontFamily: "Cardo, serif" }}>
+                <p style={{ fontFamily: "Cardo, serif", marginBottom: "0rem" }}>
                   <strong style={{ color: "#950f13" }}>
                     Minuit sonne rouge
                   </strong>{" "}
@@ -4884,16 +4903,30 @@ export default function App() {
                   <strong>Blood on the Clocktower</strong> réalisée par un fan.
                 </p>
 
-                <p style={{ fontFamily: "Cardo, serif" }}>
+                
+                <p style={{ fontFamily: "Cardo, serif", marginBottom: "0rem" }}>
                   <strong>Blood on the Clocktower</strong> est une marque
                   déposée de Steven Medway et The Pandemonium Institute.
                 </p>
-                <p style={{ fontFamily: "Cardo, serif" }}>
+                <p style={{ fontFamily: "Cardo, serif", marginBottom: "0rem" }}>
                   Cette application est un grimoire virtuel non officiel et
                   gratuit et n’est pas affiliée à Steven Medway ou The
                   Pandemonium Institute.
                 </p>
-                <ul style={{ marginLeft: "0rem", fontFamily: "Cardo, serif" }}>
+                <p style={{ fontFamily: "Cardo, serif", marginBottom: "0rem" }}>
+                  Elle est inspirée de l'application open source
+                  {" "}
+                  <a
+                    href="https://www.pocketgrimoire.co.uk"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "#0e74b4", textDecoration: "underline", fontWeight: "bold" }}
+                  >
+                    Pocket Grimoire
+                  </a>
+                  {" "}réalisée par Skateside.
+                </p>
+                <ul style={{ marginLeft: "0rem",  fontFamily: "Cardo, serif" }}>
                   <li>Traduction des textes&nbsp;: Valentin Janequin</li>
                   <li>
                     Source d’images et textes &nbsp;:&nbsp;
