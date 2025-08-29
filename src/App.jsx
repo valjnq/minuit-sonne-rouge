@@ -208,12 +208,24 @@ export default function App() {
   const [bluffsValides, setBluffsValides] = useState(false);
   const [afficherNotes, setAfficherNotes] = useState(false);
   const [notes, setNotes] = useState("");
+  // Ajout de l'état pour la modale de confirmation d'effacement des notes
+  const [showClearNotesModal, setShowClearNotesModal] = useState(false);
   const [afficherMentions, setAfficherMentions] = useState(false);
   const tousAttribues =
     nbJoueurs > 0 && Object.keys(joueursAttribues).length === nbJoueurs;
   function clearNotes() {
-    setNotes("");
+    setShowClearNotesModal(true);
   }
+  // Fonction pour confirmer l'effacement
+  function confirmClearNotes() {
+  setNotes("");
+  setShowClearNotesModal(false);
+  }
+  // Fonction pour annuler
+  function cancelClearNotes() {
+    setShowClearNotesModal(false);
+  }
+  
   const [customScriptVisible, setCustomScriptVisible] = useState(false);
   const [customScriptPool, setCustomScriptPool] = useState([]);
   const [customScriptTemp, setCustomScriptTemp] = useState([]);
@@ -4753,6 +4765,55 @@ export default function App() {
                 display: "block",
               }}
             ></div>
+            
+            {showClearNotesModal && (
+              <div style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                background: "rgba(0,0,0,0.4)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 9999,
+              }}>
+                <div style={{
+                  background: "#fff",
+                  borderRadius: 12,
+                  padding: "2rem 1.5rem",
+                  boxShadow: "0 2px 16px rgba(0,0,0,0.15)",
+                  minWidth: 280,
+                  textAlign: "center",
+                }}>
+                  <div style={{ fontSize: "1.2rem", marginBottom: "1.2rem" }}>
+                    Effacer les notes&nbsp;?
+                  </div>
+                  <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
+                    <button
+                      style={{ ...buttonStyle, background: "#eee" }}
+                      onClick={cancelClearNotes}
+                    >
+                      Non
+                    </button>
+                    <button
+                      style={{
+                        ...buttonStyle,
+                        color: "#950f13",
+                        background: "#fbeaea",
+                        border: "1px solid #950f13",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                        fontSize: "1.1rem",
+                      }}
+                      onClick={confirmClearNotes}
+                    >
+                      Oui
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
             <details
               className="collapsible"
               open={afficherNotes}
@@ -4790,14 +4851,14 @@ export default function App() {
                   <button
                     className="btn"
                     style={{ ...buttonStyle, width: "100%" }}
-                    onClick={clearNotes}
+                    onClick={() => setShowClearNotesModal(true)}
                   >
                     Effacer les notes
                   </button>
                 </div>
-              </div>{" "}
+              </div>
               {/* ← ferme le conteneur des notes */}
-            </details>{" "}
+            </details>
             {/* ← ferme le collapsible */}
             <details
               className="collapsible"
