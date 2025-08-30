@@ -1,4 +1,50 @@
 import React, { useState, useEffect, useRef } from "react";
+// Composant d'en-tête avec croix alignée
+function HeaderWithClose({ title, onClose, style, titleStyle, closeStyle }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        padding: "0.5rem 3rem 0.5rem 0.5rem", // padding gauche réduit, droite augmenté
+        position: "relative",
+        ...style,
+      }}
+    >
+      <span style={{ fontSize: "1.2rem", fontWeight: "bold", marginLeft: 0, ...titleStyle }}>{title}</span>
+      <button
+        onClick={onClose}
+        style={{
+          background: "#f5F5F5",
+          border: "1px solid #bbb",
+          color: "#000",
+          fontSize: "0.9rem",
+          cursor: "pointer",
+          marginLeft: "auto",
+          lineHeight: 1,
+          position: "absolute",
+          right: "0.5rem",
+          top: "50%",
+          transform: "translateY(-50%)",
+          borderRadius: "6px",
+          minWidth: "2.4rem",
+          height: "1.6rem",
+          padding: "0 0.5rem",
+          fontFamily: "Cardo, serif",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
+          transition: "background 0.2s, color 0.2s, border 0.2s",
+          ...closeStyle,
+        }}
+        aria-label="Fermer"
+      >
+        Fermer
+      </button>
+    </div>
+  );
+}
 import roles from "./roles-fr.json";
 import QRCode from "react-qr-code";
 import "./mobile.css";
@@ -37,7 +83,7 @@ const buttonStyle = {
   border: "1px solid #bbb",
   background: "#f5F5F5",
 
-  color: "#222",
+  color: "#000",
   cursor: "pointer",
   transition: "background 0.2s, color 0.2s, border 0.2s",
 };
@@ -70,10 +116,10 @@ export default function App() {
   const jetonsInfoButtons = [
     {
       label: "Voici le démon",
-      color: "#222",
+      color: "#000",
       page: "demon",
       content: "Voici le démon",
-      textColor: "#222",
+      textColor: "#000",
       background: "#f5F5F5",
 
       border: "1px solid #bbb",
@@ -81,10 +127,10 @@ export default function App() {
     },
     {
       label: "Voici tes acolytes",
-      color: "#222",
+      color: "#000",
       page: "acolytes",
       content: "Voici tes acolytes",
-      textColor: "#222",
+      textColor: "#000",
       background: "#f5F5F5",
 
       border: "1px solid #bbb",
@@ -92,10 +138,10 @@ export default function App() {
     },
     {
       label: "Bluffs du démon",
-      color: "#222",
+      color: "#000",
       page: "not-in-game",
       content: "Ces rôles ne sont pas en jeu",
-      textColor: "#222",
+      textColor: "#000",
       background: "#f5F5F5",
 
       border: "1px solid #bbb",
@@ -103,10 +149,10 @@ export default function App() {
     },
     {
       label: "Afficher un rôle",
-      color: "#222",
+      color: "#000",
       page: "roles",
       content: "Afficher un rôle",
-      textColor: "#222",
+      textColor: "#000",
       background: "#f5F5F5",
 
       border: "1px solid #bbb",
@@ -114,10 +160,10 @@ export default function App() {
     },
     {
       label: "Tu es",
-      color: "#222",
+      color: "#000",
       page: "you-are",
       content: "Tu es",
-      textColor: "#222",
+      textColor: "#000",
       background: "#f5F5F5",
 
       border: "1px solid #bbb",
@@ -125,10 +171,10 @@ export default function App() {
     },
     {
       label: "Ce joueur est",
-      color: "#222",
+      color: "#000",
       page: "player-is",
       content: "Ce joueur est",
-      textColor: "#222",
+      textColor: "#000",
       background: "#f5F5F5",
 
       border: "1px solid #bbb",
@@ -136,10 +182,10 @@ export default function App() {
     },
     {
       label: "Utiliser ton pouvoir ?",
-      color: "#222",
+      color: "#000",
       page: "use-power",
       content: "Utiliser ton pouvoir ?",
-      textColor: "#222",
+      textColor: "#000",
       background: "#f5F5F5",
 
       border: "1px solid #bbb",
@@ -382,7 +428,7 @@ export default function App() {
     Démon: "Démons",
   };
   const colorForType = (type) =>
-    lignes.find((l) => l.label === typeToPlural[type])?.color || "#222";
+    lignes.find((l) => l.label === typeToPlural[type])?.color || "#000";
   const rolesFiltres =
     edition === "Script personnalisé"
       ? customScriptPool
@@ -795,7 +841,7 @@ export default function App() {
                   { label: "Démons", key: "Démons" },
                 ].map(({ label, key }) => {
                   const color =
-                    lignes.find((l) => l.label === label)?.color || "#222";
+                    lignes.find((l) => l.label === label)?.color || "#000";
                   const value = tableRepartition[nbJoueurs]?.[key] ?? 0;
                   return (
                     <div
@@ -965,7 +1011,7 @@ export default function App() {
               <div
                 style={{
                   background: "#fff",
-                  color: "#222",
+                  color: "#000",
                   position: "fixed", // ← plein écran réel
                   top: 0,
                   right: 0,
@@ -999,35 +1045,12 @@ export default function App() {
                 role="dialog"
                 aria-modal="true"
               >
-                {/* CROIX TOUJOURS VISIBLE */}
-                <button
-                  onClick={() => setCustomScriptVisible(false)}
-                  style={{
-                    position: "absolute",
-                    top: "0.75rem",
-                    right: "0.75rem",
-                    border: "none",
-                    background: "none",
-                    fontSize: "1.5rem",
-                    cursor: "pointer",
-                    lineHeight: 1,
-                    color: "#222",
-                  }}
-                  aria-label="Fermer"
-                >
-                  ×
-                </button>
-
-                <h3
-                  style={{
-                    marginTop: 0,
-                    marginBottom: "1rem",
-                    paddingRight: "2rem",
-                    fontFamily: "IM Fell English SC, serif",
-                  }}
-                >
-                  Choisir les rôles du script
-                </h3>
+                <HeaderWithClose
+                  title="Choisir les rôles du script"
+                  onClose={() => setCustomScriptVisible(false)}
+                  style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                  titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                />
 
                 {/* CORPS SCROLLABLE */}
                 <div
@@ -1389,7 +1412,7 @@ export default function App() {
                                 style={{
                                   fontFamily: "Cardo, serif",
                                   fontSize: "0.95rem",
-                                  color: "#222",
+                                  color: "#000",
                                   marginTop: "0.2rem",
                                 }}
                               >
@@ -1717,63 +1740,50 @@ export default function App() {
           )}
           {affectationVisible && (
             <div
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "#fff",
-                color: "inherit",
-                zIndex: 10,
-                display: "flex",
-                flexDirection: "column", // header séparé du contenu
-              }}
-            >
-              {/* HEADER MODAL indépendant */}
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  padding: "1rem 0.75rem",
-                  borderBottom: "1px solid #eee",
-                  fontFamily: "IM Fell English SC, serif",
-                  fontSize: "1.2rem",
-                  //textAlign: "center",
-                  background: "none",
-                  flexShrink: 0,
-                }}
-              >
-                Attribuer les rôles
-                <button
-                  onClick={quitterAffectation}
-                  style={{
-                    position: "absolute",
-                    right: "0.75rem",
-                    top: "0.5rem",
-                    border: "none",
-                    background: "none",
-                    fontSize: "1.5rem",
-                    cursor: "pointer",
-                    color: "#222", // Force noir sur toutes plateformes
-                    lineHeight: 1,
-                  }}
-                  aria-label="Fermer"
-                >
-                  ×
-                </button>
-              </div>
-
-              {/* CONTENU de la modale */}
+                      style={{
+                        background: "#fff",
+                        color: "#000",
+                        position: "fixed",
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0,
+                        width: "auto",
+                        height: "auto",
+                        borderRadius: 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        overflow: "hidden", // le corps scrolle, pas l’en-tête
+                        minHeight: "-webkit-fill-available",
+                        paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                        paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                        paddingBottom:
+                          "calc(1rem + env(safe-area-inset-bottom))",
+                        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                        WebkitOverflowScrolling: "touch",
+                        overscrollBehavior: "contain",
+                        fontFamily: "Cardo, serif",
+                        zIndex: 501,
+                      }}
+                      role="dialog"
+                      aria-modal="true"
+                    >
+              <HeaderWithClose
+                title="Attribuer les rôles"
+                onClose={quitterAffectation}
+                style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+              />
               <div
                 style={{
                   flex: 1,
+                  overflow: "auto",
+                  padding: "1rem",
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "1rem",
-                  overflowY: "auto", // si jamais il y a beaucoup d’éléments
+                  gap: "1rem",
+                  color: "#000",
+                  
                 }}
               >
                 {indexActif === null && (
@@ -1784,7 +1794,9 @@ export default function App() {
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
+                      justifyContent: "center",
                       gap: "1.5rem",
+                      height: "100%",
                     }}
                   >
                     <button
@@ -1839,7 +1851,7 @@ export default function App() {
                     <div
                       style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(4, 80px)",
+                        gridTemplateColumns: "repeat(4, 70px)",
                         gap: "0.5rem",
                       }}
                     >
@@ -1851,8 +1863,8 @@ export default function App() {
                             joueursAttribues[i] || rolesRestants.length === 0
                           }
                           style={{
-                            width: 80,
-                            height: 80,
+                            width: 70,
+                            height: 70,
                             borderRadius: "50%",
                             fontSize: "1.5rem",
                             backgroundColor: joueursAttribues[i]
@@ -1894,7 +1906,7 @@ export default function App() {
                             ? "#0e74b4"
                             : roleActif.alignement === "Maléfique"
                             ? "#950f13"
-                            : "#222",
+                            : "#000",
                         marginBottom: "0.5rem",
                         textAlign: "center",
                       }}
@@ -2218,7 +2230,7 @@ export default function App() {
 
                 <h4
                   style={{
-                    color: "#222",
+                    color: "#000",
                     fontSize: "1.2rem",
                     textAlign: "center",
                   }}
@@ -2292,7 +2304,7 @@ export default function App() {
                                 ? "#0e74b4"
                                 : joueur.alignement === "Maléfique"
                                 ? "#950f13"
-                                : "#222",
+                                : "#000",
                             padding: "0.5rem 0",
                             borderRadius: "8px",
                             textAlign: "left",
@@ -2440,7 +2452,7 @@ export default function App() {
                     <div
                       style={{
                         background: "#fff",
-                        color: "#222",
+                        color: "#000",
                         position: "fixed",
                         top: 0,
                         right: 0,
@@ -2466,35 +2478,12 @@ export default function App() {
                       role="dialog"
                       aria-modal="true"
                     >
-                      {/* CROIX FERMER */}
-                      <button
-                        onClick={() => setEditBluffsModal(false)}
-                        style={{
-                          position: "absolute",
-                          top: "0.75rem",
-                          right: "0.75rem",
-                          border: "none",
-                          background: "none",
-                          fontSize: "1.5rem",
-                          cursor: "pointer",
-                          lineHeight: 1,
-                          color: "#222",
-                        }}
-                        aria-label="Fermer"
-                      >
-                        ×
-                      </button>
-
-                      <h3
-                        style={{
-                          marginTop: 0,
-                          marginBottom: "1rem",
-                          paddingRight: "2rem",
-                          fontFamily: "IM Fell English SC, serif",
-                        }}
-                      >
-                        Choisir les bluffs du démon
-                      </h3>
+                      <HeaderWithClose
+                        title="Choisir les bluffs du démon"
+                        onClose={() => setEditBluffsModal(false)}
+                        style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                        titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                      />
 
                       {/* CORPS SCROLLABLE */}
                       <div
@@ -2742,73 +2731,41 @@ export default function App() {
 
                     return (
                       <div
-                        style={{
-                          position: "fixed",
-                          inset: 0,
-                          background: "#fff", // ← fond blanc
-                          color: "#000", // ← texte noir
-                          zIndex: 9999,
-                          display: "flex",
-                          flexDirection: "column",
-                          // safe-areas iOS
-                          paddingTop: "env(safe-area-inset-top)",
-                          paddingRight: "env(safe-area-inset-right)",
-                          paddingBottom: "env(safe-area-inset-bottom)",
-                          paddingLeft: "env(safe-area-inset-left)",
-                        }}
-                        role="dialog"
-                        aria-modal="true"
-                      >
-                        {/* HEADER sticky */}
-                        <div
-                          style={{
-                            position: "sticky",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            zIndex: 2,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            padding: "0.75rem 1rem",
-                            background: "#fff", // ← header blanc
-                            borderBottom: "1px solid #eee",
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: ".5rem",
-                            }}
-                          >
-                            <div
-                              style={{
-                                fontFamily: "IM Fell English SC, serif",
-                                fontSize: "1.25rem",
-                                lineHeight: 1.1,
-                                color: "#000", // ← titre noir
-                              }}
-                            >
-                              Modifier le joueur
-                            </div>
-                          </div>
-
-                          <button
-                            onClick={() => setNomEditModal(null)}
-                            style={{
-                              border: "none",
-                              background: "none",
-                              fontSize: "1.8rem",
-                              cursor: "pointer",
-                              lineHeight: 1,
-                              color: "#222",
-                            }}
-                            aria-label="Fermer"
-                          >
-                            ×
-                          </button>
-                        </div>
+                      style={{
+                        background: "#fff",
+                        color: "#000",
+                        position: "fixed",
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0,
+                        width: "auto",
+                        height: "auto",
+                        borderRadius: 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        overflow: "hidden", // le corps scrolle, pas l’en-tête
+                        minHeight: "-webkit-fill-available",
+                        paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                        paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                        paddingBottom:
+                          "calc(1rem + env(safe-area-inset-bottom))",
+                        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                        WebkitOverflowScrolling: "touch",
+                        overscrollBehavior: "contain",
+                        fontFamily: "Cardo, serif",
+                        zIndex: 501,
+                      }}
+                      role="dialog"
+                      aria-modal="true"
+                    >
+                        <HeaderWithClose
+                          title="Modifier le joueur"
+                          onClose={() => setNomEditModal(null)}
+                          style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                          titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                        />
+                            
 
                         {/* BODY scrollable */}
                         <div
@@ -3152,7 +3109,7 @@ export default function App() {
                                 <div
                                   style={{
                                     background: "#fff",
-                                    color: "#222",
+                                    color: "#000",
                                     position: "fixed",
                                     top: 0,
                                     right: 0,
@@ -3164,8 +3121,6 @@ export default function App() {
                                     display: "flex",
                                     flexDirection: "column",
                                     overflow: "hidden",
-
-                                    /* Safe-areas iOS */
                                     paddingTop:
                                       "calc(1rem + env(safe-area-inset-top))",
                                     paddingRight:
@@ -3174,7 +3129,6 @@ export default function App() {
                                       "calc(1rem + env(safe-area-inset-bottom))",
                                     paddingLeft:
                                       "calc(1rem + env(safe-area-inset-left))",
-
                                     WebkitOverflowScrolling: "touch",
                                     overscrollBehavior: "contain",
                                     fontFamily: "Cardo, serif",
@@ -3183,37 +3137,12 @@ export default function App() {
                                   role="dialog"
                                   aria-modal="true"
                                 >
-                                  {/* FERMER */}
-                                  <button
-                                    onClick={() => setShowRappelModal(false)}
-                                    style={{
-                                      position: "absolute",
-                                      top: "0.75rem",
-                                      right: "0.75rem",
-                                      border: "none",
-                                      background: "none",
-                                      fontSize: "1.5rem",
-                                      cursor: "pointer",
-                                      color: "#222",
-                                      lineHeight: 1,
-                                    }}
-                                    aria-label="Fermer"
-                                  >
-                                    ×
-                                  </button>
-
-                                  {/* TITRE */}
-                                  <h3
-                                    style={{
-                                      marginTop: 0,
-                                      marginBottom: "0.75rem",
-                                      paddingRight: "2rem",
-                                      fontFamily: "IM Fell English SC, serif",
-                                      fontSize: "1.3rem",
-                                    }}
-                                  >
-                                    Choisir les rappels
-                                  </h3>
+                                  <HeaderWithClose
+                                    title="Choisir les rappels"
+                                    onClose={() => setShowRappelModal(false)}
+                                    style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                                    titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                                  />
 
                                   {/* CORPS SCROLLABLE : 2 par ligne, icône au-dessus, nom en dessous */}
                                   <div
@@ -3418,14 +3347,13 @@ export default function App() {
                                     style={{
                                       position: "fixed",
                                       inset: 0,
-                                      background: "rgba(0,0,0,0.6)", // ← overlay comme "Rappels"
+                                      background: "rgba(0,0,0,0.6)",
                                       zIndex: 500,
                                       display: "flex",
                                       alignItems: "center",
                                       justifyContent: "center",
                                     }}
                                   >
-                                    {/* BOÎTE BLANCHE PLEIN ÉCRAN */}
                                     <div
                                       style={{
                                         position: "fixed",
@@ -3443,7 +3371,7 @@ export default function App() {
                                         aria-modal="true"
                                         style={{
                                           background: "#fff",
-                                          color: "#222",
+                                          color: "#000",
                                           position: "fixed",
                                           top: 0,
                                           right: 0,
@@ -3466,40 +3394,12 @@ export default function App() {
                                           zIndex: 501,
                                         }}
                                       >
-                                        {/* croix comme "Rappels" */}
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            setShowRemplacerDropdown(false)
-                                          }
-                                          aria-label="Fermer"
-                                          style={{
-                                            position: "absolute",
-                                            top: "0.75rem",
-                                            right: "0.75rem",
-                                            border: "none",
-                                            background: "none",
-                                            fontSize: "1.5rem",
-                                            cursor: "pointer",
-                                            lineHeight: 1,
-                                            color: "#222",
-                                          }}
-                                        >
-                                          ×
-                                        </button>
-
-                                        <h3
-                                          style={{
-                                            marginTop: 0,
-                                            marginBottom: "0.75rem",
-                                            paddingRight: "2rem",
-                                            fontFamily:
-                                              "IM Fell English SC, serif",
-                                            fontSize: "1.3rem",
-                                          }}
-                                        >
-                                          Choisir le nouveau rôle
-                                        </h3>
+                                        <HeaderWithClose
+                                          title="Choisir le nouveau rôle"
+                                          onClose={() => setShowRemplacerDropdown(false)}
+                                          style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                                          titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                                        />
 
                                         {/* Corps scrollable : grille 2 colonnes */}
                                         <div
@@ -3723,36 +3623,45 @@ export default function App() {
           )}
           {qrCodeVisible && (
             <div
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "white",
-                color: "black",
-                zIndex: 15,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <button
-                onClick={() => setQrCodeVisible(false)}
+                      style={{
+                        background: "#fff",
+                        color: "#000",
+                        position: "fixed",
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0,
+                        width: "auto",
+                        height: "auto",
+                        borderRadius: 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        overflow: "hidden", // le corps scrolle, pas l’en-tête
+                        minHeight: "-webkit-fill-available",
+                        paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                        paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                        paddingBottom:
+                          "calc(1rem + env(safe-area-inset-bottom))",
+                        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                        WebkitOverflowScrolling: "touch",
+                        overscrollBehavior: "contain",
+                        fontFamily: "Cardo, serif",
+                        zIndex: 501,
+                      }}
+                      role="dialog"
+                      aria-modal="true"
+                    >
+              <HeaderWithClose
+                title=""
+                onClose={() => setQrCodeVisible(false)}
                 style={{
-                  position: "absolute",
-                  top: "1rem",
-                  right: "1rem",
-                  fontSize: "1.5rem",
-                  color: "black",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
+                  width: "100%",
+                  marginBottom: "0.5rem",
+                  minHeight: "3.2rem",
+                  boxSizing: "border-box",
                 }}
-              >
-                ✖
-              </button>
+                closeStyle={{ minWidth: "3.2rem", height: "2rem" }}
+              />
 
               <h2
                 style={{
@@ -3789,26 +3698,28 @@ export default function App() {
                 </span>
               </h2>
 
-              <QRCode
-                value={
-                  edition === "Script personnalisé"
-                    ? customScriptPool.length > 0
-                      ? `${
-                          window.location.origin
-                        }/minuit-sonne-rouge/QRCodePage.html?custom=${encodeURIComponent(
-                          customScriptPool.map((r) => r.nom).join(",")
-                        )}`
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", margin: "2rem 0" }}>
+                <QRCode
+                  value={
+                    edition === "Script personnalisé"
+                      ? customScriptPool.length > 0
+                        ? `${
+                            window.location.origin
+                          }/minuit-sonne-rouge/QRCodePage.html?custom=${encodeURIComponent(
+                            customScriptPool.map((r) => r.nom).join(",")
+                          )}`
+                        : window.location.origin + "/minuit-sonne-rouge/"
+                      : urlPDF[edition]
+                      ? window.location.origin +
+                        "/minuit-sonne-rouge/" +
+                        urlPDF[edition]
                       : window.location.origin + "/minuit-sonne-rouge/"
-                    : urlPDF[edition]
-                    ? window.location.origin +
-                      "/minuit-sonne-rouge/" +
-                      urlPDF[edition]
-                    : window.location.origin + "/minuit-sonne-rouge/"
-                }
-                size={256}
-                bgColor="#ffffff"
-                fgColor="#000000"
-              />
+                  }
+                  size={256}
+                  bgColor="#ffffff"
+                  fgColor="#000000"
+                />
+              </div>
               {/* Show 'Afficher le script' for custom script, 'Voir PDF' for standard editions */}
               {edition === "Script personnalisé" &&
                 customScriptPool.length > 0 && (
@@ -3820,7 +3731,7 @@ export default function App() {
                       fontSize: "1.1rem",
                       cursor: "pointer",
                       background: "#fff",
-                      color: "#222",
+                      color: "#000",
                       borderRadius: 8,
                       border: "1px solid #bbb",
                     }}
@@ -3846,8 +3757,8 @@ export default function App() {
                     fontFamily: "Cardo, serif",
                     fontSize: "1.1rem",
                     cursor: "pointer",
-                    background: "#fff",
-                    color: "#222",
+                    background: "#F5F5F5",
+                    color: "#000",
                     borderRadius: 8,
                     border: "1px solid #bbb",
                   }}
@@ -3942,7 +3853,7 @@ export default function App() {
             style={{
               margin: 0, // uniformise l'espacement
               fontFamily: "Cardo, serif",
-              color: "#222",
+              color: "#000",
               maxWidth: "1200px",
               marginLeft: 0,
               marginRight: "auto",
@@ -4049,7 +3960,7 @@ export default function App() {
                         style={{
                           ...buttonStyle,
                           background: "#f5F5F5",
-                          color: "#222",
+                          color: "#000",
                           width: "100%",
                           alignSelf: "stretch",
                           fontSize: "1.1rem",
@@ -4089,64 +4000,44 @@ export default function App() {
                   }}
                 >
                   {/* BOÎTE PLEIN ÉCRAN */}
-                  <div
-                    style={{
-                      background: "#fff",
-                      color: "#222",
-                      position: "fixed",
-                      top: 0,
-                      right: 0,
-                      bottom: 0,
-                      left: 0,
-                      width: "auto",
-                      height: "auto",
-                      borderRadius: 0,
-                      display: "flex",
-                      flexDirection: "column",
-                      overflow: "hidden", // le corps scrolle, pas l'en-tête
-                      // Safe-areas
-                      paddingTop: "calc(1rem + env(safe-area-inset-top))",
-                      paddingRight: "calc(1rem + env(safe-area-inset-right))",
-                      paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
-                      paddingLeft: "calc(1rem + env(safe-area-inset-left))",
-                      WebkitOverflowScrolling: "touch",
-                      overscrollBehavior: "contain",
-                      fontFamily: "Cardo, serif",
-                      zIndex: 501,
-                    }}
-                    role="dialog"
-                    aria-modal="true"
-                  >
-                    {/* CROIX FERMETURE */}
-                    <button
-                      onClick={() => setRolesModalOpen(false)}
+                  
+                    <div
                       style={{
-                        position: "absolute",
-                        top: "0.75rem",
-                        right: "0.75rem",
-                        border: "none",
-                        background: "none",
-                        fontSize: "1.5rem",
-                        cursor: "pointer",
-                        lineHeight: 1,
-                        color: "#222",
+                        background: "#fff",
+                        color: "#000",
+                        position: "fixed",
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0,
+                        width: "auto",
+                        height: "auto",
+                        borderRadius: 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        overflow: "hidden", // le corps scrolle, pas l’en-tête
+                        minHeight: "-webkit-fill-available",
+                        paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                        paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                        paddingBottom:
+                          "calc(1rem + env(safe-area-inset-bottom))",
+                        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                        WebkitOverflowScrolling: "touch",
+                        overscrollBehavior: "contain",
+                        fontFamily: "Cardo, serif",
+                        zIndex: 501,
                       }}
-                      aria-label="Fermer"
+                      role="dialog"
+                      aria-modal="true"
                     >
-                      ×
-                    </button>
+              <HeaderWithClose
+                title="Choisir un rôle"
+                onClose={() => setRolesModalOpen(false)}
+                style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+              />
 
-                    <h3
-                      style={{
-                        marginTop: 0,
-                        marginBottom: "1rem",
-                        paddingRight: "2rem",
-                        fontFamily: "IM Fell English SC, serif",
-                      }}
-                    >
-                      Choisir un rôle
-                    </h3>
-
+                 
                     {/* CORPS SCROLLABLE */}
                     <div
                       style={{
@@ -4249,35 +4140,39 @@ export default function App() {
               {selectedRole && (
                 <div
                   style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: "#fff",
-                    zIndex: 401,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
+                        background: "#fff",
+                        color: "#000",
+                        position: "fixed",
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0,
+                        width: "auto",
+                        height: "auto",
+                        borderRadius: 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        overflow: "hidden", // le corps scrolle, pas l’en-tête
+                        minHeight: "-webkit-fill-available",
+                        paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                        paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                        paddingBottom:
+                          "calc(1rem + env(safe-area-inset-bottom))",
+                        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                        WebkitOverflowScrolling: "touch",
+                        overscrollBehavior: "contain",
+                        fontFamily: "Cardo, serif",
+                        zIndex: 501,
+                      }}
+                      role="dialog"
+                      aria-modal="true"
                 >
-                  <button
-                    onClick={() => setSelectedRole(null)}
-                    style={{
-                      position: "absolute",
-                      top: "1.2rem",
-                      right: "1.2rem",
-                      fontSize: "2.2rem",
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      zIndex: 2,
-                      color: "#222",
-                    }}
-                  >
-                    ×
-                  </button>
+                  <HeaderWithClose
+                    title="Afficher un rôle"
+                    onClose={() => setSelectedRole(null)}
+                    style={{ marginBottom: "1rem", paddingRight: "2rem", color: "#fff" }}
+                    titleStyle={{}}
+                  />
                   <div
                     style={{
                       width: "100%",
@@ -4290,7 +4185,7 @@ export default function App() {
                           ? "#0e74b4"
                           : selectedRole.alignement === "Maléfique"
                           ? "#950f13"
-                          : "#222",
+                          : "#000",
                     }}
                   >
                     <div
@@ -4332,7 +4227,7 @@ export default function App() {
                       style={{
                         fontSize: "1.15rem",
                         fontFamily: "Cardo, serif",
-                        color: "#222", // force le texte du pouvoir en noir
+                        color: "#000", // force le texte du pouvoir en noir
                       }}
                     >
                       {renderBoldBrackets(selectedRole.pouvoir)}
@@ -4362,7 +4257,7 @@ export default function App() {
                   <div
                     style={{
                       background: "#fff",
-                      color: "#222",
+                      color: "#000",
                       position: "fixed",
                       top: 0,
                       right: 0,
@@ -4387,38 +4282,12 @@ export default function App() {
                     role="dialog"
                     aria-modal="true"
                   >
-                    {/* CROIX FERMER */}
-                    <button
-                      onClick={() => setAddCustomJetonVisible(false)}
-                      style={{
-                        position: "absolute",
-                        top: "0.75rem",
-                        right: "0.75rem",
-                        border: "none",
-                        background: "none",
-                        fontSize: "1.5rem",
-                        cursor: "pointer",
-                        color: "#222",
-                        lineHeight: 1,
-                      }}
-                      aria-label="Fermer"
-                    >
-                      ×
-                    </button>
-
-                    {/* HEADER */}
-                    <h3
-                      style={{
-                        marginTop: 0,
-                        marginBottom: "1rem",
-                        paddingRight: "2rem",
-                        fontFamily: "'IM Fell English SC', serif",
-                        fontSize: "calc(var(--h2-size) * 1.1)",
-                        letterSpacing: "0.02em",
-                      }}
-                    >
-                      Ajouter un message
-                    </h3>
+                    <HeaderWithClose
+                      title="Ajouter un message"
+                      onClose={() => setAddCustomJetonVisible(false)}
+                      style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                      titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                    />
 
                     {/* CORPS SCROLLABLE */}
                     <div
@@ -4514,7 +4383,7 @@ export default function App() {
                   ...buttonStyle,
                   background: "#f5F5F5",
 
-                  color: "#222",
+                  color: "#000",
                   border: "1px solid #bbb",
                   fontSize: "1rem",
                   fontFamily: "Cardo, serif",
@@ -4586,7 +4455,7 @@ export default function App() {
                       top: "0.75rem",
                       left: "0.75rem",
                       fontSize: "1.5rem",
-                      color: "#222", // ← icône sombre
+                      color: "#000", // ← icône sombre
                       background: "none",
                       border: "none",
                       cursor: "pointer",
@@ -4598,25 +4467,12 @@ export default function App() {
                   </button>
                 )}
 
-                {/* Croix fermer */}
-                <button
-                  onClick={() => setJetonInfoPage(null)}
-                  style={{
-                    position: "absolute",
-                    top: "0.75rem",
-                    right: "0.75rem",
-                    border: "none",
-                    background: "none",
-                    fontSize: "1.5rem",
-                    cursor: "pointer",
-                    lineHeight: 1,
-                    color: "#222", // ← icône sombre
-                    zIndex: 401,
-                  }}
-                  aria-label="Fermer"
-                >
-                  ×
-                </button>
+                <HeaderWithClose
+                  title="Afficher un message"
+                  onClose={() => setJetonInfoPage(null)}
+                  style={{ marginBottom: "1rem", paddingRight: "2rem", color: "#fff" }}
+                  titleStyle={{}}
+                />
                 {/* CONTENU CENTRÉ VERTICAL + HORIZONTAL */}
                 <div
                   style={{
@@ -4862,7 +4718,7 @@ export default function App() {
                     padding: "0.5rem",
                     resize: "vertical",
                     background: "#ffe9a7ff",
-                    color: "#222",
+                    color: "#000",
                     marginBottom: "0rem",
                   }}
                 />
@@ -4903,7 +4759,6 @@ export default function App() {
                   <strong>Blood on the Clocktower</strong> réalisée par un fan.
                 </p>
 
-                
                 <p style={{ fontFamily: "Cardo, serif", marginBottom: "0rem" }}>
                   <strong>Blood on the Clocktower</strong> est une marque
                   déposée de Steven Medway et The Pandemonium Institute.
@@ -4914,19 +4769,22 @@ export default function App() {
                   Pandemonium Institute.
                 </p>
                 <p style={{ fontFamily: "Cardo, serif", marginBottom: "0rem" }}>
-                  Elle est inspirée de l'application open source
-                  {" "}
+                  Elle est inspirée de l'application open source{" "}
                   <a
                     href="https://www.pocketgrimoire.co.uk"
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: "#0e74b4", textDecoration: "underline", fontWeight: "bold" }}
+                    style={{
+                      color: "#0e74b4",
+                      textDecoration: "underline",
+                      fontWeight: "bold",
+                    }}
                   >
                     Pocket Grimoire
-                  </a>
-                  {" "}réalisée par Skateside.
+                  </a>{" "}
+                  réalisée par Skateside.
                 </p>
-                <ul style={{ marginLeft: "0rem",  fontFamily: "Cardo, serif" }}>
+                <ul style={{ marginLeft: "0rem", fontFamily: "Cardo, serif" }}>
                   <li>Traduction des textes&nbsp;: Valentin Janequin</li>
                   <li>
                     Source d’images et textes &nbsp;:&nbsp;
