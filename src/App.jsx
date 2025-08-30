@@ -1419,12 +1419,13 @@ export default function App() {
                               <div
                                 style={{
                                   fontFamily: "'IM Fell English SC', serif",
-                                  fontSize: "1.1rem",
+                                  fontSize: "1.15rem",
                                   color:
                                     role.alignement === "Bon"
                                       ? "#0e74b4"
                                       : "#950f13",
                                   fontWeight: "bold",
+                                  lineHeight: 1.2,
                                 }}
                               >
                                 {role.nom}
@@ -1432,9 +1433,10 @@ export default function App() {
                               <div
                                 style={{
                                   fontFamily: "Cardo, serif",
-                                  fontSize: "0.95rem",
+                                  fontSize: "1.08rem",
                                   color: "#000",
                                   marginTop: "0.2rem",
+                                  lineHeight: 1.3,
                                 }}
                               >
                                 {renderBoldBrackets(
