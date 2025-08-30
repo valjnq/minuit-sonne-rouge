@@ -168,6 +168,7 @@ button,
 a.button {
   min-height: var(--btn-min-h);
   padding: var(--btn-pad-v) var(--btn-pad-h);
+  font-size: var(--text-size); /* Uniformise la taille du texte des boutons */
   border-radius: 10px;
 }
 
