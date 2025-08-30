@@ -1935,6 +1935,8 @@ export default function App() {
                                 fontFamily: "Cardo, serif",
                                 fontSize: "0.95rem",
                                 cursor: "pointer",
+                                color: "#000",
+                                WebkitTextFillColor: "#000", // Safari/iOS
                               }}
                             >
                               Non
