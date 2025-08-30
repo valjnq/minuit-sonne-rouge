@@ -3867,49 +3867,109 @@ export default function App() {
                 closeStyle={{ minWidth: "3.2rem", height: "2rem" }}
               />
 
-              <h2
-                style={{
-                  fontFamily: "Cardo",
-                  fontSize: "2rem",
-                  marginBottom: "1rem",
-                  textAlign: "center",
-                }}
-              >
-                <br />
-                <span style={{}}>
-                  <span
-                    style={{
-                      fontFamily: '"Pirata One", cursive',
-                      color:
-                        edition === "Sombre présage"
-                          ? "#950f13"
-                          : ["Parfum d'hystérie", "Parfum d’hystérie"].includes(
-                              edition
-                            )
-                          ? "#673253"
-                          : edition === "Crépuscule funeste"
-                          ? "#af4c0f"
-                          : edition === "Script personnalisé"
-                          ? "#000"
-                          : undefined,
-                    }}
-                  >
-                    {edition}
-                  </span>
-                </span>
-              </h2>
-
+              {/* === CORPS SCROLLABLE === */}
               <div
                 style={{
+                  flex: 1,
+                  overflow: "auto",
+                  padding: "1rem",
                   display: "flex",
-                  justifyContent: "center",
+                  flexDirection: "column",
                   alignItems: "center",
-                  width: "100%",
-                  margin: "2rem 0",
+                  justifyContent: "flex-start",
                 }}
               >
-                <QRCode
-                  value={
+                <h2
+                  style={{
+                    fontFamily: "Cardo",
+                    fontSize: "2rem",
+                    marginBottom: "1rem",
+                    textAlign: "center",
+                  }}
+                >
+                  <br />
+                  <span>
+                    <span
+                      style={{
+                        fontFamily: '"Pirata One", cursive',
+                        fontSize: "2.8rem",
+                        color:
+                          edition === "Sombre présage"
+                            ? "#950f13"
+                            : [
+                                "Parfum d'hystérie",
+                                "Parfum d’hystérie",
+                              ].includes(edition)
+                            ? "#673253"
+                            : edition === "Crépuscule funeste"
+                            ? "#af4c0f"
+                            : edition === "Script personnalisé"
+                            ? "#000"
+                            : undefined,
+                      }}
+                    >
+                      {edition}
+                    </span>
+                  </span>
+                </h2>
+
+                <div
+                  style={{
+                    paddingTop: "1rem",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    margin: 0,
+                  }}
+                >
+                  <QRCode
+                    value={
+                      edition === "Script personnalisé"
+                        ? customScriptPool.length > 0
+                          ? `${
+                              window.location.origin
+                            }/minuit-sonne-rouge/QRCodePage.html?custom=${encodeURIComponent(
+                              customScriptPool.map((r) => r.nom).join(",")
+                            )}`
+                          : window.location.origin + "/minuit-sonne-rouge/"
+                        : urlPDF[edition]
+                        ? window.location.origin +
+                          "/minuit-sonne-rouge/" +
+                          urlPDF[edition]
+                        : window.location.origin + "/minuit-sonne-rouge/"
+                    }
+                    size={200}
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                  />
+                </div>
+              </div>
+
+              {/* === PIED DE MODALE FIXE (bouton plein écran) === */}
+              <div
+                style={{
+                  position: "relative",
+                  paddingTop: "1rem",
+                }}
+              >
+                {/* séparateur bord-à-bord */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100vw",
+                    height: "1px",
+                    background: "#bbb",
+                    pointerEvents: "none",
+                    zIndex: 1,
+                  }}
+                />
+                {(() => {
+                  // URL cible unique pour le bouton
+                  const targetUrl =
                     edition === "Script personnalisé"
                       ? customScriptPool.length > 0
                         ? `${
@@ -3922,77 +3982,21 @@ export default function App() {
                       ? window.location.origin +
                         "/minuit-sonne-rouge/" +
                         urlPDF[edition]
-                      : window.location.origin + "/minuit-sonne-rouge/"
-                  }
-                  size={256}
-                  bgColor="#ffffff"
-                  fgColor="#000000"
-                />
-              </div>
-              {/* Show 'Afficher le script' for custom script, 'Voir PDF' for standard editions */}
-              {edition === "Script personnalisé" &&
-                customScriptPool.length > 0 && (
-                  <div style={{ display: "flex", justifyContent: "center" }}>
+                      : window.location.origin + "/minuit-sonne-rouge/";
+
+                  return (
                     <button
-                      style={{
-                        marginTop: "1.rem",
-                        width: 256,
-                        padding: "0.5rem 1.5rem",
-                        fontFamily: "Cardo, serif",
-                        fontSize: "1.1rem",
-                        cursor: "pointer",
-                        background: "#bbb",
-                        color: "#000",
-                        borderRadius: 8,
-                        border: "1px solid #bbb",
-                        display: "block",
-                      }}
-                      onClick={() =>
-                        window.open(
-                          `${
-                            window.location.origin
-                          }/minuit-sonne-rouge/QRCodePage.html?custom=${encodeURIComponent(
-                            customScriptPool.map((r) => r.nom).join(",")
-                          )}`,
-                          "_blank"
-                        )
-                      }
+                      style={{ ...buttonStyle, width: "100%" }}
+                      onClick={() => window.open(targetUrl, "_blank")}
                     >
                       Afficher
                     </button>
-                  </div>
-                )}
-              {edition !== "Script personnalisé" && urlPDF[edition] && (
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  <button
-                    style={{
-                      marginTop: "1.5rem",
-                      width: 256,
-                      padding: "0.5rem 1.5rem",
-                      fontFamily: "Cardo, serif",
-                      fontSize: "1.1rem",
-                      cursor: "pointer",
-                      background: "#F5F5F5",
-                      color: "#000",
-                      borderRadius: 8,
-                      border: "1px solid #bbb",
-                      display: "block",
-                    }}
-                    onClick={() =>
-                      window.open(
-                        window.location.origin +
-                          "/minuit-sonne-rouge/" +
-                          urlPDF[edition],
-                        "_blank"
-                      )
-                    }
-                  >
-                    Afficher
-                  </button>
-                </div>
-              )}
+                  );
+                })()}
+              </div>
             </div>
           )}
+
           {afficherBluffs && (
             <div
               style={{
