@@ -1941,6 +1941,8 @@ export default function App() {
                               : "#e4e4e4",
                             border: "1px solid #bbb",
                             cursor: joueursAttribues[i] ? "default" : "pointer",
+                            color: "#000", // force le texte en noir
+                            WebkitTextFillColor: "#000", // iOS Safari
                           }}
                         >
                           {i + 1}
