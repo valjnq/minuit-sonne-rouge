@@ -11,7 +11,16 @@ function HeaderWithClose({ title, onClose, style, titleStyle, closeStyle }) {
         ...style,
       }}
     >
-      <span style={{ fontSize: "1.2rem", fontWeight: "bold", marginLeft: 0, ...titleStyle }}>{title}</span>
+      <span
+        style={{
+          fontSize: "1.2rem",
+          fontWeight: "bold",
+          marginLeft: 0,
+          ...titleStyle,
+        }}
+      >
+        {title}
+      </span>
       <button
         onClick={onClose}
         style={{
@@ -258,12 +267,12 @@ export default function App() {
   // Ajout de l'état pour la modale de confirmation d'effacement des notes
   const [showClearNotesModal, setShowClearNotesModal] = useState(false);
   const [afficherMentions, setAfficherMentions] = useState(false);
-    // Fonction pour que le textarea s'agrandisse automatiquement
-    function handleNotesInput(e) {
-      setNotes(e.target.value);
-      e.target.style.height = "auto";
-      e.target.style.height = e.target.scrollHeight + "px";
-    }
+  // Fonction pour que le textarea s'agrandisse automatiquement
+  function handleNotesInput(e) {
+    setNotes(e.target.value);
+    e.target.style.height = "auto";
+    e.target.style.height = e.target.scrollHeight + "px";
+  }
   const tousAttribues =
     nbJoueurs > 0 && Object.keys(joueursAttribues).length === nbJoueurs;
   function clearNotes() {
@@ -1056,7 +1065,10 @@ export default function App() {
                   title="Choisir les rôles du script"
                   onClose={() => setCustomScriptVisible(false)}
                   style={{ marginBottom: "1rem", paddingRight: "2rem" }}
-                  titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                  titleStyle={{
+                    fontFamily: "IM Fell English SC, serif",
+                    fontSize: "1.3rem",
+                  }}
                 />
 
                 {/* CORPS SCROLLABLE */}
@@ -1201,6 +1213,7 @@ export default function App() {
                         fontFamily: "Cardo, serif",
                         flex: 1,
                         color: "#000",
+                        fontSize: "0.9rem",
                       }}
                     >
                       Aléatoire
@@ -1219,6 +1232,7 @@ export default function App() {
                             ? "not-allowed"
                             : "pointer",
                         opacity: customScriptTemp.length === 0 ? 0.5 : 1,
+                        fontSize: "0.9rem",
                       }}
                     >
                       Vider
@@ -1236,6 +1250,7 @@ export default function App() {
                         fontFamily: "Cardo, serif",
                         flex: 1,
                         color: "#000",
+                        fontSize: "0.9rem",
                       }}
                     >
                       Valider ({customScriptTemp.length})
@@ -1746,39 +1761,41 @@ export default function App() {
           )}
           {affectationVisible && (
             <div
-                      style={{
-                        background: "#fff",
-                        color: "#000",
-                        position: "fixed",
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                        left: 0,
-                        width: "auto",
-                        height: "auto",
-                        borderRadius: 0,
-                        display: "flex",
-                        flexDirection: "column",
-                        overflow: "hidden", // le corps scrolle, pas l’en-tête
-                        minHeight: "-webkit-fill-available",
-                        paddingTop: "calc(1rem + env(safe-area-inset-top))",
-                        paddingRight: "calc(1rem + env(safe-area-inset-right))",
-                        paddingBottom:
-                          "calc(1rem + env(safe-area-inset-bottom))",
-                        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
-                        WebkitOverflowScrolling: "touch",
-                        overscrollBehavior: "contain",
-                        fontFamily: "Cardo, serif",
-                        zIndex: 501,
-                      }}
-                      role="dialog"
-                      aria-modal="true"
-                    >
+              style={{
+                background: "#fff",
+                color: "#000",
+                position: "fixed",
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                width: "auto",
+                height: "auto",
+                borderRadius: 0,
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden", // le corps scrolle, pas l’en-tête
+                minHeight: "-webkit-fill-available",
+                paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
+                paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                WebkitOverflowScrolling: "touch",
+                overscrollBehavior: "contain",
+                fontFamily: "Cardo, serif",
+                zIndex: 501,
+              }}
+              role="dialog"
+              aria-modal="true"
+            >
               <HeaderWithClose
                 title="Attribuer les rôles"
                 onClose={quitterAffectation}
                 style={{ marginBottom: "1rem", paddingRight: "2rem" }}
-                titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                titleStyle={{
+                  fontFamily: "IM Fell English SC, serif",
+                  fontSize: "1.3rem",
+                }}
               />
               <div
                 style={{
@@ -1789,7 +1806,6 @@ export default function App() {
                   flexDirection: "column",
                   gap: "1rem",
                   color: "#000",
-                  
                 }}
               >
                 {indexActif === null && (
@@ -2488,7 +2504,10 @@ export default function App() {
                         title="Choisir les bluffs du démon"
                         onClose={() => setEditBluffsModal(false)}
                         style={{ marginBottom: "1rem", paddingRight: "2rem" }}
-                        titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                        titleStyle={{
+                          fontFamily: "IM Fell English SC, serif",
+                          fontSize: "1.3rem",
+                        }}
                       />
 
                       {/* CORPS SCROLLABLE */}
@@ -2737,41 +2756,44 @@ export default function App() {
 
                     return (
                       <div
-                      style={{
-                        background: "#fff",
-                        color: "#000",
-                        position: "fixed",
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                        left: 0,
-                        width: "auto",
-                        height: "auto",
-                        borderRadius: 0,
-                        display: "flex",
-                        flexDirection: "column",
-                        overflow: "hidden", // le corps scrolle, pas l’en-tête
-                        minHeight: "-webkit-fill-available",
-                        paddingTop: "calc(1rem + env(safe-area-inset-top))",
-                        paddingRight: "calc(1rem + env(safe-area-inset-right))",
-                        paddingBottom:
-                          "calc(1rem + env(safe-area-inset-bottom))",
-                        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
-                        WebkitOverflowScrolling: "touch",
-                        overscrollBehavior: "contain",
-                        fontFamily: "Cardo, serif",
-                        zIndex: 501,
-                      }}
-                      role="dialog"
-                      aria-modal="true"
-                    >
+                        style={{
+                          background: "#fff",
+                          color: "#000",
+                          position: "fixed",
+                          top: 0,
+                          right: 0,
+                          bottom: 0,
+                          left: 0,
+                          width: "auto",
+                          height: "auto",
+                          borderRadius: 0,
+                          display: "flex",
+                          flexDirection: "column",
+                          overflow: "hidden", // le corps scrolle, pas l’en-tête
+                          minHeight: "-webkit-fill-available",
+                          paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                          paddingRight:
+                            "calc(1rem + env(safe-area-inset-right))",
+                          paddingBottom:
+                            "calc(1rem + env(safe-area-inset-bottom))",
+                          paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                          WebkitOverflowScrolling: "touch",
+                          overscrollBehavior: "contain",
+                          fontFamily: "Cardo, serif",
+                          zIndex: 501,
+                        }}
+                        role="dialog"
+                        aria-modal="true"
+                      >
                         <HeaderWithClose
                           title="Modifier le joueur"
                           onClose={() => setNomEditModal(null)}
                           style={{ marginBottom: "1rem", paddingRight: "2rem" }}
-                          titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                          titleStyle={{
+                            fontFamily: "IM Fell English SC, serif",
+                            fontSize: "1.3rem",
+                          }}
                         />
-                            
 
                         {/* BODY scrollable */}
                         <div
@@ -3146,8 +3168,14 @@ export default function App() {
                                   <HeaderWithClose
                                     title="Choisir les rappels"
                                     onClose={() => setShowRappelModal(false)}
-                                    style={{ marginBottom: "1rem", paddingRight: "2rem" }}
-                                    titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                                    style={{
+                                      marginBottom: "1rem",
+                                      paddingRight: "2rem",
+                                    }}
+                                    titleStyle={{
+                                      fontFamily: "IM Fell English SC, serif",
+                                      fontSize: "1.3rem",
+                                    }}
                                   />
 
                                   {/* CORPS SCROLLABLE : 2 par ligne, icône au-dessus, nom en dessous */}
@@ -3402,9 +3430,18 @@ export default function App() {
                                       >
                                         <HeaderWithClose
                                           title="Choisir le nouveau rôle"
-                                          onClose={() => setShowRemplacerDropdown(false)}
-                                          style={{ marginBottom: "1rem", paddingRight: "2rem" }}
-                                          titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                                          onClose={() =>
+                                            setShowRemplacerDropdown(false)
+                                          }
+                                          style={{
+                                            marginBottom: "1rem",
+                                            paddingRight: "2rem",
+                                          }}
+                                          titleStyle={{
+                                            fontFamily:
+                                              "IM Fell English SC, serif",
+                                            fontSize: "1.3rem",
+                                          }}
                                         />
 
                                         {/* Corps scrollable : grille 2 colonnes */}
@@ -3629,34 +3666,33 @@ export default function App() {
           )}
           {qrCodeVisible && (
             <div
-                      style={{
-                        background: "#fff",
-                        color: "#000",
-                        position: "fixed",
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                        left: 0,
-                        width: "auto",
-                        height: "auto",
-                        borderRadius: 0,
-                        display: "flex",
-                        flexDirection: "column",
-                        overflow: "hidden", // le corps scrolle, pas l’en-tête
-                        minHeight: "-webkit-fill-available",
-                        paddingTop: "calc(1rem + env(safe-area-inset-top))",
-                        paddingRight: "calc(1rem + env(safe-area-inset-right))",
-                        paddingBottom:
-                          "calc(1rem + env(safe-area-inset-bottom))",
-                        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
-                        WebkitOverflowScrolling: "touch",
-                        overscrollBehavior: "contain",
-                        fontFamily: "Cardo, serif",
-                        zIndex: 501,
-                      }}
-                      role="dialog"
-                      aria-modal="true"
-                    >
+              style={{
+                background: "#fff",
+                color: "#000",
+                position: "fixed",
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                width: "auto",
+                height: "auto",
+                borderRadius: 0,
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden", // le corps scrolle, pas l’en-tête
+                minHeight: "-webkit-fill-available",
+                paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
+                paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                WebkitOverflowScrolling: "touch",
+                overscrollBehavior: "contain",
+                fontFamily: "Cardo, serif",
+                zIndex: 501,
+              }}
+              role="dialog"
+              aria-modal="true"
+            >
               <HeaderWithClose
                 title=""
                 onClose={() => setQrCodeVisible(false)}
@@ -3704,7 +3740,15 @@ export default function App() {
                 </span>
               </h2>
 
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", margin: "2rem 0" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  margin: "2rem 0",
+                }}
+              >
                 <QRCode
                   value={
                     edition === "Script personnalisé"
@@ -4006,44 +4050,45 @@ export default function App() {
                   }}
                 >
                   {/* BOÎTE PLEIN ÉCRAN */}
-                  
-                    <div
-                      style={{
-                        background: "#fff",
-                        color: "#000",
-                        position: "fixed",
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                        left: 0,
-                        width: "auto",
-                        height: "auto",
-                        borderRadius: 0,
-                        display: "flex",
-                        flexDirection: "column",
-                        overflow: "hidden", // le corps scrolle, pas l’en-tête
-                        minHeight: "-webkit-fill-available",
-                        paddingTop: "calc(1rem + env(safe-area-inset-top))",
-                        paddingRight: "calc(1rem + env(safe-area-inset-right))",
-                        paddingBottom:
-                          "calc(1rem + env(safe-area-inset-bottom))",
-                        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
-                        WebkitOverflowScrolling: "touch",
-                        overscrollBehavior: "contain",
-                        fontFamily: "Cardo, serif",
-                        zIndex: 501,
-                      }}
-                      role="dialog"
-                      aria-modal="true"
-                    >
-              <HeaderWithClose
-                title="Choisir un rôle"
-                onClose={() => setRolesModalOpen(false)}
-                style={{ marginBottom: "1rem", paddingRight: "2rem" }}
-                titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
-              />
 
-                 
+                  <div
+                    style={{
+                      background: "#fff",
+                      color: "#000",
+                      position: "fixed",
+                      top: 0,
+                      right: 0,
+                      bottom: 0,
+                      left: 0,
+                      width: "auto",
+                      height: "auto",
+                      borderRadius: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      overflow: "hidden", // le corps scrolle, pas l’en-tête
+                      minHeight: "-webkit-fill-available",
+                      paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                      paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                      paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
+                      paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                      WebkitOverflowScrolling: "touch",
+                      overscrollBehavior: "contain",
+                      fontFamily: "Cardo, serif",
+                      zIndex: 501,
+                    }}
+                    role="dialog"
+                    aria-modal="true"
+                  >
+                    <HeaderWithClose
+                      title="Choisir un rôle"
+                      onClose={() => setRolesModalOpen(false)}
+                      style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                      titleStyle={{
+                        fontFamily: "IM Fell English SC, serif",
+                        fontSize: "1.3rem",
+                      }}
+                    />
+
                     {/* CORPS SCROLLABLE */}
                     <div
                       style={{
@@ -4146,37 +4191,40 @@ export default function App() {
               {selectedRole && (
                 <div
                   style={{
-                        background: "#fff",
-                        color: "#000",
-                        position: "fixed",
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                        left: 0,
-                        width: "auto",
-                        height: "auto",
-                        borderRadius: 0,
-                        display: "flex",
-                        flexDirection: "column",
-                        overflow: "hidden", // le corps scrolle, pas l’en-tête
-                        minHeight: "-webkit-fill-available",
-                        paddingTop: "calc(1rem + env(safe-area-inset-top))",
-                        paddingRight: "calc(1rem + env(safe-area-inset-right))",
-                        paddingBottom:
-                          "calc(1rem + env(safe-area-inset-bottom))",
-                        paddingLeft: "calc(1rem + env(safe-area-inset-left))",
-                        WebkitOverflowScrolling: "touch",
-                        overscrollBehavior: "contain",
-                        fontFamily: "Cardo, serif",
-                        zIndex: 501,
-                      }}
-                      role="dialog"
-                      aria-modal="true"
+                    background: "#fff",
+                    color: "#000",
+                    position: "fixed",
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0,
+                    width: "auto",
+                    height: "auto",
+                    borderRadius: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    overflow: "hidden", // le corps scrolle, pas l’en-tête
+                    minHeight: "-webkit-fill-available",
+                    paddingTop: "calc(1rem + env(safe-area-inset-top))",
+                    paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                    paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
+                    paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                    WebkitOverflowScrolling: "touch",
+                    overscrollBehavior: "contain",
+                    fontFamily: "Cardo, serif",
+                    zIndex: 501,
+                  }}
+                  role="dialog"
+                  aria-modal="true"
                 >
                   <HeaderWithClose
                     title="Afficher un rôle"
                     onClose={() => setSelectedRole(null)}
-                    style={{ marginBottom: "1rem", paddingRight: "2rem", color: "#fff" }}
+                    style={{
+                      marginBottom: "1rem",
+                      paddingRight: "2rem",
+                      color: "#fff",
+                    }}
                     titleStyle={{}}
                   />
                   <div
@@ -4292,7 +4340,10 @@ export default function App() {
                       title="Ajouter un message"
                       onClose={() => setAddCustomJetonVisible(false)}
                       style={{ marginBottom: "1rem", paddingRight: "2rem" }}
-                      titleStyle={{ fontFamily: "IM Fell English SC, serif", fontSize: "1.3rem" }}
+                      titleStyle={{
+                        fontFamily: "IM Fell English SC, serif",
+                        fontSize: "1.3rem",
+                      }}
                     />
 
                     {/* CORPS SCROLLABLE */}
@@ -4476,7 +4527,11 @@ export default function App() {
                 <HeaderWithClose
                   title="Afficher un message"
                   onClose={() => setJetonInfoPage(null)}
-                  style={{ marginBottom: "1rem", paddingRight: "2rem", color: "#fff" }}
+                  style={{
+                    marginBottom: "1rem",
+                    paddingRight: "2rem",
+                    color: "#fff",
+                  }}
                   titleStyle={{}}
                 />
                 {/* CONTENU CENTRÉ VERTICAL + HORIZONTAL */}
@@ -4708,31 +4763,31 @@ export default function App() {
                   color: "black",
                   display: "flex",
                   flexDirection: "column",
-                    paddingLeft: "0.5rem",
-                    paddingRight: "0.5rem",
-                  }}
+                  paddingLeft: "0.5rem",
+                  paddingRight: "0.5rem",
+                }}
               >
-                  <textarea
-                    value={notes}
-                    onInput={handleNotesInput}
-                    style={{
-                      width: "100%", // prend toute la largeur du conteneur
-                      fontFamily: "Cardo, serif",
-                      fontSize: "1.2rem",
-                      borderRadius: 0,
-                      border: "1px solid #bbb",
-                      padding: "0.5rem",
-                      resize: "none",
-                      background: "#ffe9a7ff",
-                      color: "#000",
-                      marginBottom: "0rem",
-                      boxSizing: "border-box",
-                      overflow: "hidden",
-                      transition: "height 0.2s",
-                      minHeight: "200px",
-                    }}
-                    //placeholder="Écris tes notes ici..."
-                  />
+                <textarea
+                  value={notes}
+                  onInput={handleNotesInput}
+                  style={{
+                    width: "100%", // prend toute la largeur du conteneur
+                    fontFamily: "Cardo, serif",
+                    fontSize: "1.2rem",
+                    borderRadius: 0,
+                    border: "1px solid #bbb",
+                    padding: "0.5rem",
+                    resize: "none",
+                    background: "#ffe9a7ff",
+                    color: "#000",
+                    marginBottom: "0rem",
+                    boxSizing: "border-box",
+                    overflow: "hidden",
+                    transition: "height 0.2s",
+                    minHeight: "200px",
+                  }}
+                  //placeholder="Écris tes notes ici..."
+                />
                 <div style={{ marginTop: "1rem" }}>
                   <button
                     className="btn"
