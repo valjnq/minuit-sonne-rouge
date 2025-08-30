@@ -234,6 +234,7 @@ export default function App() {
   const [customJetonText, setCustomJetonText] = useState("");
   const [editBluffsModal, setEditBluffsModal] = useState(false);
   const [editBluffsTemp, setEditBluffsTemp] = useState([]);
+  const [showConfirmAutoAttrib, setShowConfirmAutoAttrib] = useState(false);
 
   // Remove a custom jeton by index
   function removeCustomJeton(index) {
@@ -575,16 +576,21 @@ export default function App() {
   }
 
   function validerJoueur() {
-    if (indexActif === null || !nomTemporaire.trim() || !roleActif) return;
+    if (indexActif === null || !roleActif) return;
+
+    // Nom auto si vide : "Joueur X"
+    const nomFinal = nomTemporaire.trim() || `Joueur ${indexActif + 1}`;
+
     // Détermine l'alignement selon le type du rôle
     let alignementAuto = "Maléfique";
     if (roleActif.type === "Habitant" || roleActif.type === "Étranger") {
       alignementAuto = "Bon";
     }
+
     setJoueursAttribues((prev) => ({
       ...prev,
       [indexActif]: {
-        nom: nomTemporaire.trim(),
+        nom: nomFinal,
         role: roleActif,
         alignement: alignementAuto,
         alignementFixe: false,
@@ -596,6 +602,7 @@ export default function App() {
     if (rolesDisponiblesPourRemplacer.length === 0 && selected.length > 0) {
       setRolesDisponiblesPourRemplacer(selected);
     }
+
     setIndexActif(null);
     setNomTemporaire("");
     setRoleActif(null);
@@ -1869,44 +1876,7 @@ export default function App() {
                     }}
                   >
                     <button
-                      onClick={() => {
-                        const newAttribues = { ...joueursAttribues };
-                        const assignedRoleNames = Object.values(
-                          newAttribues
-                        ).map((j) => j.role.nom);
-                        const availableRoles = rolesRestants.filter(
-                          (r) => !assignedRoleNames.includes(r.nom)
-                        );
-
-                        for (let i = 0; i < nbJoueurs; i++) {
-                          if (!newAttribues[i] && availableRoles.length > 0) {
-                            const indexAleatoire = Math.floor(
-                              Math.random() * availableRoles.length
-                            );
-                            const roleAuto = availableRoles[indexAleatoire];
-
-                            let alignementAuto = "Maléfique";
-                            if (
-                              roleAuto.type === "Habitant" ||
-                              roleAuto.type === "Étranger"
-                            ) {
-                              alignementAuto = "Bon";
-                            }
-
-                            newAttribues[i] = {
-                              nom: `Joueur ${i + 1}`,
-                              role: roleAuto,
-                              alignement: alignementAuto,
-                              alignementFixe: false,
-                              rappelRoles: [], // ← ICI, dans la boucle
-                            };
-
-                            availableRoles.splice(indexAleatoire, 1);
-                          }
-                        }
-
-                        setJoueursAttribues(newAttribues);
-                      }}
+                      onClick={() => setShowConfirmAutoAttrib(true)}
                       style={{
                         ...buttonStyle,
                         width: "100%",
@@ -1916,6 +1886,121 @@ export default function App() {
                     >
                       Attribution automatique
                     </button>
+                    {showConfirmAutoAttrib && (
+                      <div
+                        style={{
+                          position: "fixed",
+                          inset: 0,
+                          background: "rgba(0,0,0,0.6)",
+                          zIndex: 1000,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            background: "#fff",
+                            color: "#000",
+                            padding: "1.5rem",
+                            borderRadius: "10px",
+                            width: "min(90%, 400px)",
+                            textAlign: "center",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontFamily: "Cardo, serif",
+                              fontSize: "1.2rem",
+                              marginBottom: "1.2rem",
+                            }}
+                          >
+                            Attribuer automatiquement les rôles ?
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "1rem",
+                              justifyContent: "space-around",
+                            }}
+                          >
+                            <button
+                              onClick={() => setShowConfirmAutoAttrib(false)}
+                              style={{
+                                flex: 1,
+                                padding: "0.5rem 1rem",
+                                borderRadius: 8,
+                                border: "1px solid #bbb",
+                                background: "#f5f5f5",
+                                fontFamily: "Cardo, serif",
+                                fontSize: "0.95rem",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Non
+                            </button>
+                            <button
+                              onClick={() => {
+                                const newAttribues = { ...joueursAttribues };
+                                const assignedRoleNames = Object.values(
+                                  newAttribues
+                                ).map((j) => j.role.nom);
+                                const availableRoles = rolesRestants.filter(
+                                  (r) => !assignedRoleNames.includes(r.nom)
+                                );
+
+                                for (let i = 0; i < nbJoueurs; i++) {
+                                  if (
+                                    !newAttribues[i] &&
+                                    availableRoles.length > 0
+                                  ) {
+                                    const indexAleatoire = Math.floor(
+                                      Math.random() * availableRoles.length
+                                    );
+                                    const roleAuto =
+                                      availableRoles[indexAleatoire];
+
+                                    let alignementAuto = "Maléfique";
+                                    if (
+                                      roleAuto.type === "Habitant" ||
+                                      roleAuto.type === "Étranger"
+                                    ) {
+                                      alignementAuto = "Bon";
+                                    }
+
+                                    newAttribues[i] = {
+                                      nom: `Joueur ${i + 1}`,
+                                      role: roleAuto,
+                                      alignement: alignementAuto,
+                                      alignementFixe: false,
+                                      rappelRoles: [],
+                                    };
+
+                                    availableRoles.splice(indexAleatoire, 1);
+                                  }
+                                }
+
+                                setJoueursAttribues(newAttribues);
+                                setShowConfirmAutoAttrib(false);
+                              }}
+                              style={{
+                                flex: 1,
+                                padding: "0.5rem 1rem",
+                                borderRadius: 8,
+                                color: "#950f13",
+                                border: "1px solid #950f13",
+                                background: "#fbeaea",
+                                fontFamily: "Cardo, serif",
+                                fontSize: "1rem",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Oui
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     <div
                       style={{
@@ -1955,12 +2040,12 @@ export default function App() {
                 {indexActif !== null && roleActif && (
                   <div
                     style={{
+                      flex: 1, // ← prend toute la hauteur disponible
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      justifyContent: "center",
-                      paddingLeft: "1.5rem",
-                      paddingRight: "1.5rem",
+                      justifyContent: "center", // ← maintenant centre bien verticalement
+                      padding: "1.5rem",
                     }}
                   >
                     <img
@@ -1990,6 +2075,7 @@ export default function App() {
                         fontFamily: "Cardo",
                         maxWidth: "50ch",
                         margin: "1rem auto",
+                        textAlign: "center",
                       }}
                     >
                       {renderBoldBrackets(
@@ -2004,9 +2090,19 @@ export default function App() {
                       placeholder="Nom du joueur"
                       value={nomTemporaire}
                       onChange={(e) => setNomTemporaire(e.target.value)}
-                      style={{ padding: "0.5rem", fontSize: "1rem" }}
+                      style={{
+                        padding: "0.5rem 0.75rem",
+                        fontSize: "1rem",
+                        border: "1px solid #bbb",
+                        borderRadius: "8px", // ← arrondi
+                        fontFamily: "Cardo, serif",
+                        width: "100%",
+                        maxWidth: "320px",
+                        textAlign: "center",
+                      }}
                     />
-                    <div style={{ marginTop: "1rem" }}>
+
+                    <div style={{ marginTop: "1rem", width: "100%" }}>
                       <button
                         onClick={validerJoueur}
                         style={{
@@ -2023,6 +2119,7 @@ export default function App() {
               </div>
             </div>
           )}
+
           {afficherBluffs && (
             <div
               style={{
@@ -2124,7 +2221,6 @@ export default function App() {
                   <>
                     <div
                       style={{
-                        
                         display: "flex",
                         alignItems: "center",
                         background: "#f8f8f8",
@@ -4006,7 +4102,8 @@ export default function App() {
                         background: btn.background,
                         border: btn.border,
                         fontFamily: btn.fontFamily,
-color: "#950f13",                        fontWeight: "normal",
+                        color: "#950f13",
+                        fontWeight: "normal",
                         fontSize: "1rem",
                         boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                         margin: 0,
@@ -4026,7 +4123,8 @@ color: "#950f13",                        fontWeight: "normal",
                         background: btn.background,
                         border: btn.border,
                         fontFamily: btn.fontFamily,
-color: "#950f13",                        fontWeight: btn.fontWeight || "normal",
+                        color: "#950f13",
+                        fontWeight: btn.fontWeight || "normal",
                         fontSize: "1rem",
                         boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                         margin: 0,
@@ -4809,7 +4907,7 @@ color: "#950f13",                        fontWeight: btn.fontWeight || "normal",
                         background: "#fbeaea",
                         border: "1px solid #950f13",
                         boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                        fontSize: "1.1rem",
+                        fontSize: "1rem",
                       }}
                       onClick={confirmClearNotes}
                     >
