@@ -1,26 +1,42 @@
 import React, { useState, useEffect, useRef } from "react";
 // Composant d'en-tête avec croix alignée
-function HeaderWithClose({ title, onClose, style, titleStyle, closeStyle }) {
+function HeaderWithClose({
+  title,
+  onClose,
+  style,
+  titleStyle,
+  closeStyle,
+  withBorder = true,
+  leftButton = null,
+}) {
   return (
     <div
       style={{
         display: "flex",
         alignItems: "center",
-        padding: "0.5rem 3rem 0.5rem 0.5rem", // padding gauche réduit, droite augmenté
+        justifyContent: "space-between",
+        padding: "0.5rem 1rem 1rem 0.5rem",
         position: "relative",
         ...style,
       }}
     >
+      {/* Bouton gauche si fourni */}
+      {leftButton && <div style={{ marginRight: "0.5rem" }}>{leftButton}</div>}
+
+      {/* Titre aligné gauche */}
       <span
         style={{
           fontSize: "1.2rem",
           fontWeight: "bold",
-          marginLeft: 0,
+          flex: 1, // prend toute la largeur dispo
+          textAlign: "left", // ← aligné à gauche
           ...titleStyle,
         }}
       >
         {title}
       </span>
+
+      {/* Bouton Fermer */}
       <button
         onClick={onClose}
         style={{
@@ -29,14 +45,9 @@ function HeaderWithClose({ title, onClose, style, titleStyle, closeStyle }) {
           color: "#000",
           fontSize: "0.9rem",
           cursor: "pointer",
-          marginLeft: "auto",
           lineHeight: 1,
-          position: "absolute",
-          right: "0.5rem",
-          top: "50%",
-          transform: "translateY(-50%)",
           borderRadius: "6px",
-          minWidth: "2.4rem",
+          minWidth: "4rem",
           height: "1.6rem",
           padding: "0 0.5rem",
           fontFamily: "Cardo, serif",
@@ -47,13 +58,29 @@ function HeaderWithClose({ title, onClose, style, titleStyle, closeStyle }) {
           transition: "background 0.2s, color 0.2s, border 0.2s",
           ...closeStyle,
         }}
-        aria-label="Fermer"
       >
         Fermer
       </button>
+
+      {withBorder && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "100vw",
+            height: "1px",
+            background: "#bbb",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        />
+      )}
     </div>
   );
 }
+
 import roles from "./roles-fr.json";
 import QRCode from "react-qr-code";
 import "./mobile.css";
@@ -1062,12 +1089,12 @@ export default function App() {
                 aria-modal="true"
               >
                 <HeaderWithClose
-                  title="Choisir les rôles du script"
+                  title="Rôles du script"
                   onClose={() => setCustomScriptVisible(false)}
-                  style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                  style={{}}
                   titleStyle={{
                     fontFamily: "IM Fell English SC, serif",
-                    fontSize: "1.3rem",
+                    fontSize: "1.5rem",
                   }}
                 />
 
@@ -1076,6 +1103,7 @@ export default function App() {
                   style={{
                     flex: 1,
                     overflow: "auto",
+                    paddingTop: "1rem",
                     paddingBottom: "env(safe-area-inset-bottom)",
                   }}
                 >
@@ -1197,11 +1225,28 @@ export default function App() {
                 {/* PIED DE MODAL (reste visible) */}
                 <div
                   style={{
+                    position: "relative",
                     display: "flex",
                     justifyContent: "space-between",
-                    marginTop: "1rem",
+                    paddingTop: "0.75rem", // ← remplace marginTop
+                    // borderTop: "1px solid #bbb", // ← enlevé, on met une barre absolue
                   }}
                 >
+                  {/* Trait bord-à-bord viewport, après le padding */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0, // en haut du pied
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: "100vw", // plein écran
+                      height: "1px",
+                      background: "#bbb",
+                      pointerEvents: "none",
+                      zIndex: 1,
+                    }}
+                  />
+
                   <div style={{ display: "flex", gap: ".5rem", width: "100%" }}>
                     <button
                       onClick={tirageAleatoireScript}
@@ -1425,7 +1470,6 @@ export default function App() {
                                       ? "#0e74b4"
                                       : "#950f13",
                                   fontWeight: "bold",
-                                  
                                 }}
                               >
                                 {role.nom}
@@ -1435,7 +1479,7 @@ export default function App() {
                                   fontFamily: "Cardo, serif",
                                   fontSize: "0.95rem",
                                   color: "#000",
-                                  
+
                                   lineHeight: 1.3,
                                 }}
                               >
@@ -1466,6 +1510,7 @@ export default function App() {
                 {/* Toggle Première nuit / Autres nuits – style alignement */}
                 <div
                   style={{
+                    paddingTop: "0.5rem",
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",
                     width: "100%",
@@ -1793,10 +1838,10 @@ export default function App() {
               <HeaderWithClose
                 title="Attribuer les rôles"
                 onClose={quitterAffectation}
-                style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                style={{}}
                 titleStyle={{
                   fontFamily: "IM Fell English SC, serif",
-                  fontSize: "1.3rem",
+                  fontSize: "1.5rem",
                 }}
               />
               <div
@@ -2077,7 +2122,7 @@ export default function App() {
                   <>
                     <div
                       style={{
-                        //marginTop: "2rem",
+                        
                         display: "flex",
                         alignItems: "center",
                         background: "#f8f8f8",
@@ -2432,7 +2477,7 @@ export default function App() {
                       style={{
                         fontFamily: "Cardo, serif",
                         fontWeight: "bold",
-                        fontSize: "1.3rem",
+                        fontSize: "1.5rem",
                         marginRight: "1.5rem",
                         letterSpacing: "1px",
                         color: "#950f13",
@@ -2503,18 +2548,19 @@ export default function App() {
                       aria-modal="true"
                     >
                       <HeaderWithClose
-                        title="Choisir les bluffs du démon"
+                        title="Bluffs du démon"
                         onClose={() => setEditBluffsModal(false)}
-                        style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                        style={{}}
                         titleStyle={{
                           fontFamily: "IM Fell English SC, serif",
-                          fontSize: "1.3rem",
+                          fontSize: "1.5rem",
                         }}
                       />
 
                       {/* CORPS SCROLLABLE */}
                       <div
                         style={{
+                          paddingTop: "1rem",
                           flex: 1,
                           overflow: "auto",
                           paddingBottom: "env(safe-area-inset-bottom)",
@@ -2645,12 +2691,27 @@ export default function App() {
                       {/* PIED (visible en bas) */}
                       <div
                         style={{
+                          position: "relative",
                           display: "flex",
                           gap: "0.5rem",
-                          marginTop: "1.5rem",
+                          paddingTop: "1rem", // remplace marginTop
                           width: "100%",
                         }}
                       >
+                        {/* Trait bord à bord */}
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            width: "100vw",
+                            height: "1px",
+                            background: "#bbb",
+                            pointerEvents: "none",
+                            zIndex: 1,
+                          }}
+                        />
                         <button
                           onClick={() => {
                             const pool = [...rolesBonsNonAttribués];
@@ -2790,10 +2851,10 @@ export default function App() {
                         <HeaderWithClose
                           title="Modifier le joueur"
                           onClose={() => setNomEditModal(null)}
-                          style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                          style={{}}
                           titleStyle={{
                             fontFamily: "IM Fell English SC, serif",
-                            fontSize: "1.3rem",
+                            fontSize: "1.5rem",
                           }}
                         />
 
@@ -3146,7 +3207,6 @@ export default function App() {
                                     bottom: 0,
                                     left: 0,
                                     width: "auto",
-                                    height: "auto",
                                     borderRadius: 0,
                                     display: "flex",
                                     flexDirection: "column",
@@ -3155,8 +3215,11 @@ export default function App() {
                                       "calc(1rem + env(safe-area-inset-top))",
                                     paddingRight:
                                       "calc(1rem + env(safe-area-inset-right))",
-                                    paddingBottom:
-                                      "calc(1rem + env(safe-area-inset-bottom))",
+                                    // pas de padding bas global ici
+                                    paddingBottom: 0,
+                                    height: "100dvh", // iOS 16.4+ fiable
+                                    minHeight: "-webkit-fill-available", // fallback iOS
+
                                     paddingLeft:
                                       "calc(1rem + env(safe-area-inset-left))",
                                     WebkitOverflowScrolling: "touch",
@@ -3170,23 +3233,19 @@ export default function App() {
                                   <HeaderWithClose
                                     title="Choisir les rappels"
                                     onClose={() => setShowRappelModal(false)}
-                                    style={{
-                                      marginBottom: "1rem",
-                                      paddingRight: "2rem",
-                                    }}
+                                    style={{}}
                                     titleStyle={{
                                       fontFamily: "IM Fell English SC, serif",
-                                      fontSize: "1.3rem",
+                                      fontSize: "1.5rem",
                                     }}
                                   />
 
                                   {/* CORPS SCROLLABLE : 2 par ligne, icône au-dessus, nom en dessous */}
                                   <div
                                     style={{
+                                      paddingTop: "1rem",
                                       flex: 1,
                                       overflow: "auto",
-                                      paddingBottom:
-                                        "env(safe-area-inset-bottom)",
                                     }}
                                   >
                                     <div
@@ -3327,7 +3386,6 @@ export default function App() {
                                         })}
                                     </div>
                                   </div>
-                                  {/* Pas de pied de modale : sélection instantanée, fermer avec × */}
                                 </div>
                               </div>
                             )}
@@ -3420,8 +3478,9 @@ export default function App() {
                                             "calc(1rem + env(safe-area-inset-top))",
                                           paddingRight:
                                             "calc(1rem + env(safe-area-inset-right))",
-                                          paddingBottom:
-                                            "calc(1rem + env(safe-area-inset-bottom))",
+                                          paddingBottom: 0,
+                                          height: "100dvh", // iOS 16.4+ fiable
+                                          minHeight: "-webkit-fill-available", // fallback iOS
                                           paddingLeft:
                                             "calc(1rem + env(safe-area-inset-left))",
                                           WebkitOverflowScrolling: "touch",
@@ -3431,18 +3490,15 @@ export default function App() {
                                         }}
                                       >
                                         <HeaderWithClose
-                                          title="Choisir le nouveau rôle"
+                                          title="Nouveau rôle"
                                           onClose={() =>
                                             setShowRemplacerDropdown(false)
                                           }
-                                          style={{
-                                            marginBottom: "1rem",
-                                            paddingRight: "2rem",
-                                          }}
+                                          style={{}}
                                           titleStyle={{
                                             fontFamily:
                                               "IM Fell English SC, serif",
-                                            fontSize: "1.3rem",
+                                            fontSize: "1.5rem",
                                           }}
                                         />
 
@@ -3696,7 +3752,7 @@ export default function App() {
               aria-modal="true"
             >
               <HeaderWithClose
-                title=""
+                title="Liste des rôles"
                 onClose={() => setQrCodeVisible(false)}
                 style={{
                   width: "100%",
@@ -3704,22 +3760,25 @@ export default function App() {
                   minHeight: "3.2rem",
                   boxSizing: "border-box",
                 }}
+                titleStyle={{
+                  fontFamily: "IM Fell English SC, serif",
+                  fontWeight: "bold",
+                  fontSize: "1.6rem",
+                  color: "black",
+                }}
                 closeStyle={{ minWidth: "3.2rem", height: "2rem" }}
               />
 
               <h2
                 style={{
                   fontFamily: "Cardo",
-                  fontSize: "1.5rem",
+                  fontSize: "2rem",
                   marginBottom: "1rem",
                   textAlign: "center",
                 }}
               >
-                Liste des rôles pour :
                 <br />
-                <span
-                  style={{ fontFamily: '"IM FELL ENGLISH SC", Cardo, serif' }}
-                >
+                <span style={{}}>
                   <span
                     style={{
                       fontFamily: '"Pirata One", cursive',
@@ -3775,56 +3834,64 @@ export default function App() {
               {/* Show 'Afficher le script' for custom script, 'Voir PDF' for standard editions */}
               {edition === "Script personnalisé" &&
                 customScriptPool.length > 0 && (
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <button
+                      style={{
+                        marginTop: "1.rem",
+                        width: 256,
+                        padding: "0.5rem 1.5rem",
+                        fontFamily: "Cardo, serif",
+                        fontSize: "1.1rem",
+                        cursor: "pointer",
+                        background: "#fff",
+                        color: "#000",
+                        borderRadius: 8,
+                        border: "1px solid #bbb",
+                        display: "block",
+                      }}
+                      onClick={() =>
+                        window.open(
+                          `${
+                            window.location.origin
+                          }/minuit-sonne-rouge/QRCodePage.html?custom=${encodeURIComponent(
+                            customScriptPool.map((r) => r.nom).join(",")
+                          )}`,
+                          "_blank"
+                        )
+                      }
+                    >
+                      Afficher
+                    </button>
+                  </div>
+                )}
+              {edition !== "Script personnalisé" && urlPDF[edition] && (
+                <div style={{ display: "flex", justifyContent: "center" }}>
                   <button
                     style={{
                       marginTop: "1.5rem",
+                      width: 256,
                       padding: "0.5rem 1.5rem",
                       fontFamily: "Cardo, serif",
                       fontSize: "1.1rem",
                       cursor: "pointer",
-                      background: "#fff",
+                      background: "#F5F5F5",
                       color: "#000",
                       borderRadius: 8,
                       border: "1px solid #bbb",
+                      display: "block",
                     }}
                     onClick={() =>
                       window.open(
-                        `${
-                          window.location.origin
-                        }/minuit-sonne-rouge/QRCodePage.html?custom=${encodeURIComponent(
-                          customScriptPool.map((r) => r.nom).join(",")
-                        )}`,
+                        window.location.origin +
+                          "/minuit-sonne-rouge/" +
+                          urlPDF[edition],
                         "_blank"
                       )
                     }
                   >
                     Afficher
                   </button>
-                )}
-              {edition !== "Script personnalisé" && urlPDF[edition] && (
-                <button
-                  style={{
-                    marginTop: "1.5rem",
-                    padding: "0.5rem 1.5rem",
-                    fontFamily: "Cardo, serif",
-                    fontSize: "1.1rem",
-                    cursor: "pointer",
-                    background: "#F5F5F5",
-                    color: "#000",
-                    borderRadius: 8,
-                    border: "1px solid #bbb",
-                  }}
-                  onClick={() =>
-                    window.open(
-                      window.location.origin +
-                        "/minuit-sonne-rouge/" +
-                        urlPDF[edition],
-                      "_blank"
-                    )
-                  }
-                >
-                  Afficher
-                </button>
+                </div>
               )}
             </div>
           )}
@@ -3937,8 +4004,7 @@ export default function App() {
                         background: btn.background,
                         border: btn.border,
                         fontFamily: btn.fontFamily,
-                        color: btn.textColor,
-                        fontWeight: "normal",
+color: "#950f13",                        fontWeight: "normal",
                         fontSize: "1rem",
                         boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                         margin: 0,
@@ -3958,8 +4024,7 @@ export default function App() {
                         background: btn.background,
                         border: btn.border,
                         fontFamily: btn.fontFamily,
-                        color: btn.textColor,
-                        fontWeight: btn.fontWeight || "normal",
+color: "#950f13",                        fontWeight: btn.fontWeight || "normal",
                         fontSize: "1rem",
                         boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                         margin: 0,
@@ -4084,16 +4149,17 @@ export default function App() {
                     <HeaderWithClose
                       title="Choisir un rôle"
                       onClose={() => setRolesModalOpen(false)}
-                      style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                      style={{}}
                       titleStyle={{
                         fontFamily: "IM Fell English SC, serif",
-                        fontSize: "1.3rem",
+                        fontSize: "1.5rem",
                       }}
                     />
 
                     {/* CORPS SCROLLABLE */}
                     <div
                       style={{
+                        paddingTop: "1rem",
                         flex: 1,
                         overflow: "auto",
                         paddingBottom: "env(safe-area-inset-bottom)",
@@ -4222,9 +4288,8 @@ export default function App() {
                   <HeaderWithClose
                     title="Afficher un rôle"
                     onClose={() => setSelectedRole(null)}
+                    withBorder={false}
                     style={{
-                      marginBottom: "1rem",
-                      paddingRight: "2rem",
                       color: "#fff",
                     }}
                     titleStyle={{}}
@@ -4341,16 +4406,17 @@ export default function App() {
                     <HeaderWithClose
                       title="Ajouter un message"
                       onClose={() => setAddCustomJetonVisible(false)}
-                      style={{ marginBottom: "1rem", paddingRight: "2rem" }}
+                      style={{}}
                       titleStyle={{
                         fontFamily: "IM Fell English SC, serif",
-                        fontSize: "1.3rem",
+                        fontSize: "1.6rem",
                       }}
                     />
 
                     {/* CORPS SCROLLABLE */}
                     <div
                       style={{
+                        paddingTop: "0.5rem",
                         flex: 1, // occupe tout l’espace entre header et pied
                         overflow: "auto",
                         paddingBottom: "env(safe-area-inset-bottom)",
@@ -4395,7 +4461,13 @@ export default function App() {
                             resize: "vertical", // l’utilisateur peut agrandir
                           }}
                         />
-                        <div style={{ marginTop: "1rem", display: "flex", justifyContent: "flex-end" }}>
+                        <div
+                          style={{
+                            marginTop: "1rem",
+                            display: "flex",
+                            justifyContent: "flex-end",
+                          }}
+                        >
                           <button
                             type="button"
                             onClick={() => {
@@ -4491,41 +4563,44 @@ export default function App() {
                 aria-modal="true"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Corbeille (messages personnalisés) */}
-                {jetonInfoPage && jetonInfoPage.startsWith("custom-") && (
-                  <button
-                    onClick={() => {
-                      const idx = parseInt(jetonInfoPage.split("-")[1]);
-                      removeCustomJeton(idx);
-                      setJetonInfoPage(null);
-                    }}
-                    style={{
-                      position: "absolute",
-                      top: "0.75rem",
-                      left: "0.75rem",
-                      fontSize: "1.5rem",
-                      color: "#000", // ← icône sombre
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      zIndex: 401,
-                    }}
-                    title="Supprimer ce message"
-                  >
-                    🗑️
-                  </button>
-                )}
-
                 <HeaderWithClose
-                  title="Afficher un message"
                   onClose={() => setJetonInfoPage(null)}
-                  style={{
-                    marginBottom: "1rem",
-                    paddingRight: "2rem",
-                    color: "#fff",
-                  }}
-                  titleStyle={{}}
+                  withBorder={false}
+                  leftButton={
+                    jetonInfoPage &&
+                    jetonInfoPage.startsWith("custom-") && (
+                      <button
+                        onClick={() => {
+                          const idx = parseInt(jetonInfoPage.split("-")[1]);
+                          removeCustomJeton(idx);
+                          setJetonInfoPage(null);
+                        }}
+                        style={{
+                          background: "#f5F5F5",
+                          border: "1px solid #bbb",
+                          color: "#000",
+                          fontSize: "0.9rem",
+                          cursor: "pointer",
+                          lineHeight: 1,
+                          borderRadius: "6px",
+                          minWidth: "4rem",
+                          height: "1.6rem",
+                          padding: "0 0.5rem",
+                          fontFamily: "Cardo, serif",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
+                          transition:
+                            "background 0.2s, color 0.2s, border 0.2s",
+                        }}
+                      >
+                        Supprimer
+                      </button>
+                    )
+                  }
                 />
+
                 {/* CONTENU CENTRÉ VERTICAL + HORIZONTAL */}
                 <div
                   style={{
@@ -4851,10 +4926,10 @@ export default function App() {
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
-                      color: "#0e74b4",
-                      textDecoration: "underline",
-                      //fontWeight: "bold",
-                    }}
+                        color: "#0e74b4",
+                        textDecoration: "underline",
+                        //fontWeight: "bold",
+                      }}
                     >
                       Wiki offciel
                     </a>
