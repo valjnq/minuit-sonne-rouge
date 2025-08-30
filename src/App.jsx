@@ -4071,7 +4071,7 @@ export default function App() {
                       minHeight: "-webkit-fill-available",
                       paddingTop: "calc(1rem + env(safe-area-inset-top))",
                       paddingRight: "calc(1rem + env(safe-area-inset-right))",
-                      paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
+                      //paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
                       paddingLeft: "calc(1rem + env(safe-area-inset-left))",
                       WebkitOverflowScrolling: "touch",
                       overscrollBehavior: "contain",
@@ -4395,42 +4395,32 @@ export default function App() {
                             resize: "vertical", // l’utilisateur peut agrandir
                           }}
                         />
+                        <div style={{ marginTop: "1rem", display: "flex", justifyContent: "flex-end" }}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (customJetonText.trim()) {
+                                setCustomJetons([
+                                  ...customJetons,
+                                  customJetonText.trim(),
+                                ]);
+                                setCustomJetonText("");
+                                setAddCustomJetonVisible(false);
+                              }
+                            }}
+                            style={{
+                              ...buttonStyle,
+                              padding: "0.5rem 1.2rem",
+                              width: "100%",
+                              minWidth: 0,
+                              alignSelf: "stretch",
+                              boxSizing: "border-box",
+                            }}
+                          >
+                            Valider
+                          </button>
+                        </div>
                       </div>
-                    </div>
-
-                    {/* PIED / FOOTER */}
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: ".5rem",
-                        marginTop: "1rem",
-                      }}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (customJetonText.trim()) {
-                            setCustomJetons([
-                              ...customJetons,
-                              customJetonText.trim(),
-                            ]);
-                            setCustomJetonText("");
-                            setAddCustomJetonVisible(false);
-                          }
-                        }}
-                        style={{
-                          ...buttonStyle,
-                          flex: "1 1 auto",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "0.35em",
-                          padding: "0.5rem 1rem",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        Valider
-                      </button>
                     </div>
                   </div>
                 </div>
