@@ -159,7 +159,7 @@ li,
 td,
 th,
 .text {
-  font-size: var(--text-size);
+  font-size: 1rem; /* identique à App.jsx */
 }
 
 /* Boutons (compact) */
