@@ -2495,14 +2495,14 @@ export default function App() {
                             <img
                               src="icons/mort.png"
                               alt="Mort"
-                              style={{ width: 28, height: 28 }}
+                              style={{ width: 30, height: 30 }}
                             />
                           )}
                           {joueur.mort && joueur.token && (
                             <img
                               src="icons/vote.png"
                               alt="Vote"
-                              style={{ width: 28, height: 28 }}
+                              style={{ width: 30, height: 30 }}
                             />
                           )}
                           {/* Icônes anciens rôles */}
