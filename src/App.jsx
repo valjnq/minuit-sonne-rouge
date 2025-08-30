@@ -1359,13 +1359,11 @@ export default function App() {
                                     : "#950f13"
                                   : "#bbb"
                               }`,
-
                               background: isSelected
                                 ? role.alignement === "Bon"
                                   ? "#e6f0fa"
                                   : "#fae6e6"
                                 : "#f5F5F5",
-
                               cursor:
                                 isDisabled || rolesValides
                                   ? "not-allowed"
@@ -1378,10 +1376,11 @@ export default function App() {
                               borderRadius: 8,
                               textAlign: "left",
                               width: "100%",
-                              minHeight: "70px",
+                              minHeight: "110px", // Hauteur minimale augmentée
                               padding: "0.7rem 1rem",
                               gap: "1rem",
                               marginBottom: "0.5rem",
+                              fontSize: "1.05rem", // Taille de police fixe pour tout le contenu
                             }}
                           >
                             <img
