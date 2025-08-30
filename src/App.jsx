@@ -253,10 +253,17 @@ export default function App() {
   const [erreurBluffs, setErreurBluffs] = useState("");
   const [bluffsValides, setBluffsValides] = useState(false);
   const [afficherNotes, setAfficherNotes] = useState(false);
+  const [text, setText] = useState("");
   const [notes, setNotes] = useState("");
   // Ajout de l'état pour la modale de confirmation d'effacement des notes
   const [showClearNotesModal, setShowClearNotesModal] = useState(false);
   const [afficherMentions, setAfficherMentions] = useState(false);
+    // Fonction pour que le textarea s'agrandisse automatiquement
+    function handleNotesInput(e) {
+      setNotes(e.target.value);
+      e.target.style.height = "auto";
+      e.target.style.height = e.target.scrollHeight + "px";
+    }
   const tousAttribues =
     nbJoueurs > 0 && Object.keys(joueursAttribues).length === nbJoueurs;
   function clearNotes() {
@@ -4702,26 +4709,31 @@ export default function App() {
                   color: "black",
                   display: "flex",
                   flexDirection: "column",
-                }}
-              >
-                <textarea
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  rows={10}
-                  style={{
-                    width: "100%", // responsive
-                    maxWidth: "600px", // limite comme avant
-                    fontFamily: "Cardo, serif",
-                    fontSize: "1.2rem",
-                    borderRadius: 0,
-                    border: "1px solid #bbb",
-                    padding: "0.5rem",
-                    resize: "vertical",
-                    background: "#ffe9a7ff",
-                    color: "#000",
-                    marginBottom: "0rem",
+                    paddingLeft: "0.5rem",
+                    paddingRight: "0.5rem",
                   }}
-                />
+              >
+                  <textarea
+                    value={notes}
+                    onInput={handleNotesInput}
+                    style={{
+                      width: "100%", // prend toute la largeur du conteneur
+                      fontFamily: "Cardo, serif",
+                      fontSize: "1.2rem",
+                      borderRadius: 0,
+                      border: "1px solid #bbb",
+                      padding: "0.5rem",
+                      resize: "none",
+                      background: "#ffe9a7ff",
+                      color: "#000",
+                      marginBottom: "0rem",
+                      boxSizing: "border-box",
+                      overflow: "hidden",
+                      transition: "height 0.2s",
+                      minHeight: "200px",
+                    }}
+                    //placeholder="Écris tes notes ici..."
+                  />
                 <div style={{ marginTop: "1rem" }}>
                   <button
                     className="btn"
