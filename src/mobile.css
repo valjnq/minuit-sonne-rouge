@@ -12,7 +12,11 @@ body {
   margin: 0;
   padding: 0;
 }
-
+/* Empêche Safari iOS de modifier la taille du texte */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 /* 2) Typo fluide et lisible (évite zoom iOS sur inputs < 16px) */
 html {
   font-size: 16px;
@@ -166,9 +170,7 @@ th,
 button,
 .btn,
 a.button {
-  min-height: var(--btn-min-h);
   padding: var(--btn-pad-v) var(--btn-pad-h);
-  font-size: var(--text-size); /* Uniformise la taille du texte des boutons */
   border-radius: 10px;
 }
 
@@ -180,10 +182,12 @@ a.button {
 .grid-cols {
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
-.card-compact {
-  width: var(--card-w);
-  min-height: 120px; /* Harmonisation des cartes rôles */
-  padding: 0.5rem;
+/* Cartes de rôles : taille uniforme, pas de boost */
+.card-compact,
+.card-compact p {
+  font-size: 1rem;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* Icônes */
