@@ -3845,7 +3845,7 @@ export default function App() {
                         fontFamily: "Cardo, serif",
                         fontSize: "1.1rem",
                         cursor: "pointer",
-                        background: "#fff",
+                        background: "#bbb",
                         color: "#000",
                         borderRadius: 8,
                         border: "1px solid #bbb",
