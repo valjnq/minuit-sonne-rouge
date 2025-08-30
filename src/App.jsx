@@ -1198,9 +1198,9 @@ export default function App() {
                         borderRadius: 8,
                         border: "1px solid #bbb",
                         background: "#f5F5F5",
-
                         fontFamily: "Cardo, serif",
                         flex: 1,
+                        color: "#000",
                       }}
                     >
                       Aléatoire
@@ -1233,9 +1233,9 @@ export default function App() {
                         borderRadius: 8,
                         border: "1px solid #bbb",
                         background: "#f5F5F5",
-
                         fontFamily: "Cardo, serif",
                         flex: 1,
+                        color: "#000",
                       }}
                     >
                       Valider ({customScriptTemp.length})
