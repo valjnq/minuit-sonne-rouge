@@ -4835,7 +4835,7 @@ export default function App() {
                     style={{
                       color: "#0e74b4",
                       textDecoration: "underline",
-                      fontWeight: "bold",
+                      //fontWeight: "bold",
                     }}
                   >
                     Pocket Grimoire
@@ -4850,6 +4850,11 @@ export default function App() {
                       href="https://wiki.bloodontheclocktower.com/Main_Page"
                       target="_blank"
                       rel="noopener noreferrer"
+                      style={{
+                      color: "#0e74b4",
+                      textDecoration: "underline",
+                      //fontWeight: "bold",
+                    }}
                     >
                       Wiki offciel
                     </a>
