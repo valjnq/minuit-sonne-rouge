@@ -112,13 +112,14 @@ textarea {
   font-size: 16px; /* clé anti-zoom iOS */
   font-family: "cardo", serif;
   line-height: 1.3;
+  color: #000; /* force le texte en noir sur Safari */
 }
 
 input:focus,
 select:focus,
 textarea:focus,
 button:focus {
-  outline: 2px solid #0e74b4;
+  outline: 2px solid #000; /* noir au focus, au lieu de bleu */
   outline-offset: 2px;
 }
 
