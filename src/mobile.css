@@ -181,7 +181,7 @@ a.button {
 }
 .card-compact {
   width: var(--card-w);
-  min-height: var(--card-min-h);
+  min-height: 120px; /* Harmonisation des cartes rôles */
   padding: 0.5rem;
 }
 
