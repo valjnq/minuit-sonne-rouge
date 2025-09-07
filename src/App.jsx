@@ -3114,10 +3114,9 @@ export default function App() {
                                   borderRadius: 8,
                                   gap: "0.5rem",
                                   overflow: "hidden",
-                                  margin: "0.5rem 0",
+                                  //margin: "0.5rem 0",
                                 }}
                               >
-                                {/* Bouton Bon */}
                                 {/* Bouton Bon */}
                                 <button
                                   type="button"
@@ -3133,11 +3132,11 @@ export default function App() {
                                     });
                                   }}
                                   style={{
-                                    padding: "0.75rem",
+                                    padding: "0.5rem 1.2rem",
                                     fontFamily: "Cardo, serif",
                                     fontSize: "1.1rem",
                                     cursor: "pointer",
-                                    borderRadius: 8,
+                                    //borderRadius: 8,
                                     border:
                                       joueur?.alignement === "Bon"
                                         ? "1px solid #0e74b4"
@@ -3175,11 +3174,11 @@ export default function App() {
                                     });
                                   }}
                                   style={{
-                                    padding: "0.75rem",
+                                    padding: "0.5rem 1.2rem",
                                     fontFamily: "Cardo, serif",
                                     fontSize: "1.1rem",
                                     cursor: "pointer",
-                                    borderRadius: 8,
+                                    //borderRadius: 8,
                                     border:
                                       joueur?.alignement === "Maléfique"
                                         ? "1px solid #950f13"
@@ -3207,6 +3206,7 @@ export default function App() {
                                 <span
                                   style={{
                                     marginLeft: "0.5rem",
+                                    marginTop:"0.5rem",
                                     fontSize: "1.3rem",
                                     verticalAlign: "middle",
                                   }}
@@ -3226,7 +3226,8 @@ export default function App() {
                               {joueur?.mort && joueur?.token && (
                                 <span
                                   style={{
-                                    marginLeft: "0.2rem",
+                                    marginLeft: "0rem",
+                                    marginTop:"0.5rem",
                                     fontSize: "1.3rem",
                                     verticalAlign: "middle",
                                   }}
@@ -3245,6 +3246,15 @@ export default function App() {
                               )}
                               {/* Icônes statut : ivre & empoisonné (affichées "derrière" mort/vote) */}
                               {joueur?.ivre && (
+                                <span
+                                  style={{
+                                    marginLeft: "0rem",
+                                    marginTop:"0.5rem",
+                                    fontSize: "1.3rem",
+                                    verticalAlign: "middle",
+                                  }}
+                                  title="Ivre"
+                                  >
                                 <img
                                   src="icons/ivre.png"
                                   alt="Ivre"
@@ -3253,8 +3263,18 @@ export default function App() {
                                     height: 36,
                                   }}
                                 />
+                                </span>
                               )}
                               {joueur?.empoisonne && (
+                                <span
+                                  style={{
+                                    marginLeft: "0rem",
+                                    marginTop:"0.5rem",
+                                    fontSize: "1.3rem",
+                                    verticalAlign: "middle",
+                                  }}
+                                  title="Empoisonné"
+                                  >
                                 <img
                                   src="icons/empoisonne.png"
                                   alt="Empoisonné"
@@ -3263,6 +3283,7 @@ export default function App() {
                                     height: 36,
                                   }}
                                 />
+                                </span>
                               )}
                               {/* Icônes des anciens rôles (grisées) */}
                               {(Array.isArray(joueur?.anciensRoles)
@@ -3273,7 +3294,8 @@ export default function App() {
                                   key={`ancien-${r.nom}-${idx}`}
                                   title={`Ancien rôle : ${r.nom}`}
                                   style={{
-                                    marginLeft: idx === 0 ? "0.5rem" : "0.2rem",
+                                    marginLeft: idx === 0 ? "0rem" : "0rem",
+                                    marginTop:"0.5rem",
                                     verticalAlign: "middle",
                                   }}
                                 >
@@ -3301,7 +3323,7 @@ export default function App() {
                                 joueur.rappelRoles.map((r) => (
                                   <span
                                     key={`rappel-${r.nom}`}
-                                    style={{ marginLeft: "0.2rem" }}
+                                    style={{ marginLeft: "0rem", marginTop:"0.5rem" }}
                                   >
                                     <img
                                       src={`icons/icon_${normalizeNom(
