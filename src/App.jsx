@@ -195,32 +195,10 @@ export default function App() {
       fontFamily: "Cardo, serif",
     },
     {
-      label: "Tu es",
-      color: "#000",
-      page: "you-are",
-      content: "Tu es",
-      textColor: "#000",
-      background: "#f5F5F5",
-
-      border: "1px solid #bbb",
-      fontFamily: "Cardo, serif",
-    },
-    {
-      label: "Ce joueur est",
-      color: "#000",
-      page: "player-is",
-      content: "Ce joueur est",
-      textColor: "#000",
-      background: "#f5F5F5",
-
-      border: "1px solid #bbb",
-      fontFamily: "Cardo, serif",
-    },
-    {
-      label: "Utiliser ton pouvoir ?",
+      label: "Veux-tu utiliser ton pouvoir ?",
       color: "#000",
       page: "use-power",
-      content: "Utiliser ton pouvoir ?",
+      content: "Veux-tu utiliser ton pouvoir ?",
       textColor: "#000",
       background: "#f5F5F5",
 
@@ -4296,9 +4274,7 @@ export default function App() {
                     >
                       {btn.label}
                     </button>
-                  ) : btn.label === "Utiliser ton pouvoir ?" ||
-                    btn.label === "Ce joueur est" ||
-                    btn.label === "Tu es" ? (
+                  ) : btn.label === "Veux-tu utiliser ton pouvoir ?" ? (
                     <button
                       key={btn.label}
                       style={{
@@ -4341,7 +4317,7 @@ export default function App() {
                           color: "#000",
                           width: "100%",
                           alignSelf: "stretch",
-                          fontSize: "1.1rem",
+                          fontSize: "1rem",
                           border: "1px solid #bbb",
                         }}
                         onClick={() => setJetonInfoPage(`custom-${idx}`)}
