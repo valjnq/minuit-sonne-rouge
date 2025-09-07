@@ -339,6 +339,8 @@ export default function App() {
       "icons/aube.png",
       "icons/acolyte.png",
       "icons/demon.png",
+      "icons/ivre.png",
+      "icons/empoisonne.png",
     ].forEach((src) => {
       const img = new window.Image();
       img.src = src;
@@ -595,6 +597,8 @@ export default function App() {
         alignement: alignementAuto,
         alignementFixe: false,
         rappelRoles: [], // ← chaque joueur a sa liste de rappels
+        ivre: false,
+        empoisonne: false,
       },
     }));
 
@@ -1880,12 +1884,18 @@ export default function App() {
                       style={{
                         ...buttonStyle,
                         width: "100%",
-                        opacity: rolesRestants.length === 0 ? 0.5 : 1,
+                        opacity:
+                          rolesRestants.length === 0 || tousAttribues ? 0.5 : 1,
+                        cursor:
+                          rolesRestants.length === 0 || tousAttribues
+                            ? "not-allowed"
+                            : "pointer",
                       }}
-                      disabled={rolesRestants.length === 0}
+                      disabled={rolesRestants.length === 0 || tousAttribues}
                     >
                       Attribution automatique
                     </button>
+
                     {showConfirmAutoAttrib && (
                       <div
                         style={{
@@ -2507,6 +2517,28 @@ export default function App() {
                               style={{ width: 30, height: 30 }}
                             />
                           )}
+                          {/* Icônes statut : ivre & empoisonné (affichées "derrière" mort/vote) */}
+                          {joueur?.ivre && (
+                            <img
+                              src="icons/ivre.png"
+                              alt="Ivre"
+                              style={{
+                                width: 32,
+                                height: 32,
+                              }}
+                            />
+                          )}
+                          {joueur?.empoisonne && (
+                            <img
+                              src="icons/empoisonne.png"
+                              alt="Empoisonné"
+                              style={{
+                                width: 32,
+                                height: 32,
+                              }}
+                            />
+                          )}
+
                           {/* Icônes anciens rôles */}
                           {(Array.isArray(joueur.anciensRoles)
                             ? joueur.anciensRoles
@@ -3211,7 +3243,27 @@ export default function App() {
                                   />
                                 </span>
                               )}
-
+                              {/* Icônes statut : ivre & empoisonné (affichées "derrière" mort/vote) */}
+                              {joueur?.ivre && (
+                                <img
+                                  src="icons/ivre.png"
+                                  alt="Ivre"
+                                  style={{
+                                    width: 36,
+                                    height: 36,
+                                  }}
+                                />
+                              )}
+                              {joueur?.empoisonne && (
+                                <img
+                                  src="icons/empoisonne.png"
+                                  alt="Empoisonné"
+                                  style={{
+                                    width: 36,
+                                    height: 36,
+                                  }}
+                                />
+                              )}
                               {/* Icônes des anciens rôles (grisées) */}
                               {(Array.isArray(joueur?.anciensRoles)
                                 ? joueur.anciensRoles
@@ -3762,6 +3814,87 @@ export default function App() {
                                 </button>
                               </div>
                             )}
+                          {/* Ivre / Empoisonné */}
+                          <div
+                            style={{
+                              display: "grid",
+                              gridTemplateColumns: "1fr 1fr",
+                              gap: "0.5rem",
+                              //marginTop: "0.5rem",
+                            }}
+                          >
+                            {/* Toggle Ivre */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setJoueursAttribues((prev) => {
+                                  const next = { ...prev };
+                                  const cur = next[nomEditModal.index] || {};
+                                  next[nomEditModal.index] = {
+                                    ...cur,
+                                    ivre: !cur.ivre,
+                                  };
+                                  return next;
+                                });
+                              }}
+                              style={{
+                                ...buttonStyle,
+                                width: "100%",
+                                border: joueur?.ivre
+                                  ? "1px solid rgba(139, 35, 113, 1)"
+                                  : "1px solid #bbb",
+                                background: joueur?.ivre
+                                  ? "rgba(225, 36, 178, 0.28)"
+                                  : "#F5F5F5",
+                                color: joueur?.ivre
+                                  ? "rgba(139, 35, 113, 1)"
+                                  : "#000",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: ".5rem",
+                              }}
+                              title="Basculer Ivre"
+                            >
+                              Ivre
+                            </button>
+
+                            {/* Toggle Empoisonné */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setJoueursAttribues((prev) => {
+                                  const next = { ...prev };
+                                  const cur = next[nomEditModal.index] || {};
+                                  next[nomEditModal.index] = {
+                                    ...cur,
+                                    empoisonne: !cur.empoisonne,
+                                  };
+                                  return next;
+                                });
+                              }}
+                              style={{
+                                ...buttonStyle,
+                                width: "100%",
+                                border: joueur?.empoisonne
+                                  ? "1px solid #496b0fff"
+                                  : "1px solid #bbb",
+                                background: joueur?.empoisonne
+                                  ? "#a1ec2193"
+                                  : "#F5F5F5",
+                                color: joueur?.empoisonne
+                                  ? "#496b0fff"
+                                  : "#000",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: ".5rem",
+                              }}
+                              title="Basculer Empoisonné"
+                            >
+                              Empoisonné
+                            </button>
+                          </div>
 
                           {/* Mort (toggle) — donne par défaut un jeton au décès */}
                           <button
