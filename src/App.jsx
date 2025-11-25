@@ -1,15 +1,3 @@
-
-// Added persistence system
-function saveState(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
-}
-function loadState(key, defaultValue) {
-  const saved = localStorage.getItem(key);
-  if (!saved) return defaultValue;
-  try { return JSON.parse(saved); } catch { return defaultValue; }
-}
-const persistKey = "msrState";
-
 import React, { useState, useEffect, useRef } from "react";
 // Composant d'en-tête avec croix alignée
 function HeaderWithClose({
